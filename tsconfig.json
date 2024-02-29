@@ -1,0 +1,40 @@
+{
+  "extends": "@sourcegraph/tsconfig",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "noEmit": false,
+    "lib": ["ESNext"],
+    "isolatedModules": false,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "allowJs": true,
+    "strict": false,
+    "alwaysStrict": false,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "noErrorTruncation": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "noEmitOnError": false,
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "."
+  },
+  "include": [".config/*.ts"],
+  "exclude": ["dist", "node_modules"],
+  "watchOptions": {
+    "watchFile": "useFsEvents",
+    "watchDirectory": "useFsEvents",
+    "fallbackPolling": "dynamicPriority"
+  },
+  "references": [
+    { "path": "agent" },
+    { "path": "lib/shared" },
+    { "path": "lib/ui" },
+    { "path": "vscode" },
+    { "path": "vscode/test/integration" },
+    { "path": "vscode/scripts" }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false, // sourcemaps come from esbuild/vite
+    "allowJs": true,
+    "alwaysStrict": false,
+    "strict": false,
+    "strictNullChecks": false,
+    "strictPropertyInitialization":false,
+    "noImplicitReturns": false,
+    "noUnusedParameters": false,
+    "noImplicitOverride":false,
+    "useUnknownInCatchVariables": false,
+    "noImplicitAny": false,
+    "rootDir": ".",
+    "outDir": "dist/tsc",
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "DOM"]
+  },
+  "include": [
+    "src",
+    "src/commands/execute/cody.json",
+    "test/fixtures",
+    "playwright.config.ts",
+    "test/e2e",
+    "webviews",
+    "webviews/*.d.ts",
+    "package.json",
+    ".storybook/*.ts"
+  ],
+  "exclude": [
+    "scripts",
+    "dist",
+    "test/integration",
+    "**/test-data",
+    "vite.config.ts",
+    "webviews/vite.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../lib/shared"
+    },
+    {
+      "path": "../lib/ui"
+    }
+  ]
+}
