@@ -1,0 +1,154 @@
+._outer-container_n3412_1 {
+    background-color: var(--vscode-sideBar-background);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+._outer-container_n3412_1:focus {
+    outline-width: 0;
+}
+
+._search-input-container_n3412_14 {
+    display: grid;
+}
+
+._input-row_n3412_18 {
+    gap: 0.3rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+}
+
+._search-input_n3412_14 {
+    color: var(--vscode-input-foreground);
+    background-color: var(--vscode-input-background);
+    border-color: var(--vscode-input-border, transparent);
+    resize: none;
+    border-radius: 2px;
+    box-sizing: border-box;
+    height: 26px;
+    padding: 4px 6px;
+    font: inherit;
+}
+
+._search-input_n3412_14:placeholder-shown {
+    text-overflow: ellipsis;
+}
+
+._search-input_n3412_14::placeholder {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+._search-input_n3412_14:focus,
+._search-input_n3412_14:focus-visible,
+._search-input_n3412_14:focus-within {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: -1px;
+    color: var(--vscode-inputOption-activeForeground);
+    border-color: var(--vscode-inputOption-activeBorder, transparent);
+}
+
+._instructions_n3412_54 {
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0 1rem;
+    color: var(--vscode-search-resultsInfoForeground);
+    display: none;
+}
+
+._outer-container_n3412_1:hover ._instructions_n3412_54,
+._outer-container_n3412_1:focus-within ._instructions_n3412_54 {
+    display: block;
+}
+
+._search-result-row-inner_n3412_67 {
+    height: 22px;
+    display: flex;
+    position: relative;
+}
+
+._search-result-row_n3412_67 {
+    cursor: pointer;
+    user-select: none;
+}
+
+._search-result-row_n3412_67:hover {
+    background-color: var(--vscode-list-hoverBackground);
+}
+
+body[data-vscode-theme-kind='vscode-high-contrast-light'] ._search-result-row_n3412_67:hover,
+body[data-vscode-theme-kind='vscode-high-contrast'] ._search-result-row_n3412_67:hover {
+    outline: 1px dashed var(--vscode-contrastActiveBorder);
+    outline-offset: -1px;
+}
+
+._search-result-row-inner-selected_n3412_88 {
+    color: var(--vscode-list-focusForeground);
+    background-color: var(--vscode-list-inactiveSelectionBackground);
+}
+
+._outer-container_n3412_1:focus ._search-result-row-inner-selected_n3412_88 {
+    color: var(--vscode-list-activeSelectionForeground);
+    background-color: var(--vscode-list-activeSelectionBackground);
+    outline: solid 1px var(--vscode-list-focusOutline);
+    z-index: 1;
+}
+
+._search-result-indent_n3412_100 {
+    width: 8px;
+}
+
+._search-result-indent-guide_n3412_104 {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    border-left: 1px solid transparent;
+    border-color: var(--vscode-tree-indentGuidesStroke);
+    height: 100%;
+}
+
+._search-result-twistie_n3412_113 {
+    display: flex !important;
+    flex-shrink: 0;
+    align-items: center;
+    height: 100%;
+    padding-left: 8px;
+    padding-right: 6px;
+    width: 16px;
+}
+
+._search-result-twistie-noindent_n3412_123 {
+    padding-left: 0;
+}
+
+._search-result-content_n3412_127 {
+    height: 100%;
+    line-height: 22px;
+    overflow: hidden;
+}
+
+._filematch-label_n3412_133 {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+._filematch-icon_n3412_142 {
+    color: var(--vscode-banner-iconForeground);
+    line-height: 1;
+}
+
+._filematch-description_n3412_147 {
+    font-size: 12px;
+    color: var(--vscode-search-resultsInfoForeground);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex: 1; /* Let this one ellipsis before the label */
+}

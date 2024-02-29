@@ -1,12 +1,12 @@
 {
   "name": "cody-ai",
   "private": true,
-  "displayName": "Haier AI",
+  "displayName": "码友",
   "version": "1.6.0",
   "publisher": "sourcegraph",
   "license": "Apache-2.0",
-  "icon": "resources/cody.png",
-  "description": "Haier AI with codebase context",
+  "icon": "resources/icon.ico",
+  "description": "码友 AI with codebase context",
   "scripts": {
     "postinstall": "pnpm download-wasm",
     "dev": "pnpm run -s dev:desktop",
@@ -16,7 +16,7 @@
     "dev:desktop:insiders": "pnpm run -s build:dev:desktop && cross-env NODE_ENV=development code-insiders --extensionDevelopmentPath=$PWD --disable-extension=sourcegraph.cody-ai --disable-extension=github.copilot --inspect-extensions=9333 --new-window . --goto ./src/completions/inline-completion-item-provider.ts:16:5",
     "dev:web": "pnpm run -s build:dev:web && pnpm run -s _dev:vscode-test-web --browserType none",
     "watch:dev:web": "concurrently \"pnpm run -s watch:build:dev:web\" \"pnpm run -s _dev:vscode-test-web --browserType none\"",
-    "_dev:vscode-test-web": "vscode-test-web --extensionDevelopmentPath=. ${WORKSPACE-test/fixtures/workspace}",
+    "_dev:vscode-test-web": "vscode-test-web --extensionDevelopmentPath=. test/fixtures/workspace",
     "build": "tsc --build && pnpm run -s _build:esbuild:desktop && pnpm run -s _build:esbuild:web && pnpm run -s _build:webviews --mode production",
     "_build:desktop": "pnpm run -s _build:esbuild:desktop && pnpm run -s _build:webviews --mode production",
     "_build:web": "pnpm run -s _build:esbuild:web && pnpm run -s _build:webviews --mode production",
@@ -29,7 +29,7 @@
     "_build:webviews": "vite -c webviews/vite.config.ts build",
     "release": "ts-node-transpile-only ./scripts/release.ts",
     "download-wasm": "ts-node-transpile-only ./scripts/download-wasm-modules.ts",
-    "release:dry-run": "pnpm run download-wasm && cross-env CODY_RELEASE_DRY_RUN=1 ts-node ./scripts/release.ts",
+    "release:dry-run": "pnpm run download-wasm && cross-env CODY_RELEASE_DRY_RUN=0 ts-node ./scripts/release.ts",
     "wwww": "vsce package --no-dependencies --out dist/cody.vsix",
     "storybook": "storybook dev -p 6007 --no-open --no-version-updates --no-release-notes",
     "test:e2e": "tsc --build && node dist/tsc/test/e2e/install-deps.js && pnpm run -s build:dev:desktop && playwright test",
@@ -526,11 +526,6 @@
         "when": "cody.activated"
       },
       {
-        "command": "cody.menu.custom-commands",
-        "key": "shift+alt+c",
-        "when": "cody.activated"
-      },
-      {
         "command": "-github.copilot.generate",
         "key": "ctrl+enter"
       },
@@ -538,26 +533,6 @@
         "command": "cody.autocomplete.manual-trigger",
         "key": "alt+\\",
         "when": "editorTextFocus && !editorHasSelection && config.cody.autocomplete.enabled && !inlineSuggestionsVisible"
-      },
-      {
-        "command": "cody.fixup.acceptNearest",
-        "key": "alt+a",
-        "when": "cody.activated && !editorReadonly && cody.hasActionableEdit"
-      },
-      {
-        "command": "cody.fixup.retryNearest",
-        "key": "alt+r",
-        "when": "cody.activated && !editorReadonly && cody.hasActionableEdit"
-      },
-      {
-        "command": "cody.fixup.undoNearest",
-        "key": "alt+x",
-        "when": "cody.activated && !editorReadonly && cody.hasActionableEdit"
-      },
-      {
-        "command": "cody.fixup.cancelNearest",
-        "key": "alt+z",
-        "when": "cody.activated && !editorReadonly && cody.hasActionableEdit"
       }
     ],
     "submenus": [
@@ -851,8 +826,8 @@
           "order": 12,
           "title": "Cody Command Hints",
           "type": "boolean",
-          "markdownDescription": "Enable hints for Edit and Chat shortcuts (\"Opt+K to Edit, Opt+L to Chat\"), displayed alongside editor selections.",
-          "default": true
+          "markdownDescription": "Enable hints for Edit and Chat shortcuts, displayed alongside editor selections.",
+          "default": false
         },
         "cody.debug.enable": {
           "order": 99,
@@ -910,7 +885,12 @@
             null,
             "starcoder-16b",
             "starcoder-7b",
-            "llama-code-13b"
+            "starcoder-3b",
+            "starcoder-1b",
+            "llama-code-7b",
+            "llama-code-13b",
+            "llama-code-13b-instruct",
+            "mistral-7b-instruct-4k"
           ],
           "markdownDescription": "Overwrite the  model used for code autocompletion inference. This is only supported with the `fireworks` provider"
         },

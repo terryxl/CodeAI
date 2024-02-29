@@ -1,0 +1,1 @@
+{"version":3,"file":"parse.d.ts","sourceRoot":"","sources":["../../../src/sourcegraph-api/completions/parse.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,KAAK,EAAE,MAAM,SAAS,CAAA;AAsEpC,UAAU,iBAAiB;IACvB,MAAM,EAAE,KAAK,EAAE,CAAA;IACf,eAAe,EAAE,MAAM,CAAA;CAC1B;AAED,wBAAgB,WAAW,CAAC,YAAY,EAAE,MAAM,GAAG,iBAAiB,GAAG,KAAK,CAiB3E"}

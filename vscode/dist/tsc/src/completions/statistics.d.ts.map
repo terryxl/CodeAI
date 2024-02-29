@@ -1,0 +1,1 @@
+{"version":3,"file":"statistics.d.ts","sourceRoot":"","sources":["../../../../src/completions/statistics.ts"],"names":[],"mappings":"AAIA,UAAU,oBAAoB;IAC1B,SAAS,EAAE,MAAM,CAAA;IACjB,QAAQ,EAAE,MAAM,CAAA;CACnB;AAOD,wBAAgB,aAAa,IAAI,oBAAoB,CAEpD;AAED,wBAAgB,YAAY,IAAI,IAAI,CAGnC;AACD,wBAAgB,WAAW,IAAI,IAAI,CAGlC;AAED,eAAO,MAAM,sBAAsB,iDAAwC,CAAA"}

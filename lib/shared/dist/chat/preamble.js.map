@@ -1,0 +1,1 @@
+{"version":3,"file":"preamble.js","sourceRoot":"","sources":["../../src/chat/preamble.ts"],"names":[],"mappings":"AAEA,MAAM,UAAU,iBAAiB,CAAC,cAAmC;IACjE,OAAO;QACH;YACI,OAAO,EAAE,OAAO;YAChB,IAAI,EAAE,yDACF,cAAc,CAAC,CAAC,CAAC,IAAI,cAAc,EAAE,CAAC,CAAC,CAAC,EAC5C,EAAE;SACL;QACD;YACI,OAAO,EAAE,WAAW;YACpB,IAAI,EAAE,qDAAqD;SAC9D;KACJ,CAAA;AACL,CAAC"}

@@ -293,7 +293,7 @@ const ErrorBanner: React.FunctionComponent<{ errors: string[]; setErrors: (error
     )
 
 function getWelcomeMessageByOS(os: string): string {
-    const welcomeMessageMarkdown = `Welcome to Cody! Start writing code and Cody will autocomplete lines and entire functions for you.
+    const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。
 
 To run [Cody Commands](command:cody.menu.commands) use the keyboard shortcut <span class="keyboard-shortcut"><span>${
         os === 'darwin' ? '⌥' : 'Alt'
@@ -302,8 +302,6 @@ To run [Cody Commands](command:cody.menu.commands) use the keyboard shortcut <sp
 You can start a new chat at any time with <span class="keyboard-shortcut"><span>${
         os === 'darwin' ? '⌥' : 'Alt'
     }</span><span>/</span></span> or using the <span class="cody-icons">H</span> button.
-
-For more tips and tricks, see the [Getting Started Guide](command:cody.welcome) and [docs](https://sourcegraph.com/docs/cody).
 `
     return welcomeMessageMarkdown
 }

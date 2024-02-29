@@ -1,0 +1,1 @@
+{"version":3,"file":"messages.js","sourceRoot":"","sources":["../../../src/chat/transcript/messages.ts"],"names":[],"mappings":"AAkFA;;;;GAIG;AACH,MAAM,UAAU,gBAAgB,CAAC,KAAY;IACzC,OAAO;QACH,gBAAgB,EAAE,kBAAkB;QACpC,GAAG,KAAK;QACR,OAAO,EAAE,KAAK,CAAC,OAAO;QACtB,IAAI,EAAE,KAAK,CAAC,IAAI;KACnB,CAAA;AACL,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"sentry.web.d.ts","sourceRoot":"","sources":["../../../../../src/services/sentry/sentry.web.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,aAAa,EAAE,KAAK,aAAa,EAAE,MAAM,UAAU,CAAA;AAE5D,qBAAa,gBAAiB,SAAQ,aAAa;IACxC,WAAW,CAAC,OAAO,EAAE,aAAa,GAAG,IAAI;CAGnD"}

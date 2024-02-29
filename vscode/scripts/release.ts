@@ -1,4 +1,4 @@
-import { execFileSync } from "child_process";
+import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 
@@ -145,25 +145,23 @@ const version =
 
 // Package (build and bundle) the extension.
 console.error(`Packaging ${releaseType} release at version ${version}...`);
-execFileSync(
-    "vsce",
-    [
-        "package",
-        ...(releaseType === ReleaseType.Insiders
-            ? [
-                  insidersVersion,
-                  "--pre-release",
-                  "--no-update-package-json",
-                  "--no-git-tag-version",
-              ]
-            : []),
-        "--no-dependencies",
-        "--out",
-        "dist/cody.vsix",
-    ],
-    {
-        stdio: "inherit",
-    }
+
+execSync(
+    "vsce " +
+        [
+            "package",
+            ...(releaseType === ReleaseType.Insiders
+                ? [
+                      insidersVersion,
+                      "--pre-release",
+                      "--no-update-package-json",
+                      "--no-git-tag-version",
+                  ]
+                : []),
+            "--no-dependencies",
+            "--out",
+            "dist/cody.vsix",
+        ].join(" ")
 );
 
 // Publish the extension.
@@ -172,16 +170,16 @@ if (dryRun) {
     console.error("Dry run complete. Skipping publish step.");
 } else {
     // Publish to the VS Code Marketplace.
-    execFileSync(
-        "vsce",
-        [
-            "publish",
-            ...(releaseType === ReleaseType.Insiders
-                ? ["--pre-release", "--no-git-tag-version"]
-                : []),
-            "--packagePath",
-            "dist/cody.vsix",
-        ],
+    execSync(
+        "vsce " +
+            [
+                "publish",
+                ...(releaseType === ReleaseType.Insiders
+                    ? ["--pre-release", "--no-git-tag-version"]
+                    : []),
+                "--packagePath",
+                "dist/cody.vsix",
+            ].join(" "),
         {
             env: { ...process.env, VSCE_PAT: tokens.vscode },
             stdio: "inherit",
@@ -189,16 +187,18 @@ if (dryRun) {
     );
 
     // Publish to the OpenVSX Registry.
-    execFileSync(
-        "ovsx",
-        [
-            "publish",
-            ...(releaseType === ReleaseType.Insiders ? ["--pre-release"] : []),
-            "--packagePath",
-            "dist/cody.vsix",
-            "--pat",
-            tokens.openvsx,
-        ],
+    execSync(
+        "ovsx " +
+            [
+                "publish",
+                ...(releaseType === ReleaseType.Insiders
+                    ? ["--pre-release"]
+                    : []),
+                "--packagePath",
+                "dist/cody.vsix",
+                "--pat",
+                tokens.openvsx,
+            ].join(" "),
         {
             stdio: "inherit",
         }

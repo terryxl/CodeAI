@@ -6,7 +6,7 @@ const osIcon = isMac() ? '⌥' : 'Alt+'
 export const CodyCommandMenuItems = [
     {
         key: 'ask',
-        description: 'New Chat',
+        description: '聊天',
         prompt: 'Start a new chat',
         icon: 'comment',
         command: { command: 'cody.chat.panel.new' },

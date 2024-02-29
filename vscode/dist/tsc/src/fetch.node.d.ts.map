@@ -1,0 +1,1 @@
+{"version":3,"file":"fetch.node.d.ts","sourceRoot":"","sources":["../../../src/fetch.node.ts"],"names":[],"mappings":";AAAA,OAAO,IAAI,MAAM,MAAM,CAAA;AAKvB,OAAO,KAAK,EAAE,aAAa,EAAE,MAAM,0BAA0B,CAAA;AAkC7D,wBAAgB,cAAc,CAC1B,aAAa,EAAE,aAAa,GAC7B,CAAC,EAAE,QAAQ,EAAE,EAAE,IAAI,CAAC,GAAG,EAAE,UAAU,CAAC,KAAK,IAAI,CAAC,KAAK,CAGrD;AAED,wBAAgB,sBAAsB,IAAI,IAAI,CA6C7C"}

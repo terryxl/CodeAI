@@ -1,0 +1,1795 @@
+.outer-container {
+    background-color: var(--vscode-sideBar-background);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+button {
+    font-family: var(--vscode-font-family);
+}
+
+.inner-container {
+    background-color: var(--vscode-sideBar-background);
+    min-height: 0;
+    overflow-x: scroll;
+    box-sizing: border-box;
+}
+
+.non-transcript-container {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    flex: 1;
+}
+
+.error-container {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+}
+
+.error {
+    flex-direction: row;
+    display: flex;
+    padding: 1rem;
+    color: var(--vscode-input-foreground);
+    background-color: var(--vscode-inputValidation-errorBackground);
+    align-items: center;
+    min-height: 2rem;
+    position: relative;
+    overflow: auto;
+    align-items: baseline;
+}
+
+.close-btn {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.25rem;
+    background: none;
+    border: none;
+    color: var(--vscode-input-foreground);
+    cursor: pointer;
+}
+._container_1xoc4_1 summary {
+    opacity: 0.8;
+}
+
+._steps_1xoc4_5 {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+._step_1xoc4_5 button {
+    display: block;
+    max-width: 100%;
+    padding: 1px 2px;
+    box-sizing: border-box;
+    text-decoration: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: relative;
+    background-color: color-mix(in srgb, var(--vscode-textLink-foreground) 15%, transparent);
+    border-radius: 2px;
+}
+
+._container_1xoc4_1 summary {
+    cursor: pointer;
+    user-select: none;
+    margin-top: 10px;
+}
+._cursor_1y03o_1::before {
+    content: '▋';
+    animation: _blink_1y03o_1 1s infinite;
+}
+
+@keyframes _blink_1y03o_1 {
+    0% {
+        visibility: visible;
+    }
+    50% {
+        visibility: hidden;
+    }
+    100% {
+        visibility: hidden;
+    }
+}
+
+._loading-container_1y03o_18 {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    opacity: 0.8;
+}
+
+._dots-holder_1y03o_25 {
+    display: flex;
+    gap: 0.2rem;
+    margin: 0.5rem 0;
+    margin-left: 0.25rem;
+}
+
+._dot_1y03o_25 {
+    animation: 1s _flash_1y03o_1 0.5s infinite;
+    width: 0.25rem !important;
+    height: 0.25rem !important;
+    border-radius: 100%;
+    background-color: #fff;
+    opacity: 0.25;
+}
+
+._dot_1y03o_25:nth-child(2) {
+    animation-delay: 0.6s;
+    background-color: #fff;
+}
+
+._dot_1y03o_25:nth-child(3) {
+    animation-delay: 0.7s;
+    background-color: #fff;
+}
+
+@keyframes _flash_1y03o_1 {
+    from {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.25;
+    }
+}
+._container_6j1p8_1 {
+    display: flex;
+    align-items: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--vscode-sideBarSectionHeader-border);
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    padding: 4px;
+}
+
+._buttons_6j1p8_12 {
+    display: flex;
+}
+
+._copy-button_6j1p8_16,
+._insert-button_6j1p8_17,
+._attribution-icon_6j1p8_18,
+._status_6j1p8_19 {
+    all: unset;
+    padding: 3px;
+    min-width: 16px;  /* Status element needs to be able to expand. */
+    height: 16px;
+    background-color: transparent;
+}
+
+._status_6j1p8_19 {
+    font-size: 12px;
+    line-height: 1;
+}
+
+._attribution-container_6j1p8_32 {
+    all: unset;
+    display: flex;
+    margin-left: auto;
+}
+
+._copy-button_6j1p8_16,
+._insert-button_6j1p8_17 {
+    cursor: pointer;
+}
+
+._attribution-icon-unavailable_6j1p8_43 {
+    color: var(--hl-orange);
+}
+
+._attribution-icon-found_6j1p8_47 {
+    color: var(--hl-dark-red);
+}
+
+._status_6j1p8_19 {
+    display: flex;
+    align-items: center;
+}
+
+._codicon-loading_6j1p8_56 {
+    animation: _spin_6j1p8_1 1s linear infinite;
+}
+
+@keyframes _spin_6j1p8_1 {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+._error-item_1v4f4_1 {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+._error-item_1v4f4_1 ._icon_1v4f4_8 {
+    font-size: 24px;
+}
+
+._error-item_1v4f4_1 ._body_1v4f4_12 {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+._error-item_1v4f4_1 vscode-button {
+    margin: 0;
+}
+
+._error-item_1v4f4_1 h1,
+._error-item_1v4f4_1 p {
+    margin: 0;
+}
+
+._error-item_1v4f4_1 header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-right: 30px;
+}
+
+._error-item_1v4f4_1 header h1 {
+    text-transform: uppercase;
+    font-size: 11px;
+    margin: 0;
+}
+
+._error-item_1v4f4_1 header p {
+    max-width: 40em;
+    opacity: 0.9;
+}
+
+._error-item_1v4f4_1 ._actions_1v4f4_45 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+._error-item_1v4f4_1 ._retry-message_1v4f4_51 {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+._error-item_1v4f4_1 ._banner-container_1v4f4_56 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+    height: 100px;
+}
+
+@property --error-item-reflection-position {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+
+._error-item_1v4f4_1 ._banner_1v4f4_56 {
+    --error-item-reflection-position: -100%;
+
+    padding: 6px 30px;
+    transform: translateY(50%) translateX(25%) rotate(45deg);
+    border: 1px solid rgba(0 0 0 / 16%);
+    background: linear-gradient(
+            45deg,
+            rgb(255 220 220 / 0%) calc(var(--error-item-reflection-position) + 35%),
+            rgb(255 220 220 / 50%) calc(var(--error-item-reflection-position) + 50%),
+            rgb(255 220 220 / 0%) calc(var(--error-item-reflection-position) + 65%)
+        ),
+        linear-gradient(rgb(255 255 255 / 55%), rgb(255 255 255 / 55%)),
+        repeating-conic-gradient(#4ac1e8, #7048e8, #ff5543, #7048e8, #4ac1e8);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%);
+    transition: box-shadow 650ms ease-in-out;
+    color: #080808;
+    text-shadow: 1px 1px 0 rgb(255 255 255 / 75%);
+    font-size: 9px;
+    line-height: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+._error-item_1v4f4_1 ._banner_1v4f4_56:hover {
+    --error-item-reflection-position: 100%;
+
+    transition:
+        --error-item-reflection-position 1.5s cubic-bezier(0.455, 0.03, 0.515, 0.955),
+        box-shadow 750ms ease-in-out;
+    box-shadow:
+        0 4px 8px 0 rgb(0 0 0 / 15%),
+        0 0 10px 0 rgb(255 255 255 / 35%);
+}
+
+._error-item_1v4f4_1 ._banner_1v4f4_56::before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 5px;
+    transform: translateX(-22px) rotate(135deg);
+    background: linear-gradient(rgb(255 255 255 / 0%), rgb(255 255 255 / 80%));
+}
+
+._error-item_1v4f4_1 ._banner_1v4f4_56::after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    width: 100px;
+    height: 5px;
+    transform: translateY(-27px) rotate(225deg);
+    background: linear-gradient(rgb(255 255 255 / 0%), rgb(255 255 255 / 80%));
+}
+
+._request-error_1v4f4_129 {
+    background-color: #f7bcbc;
+    color: #de3400;
+
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+
+    word-break: break-word;
+    text-wrap: wrap;
+    line-height: 150%;
+
+    border-left: 0.5rem solid #d8000c;
+}
+
+._request-error-title_1v4f4_143 {
+    font-weight: bold;
+}
+:root {
+    --spacing: 1rem;
+}
+
+._row_upqwe_5 {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing);
+    transition: opacity 150ms ease-in-out,
+                box-shadow 150ms ease-in-out;
+}
+
+._row_upqwe_5::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0.1rem;
+    height: 100%;
+    content: '';
+}
+
+._assistant-row_upqwe_23::before {
+    background-image: linear-gradient(to bottom, #00cbec, #b200f8, #ff5543);
+}
+
+._row_upqwe_5:hover > ._header-container_upqwe_27 {
+    visibility: visible;
+}
+
+._actions_upqwe_31 {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 var(--spacing) 0;
+}
+
+._content_upqwe_37 {
+    word-break: break-word;
+    line-height: 150%;
+}
+
+/* Style @-file tokens to match TranscriptAction context files */
+._content_upqwe_37 a[href^="vscode://file"] em,
+._content_upqwe_37 a[href^="vscode-insiders://file"] em,
+._content_upqwe_37 a[href^="vscodium://file"] em,
+._content_upqwe_37 a[href^="cursor://file"] em
+{
+    padding: 1px 2px;
+    box-sizing: border-box;
+    background-color: color-mix(in srgb, var(--vscode-textLink-foreground) 15%, transparent);
+    border-radius: 2px;
+    font-style: normal;
+    word-break: break-all;
+}
+
+._content_upqwe_37 p {
+    word-break: break-word;
+}
+
+._content_upqwe_37 pre {
+    padding: calc(var(--spacing) * 0.5);
+    overflow-x: auto;
+}
+
+._content_upqwe_37 h1,
+._content_upqwe_37 h2,
+._content_upqwe_37 h3,
+._content_upqwe_37 h4,
+._content_upqwe_37 h5,
+._content_upqwe_37 h6 {
+    margin: 1.2em 0;
+}
+
+._content_upqwe_37 h1 {
+    font-size: 1.15em;
+    font-weight: 700;
+}
+
+._content_upqwe_37 h2 {
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+._content_upqwe_37 h3 {
+    font-size: inherit;
+    font-weight: 700;
+}
+
+._content_upqwe_37 h4,
+._content_upqwe_37 h5,
+._content_upqwe_37 h6 {
+    font-size: inherit;
+    font-weight: 600;
+}
+
+._content_upqwe_37 > div:first-child > *:first-child {
+    margin-top: 0;
+}
+
+._content_upqwe_37 > div:first-child > *:last-child {
+    margin-bottom: 0;
+}
+
+._header-container_upqwe_27 {
+    position: absolute;
+    right: var(--spacing);
+    top: calc(var(--spacing) / 4);
+    visibility: hidden;
+}
+
+._transcript-item-header_upqwe_111 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.2em;
+}
+
+._editing-button-container_upqwe_118 {
+    visibility: visible;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-self: center;
+    transition: opacity 150ms ease-in-out;
+}
+
+._editing-button-container-is-editing-mode_upqwe_128 {
+    opacity: 0;
+    pointer-events: none;
+}
+
+._footer-container_upqwe_133 {
+    padding-top: calc(var(--spacing) / 2);
+}
+
+._feedback-edit-buttons_upqwe_137 {
+    display: flex;
+    margin: 0;
+}
+
+._text-area-container_upqwe_142 {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+._chat-input_upqwe_150 {
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+._cancel-edit-button_upqwe_156,
+._submit-button_upqwe_157 {
+    fill: currentColor;
+    opacity: 0.8;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+}
+
+._active-submit-button_upqwe_169 {
+    background: var(--vscode-textLink-foreground) !important;
+}
+
+._submit-button_upqwe_157:hover {
+    opacity: 1;
+}
+
+._context-files-container_upqwe_177 {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+._unfocused_upqwe_183 {
+    opacity: 0.5;
+}
+
+._unfocused_upqwe_183 ._feedback-edit-buttons-container_upqwe_187 {
+    opacity: 0;
+    pointer-events: none;
+}
+
+._focused_upqwe_192 {
+    box-shadow: 0 -1px 0 var(--vscode-sideBarSectionHeader-border),
+                0 1px 0 var(--vscode-sideBarSectionHeader-border),
+                0 0 2rem var(--vscode-widget-shadow);
+}
+._container_hn8z6_1 {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+._scroll-anchored-container_hn8z6_8 {
+    overflow-anchor: none;
+}
+
+._scroll-anchor_hn8z6_8 {
+    overflow-anchor: auto;
+    height: 5px; /* this is the grippy region for autoscroll */
+    width: 100vw;
+}
+
+/* Additional padding for the stop-generating button */
+._row-in-progress_hn8z6_19 {
+    padding-bottom: 1rem;
+}
+._inner-container_16288_1 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+._transcript-container_16288_7 {
+    flex: 1;
+}
+
+._input-row_16288_11 {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem;
+}
+
+._text-area-container_16288_19 {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+._chat-input-container_16288_26 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+._chat-input_16288_26 {
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+._submit-button_16288_38 {
+    border: none;
+    cursor: pointer;
+
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+
+    margin-left: 0.5rem;
+}
+
+._context-button_16288_49 {
+    color: var(--button-primary-background);
+    position: absolute;
+    right: 0.3rem;
+    bottom: 0.3rem;
+    fill: currentColor;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+._suggestions_16288_60 {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 0.1rem;
+    margin-bottom: 0.25rem;
+    /* This matches the button paddings, so the button text lines up with the input */
+    margin-left: -6px;
+}
+
+._abort-button-container_16288_70 {
+    display: flex;
+    /* Remove the padding of the form container from the width */
+    width: calc(100% - 2rem);
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -2.5rem;
+    z-index: 100;
+}
+._chat-actions-container_a7uo5_1 {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+._chat-action-button_a7uo5_10 {
+    all: unset;
+    padding: 2px 8px;
+    font-size: var(--type-ramp-minus1-font-size);
+    background-color: var(--vscode-button-secondaryBackground, transparent);
+    border-radius: 2px;
+    border: 1px solid var(--vscode-button-border, transparent);
+    color: var(--vscode-button-secondaryForeground);
+    cursor: pointer;
+}
+
+._chat-action-button_a7uo5_10:hover {
+    background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+._chat-action-button_a7uo5_10:focus,
+._chat-action-button_a7uo5_10:focus-visible,
+._chat-action-button_a7uo5_10:focus-within {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: -1px;
+}
+
+._chat-action-keybind_a7uo5_32 {
+    margin-left: 0.25rem;
+    opacity: 0.5;
+}
+
+._container_xa0gb_1 {
+    padding: 8px 10px 5px 12px;
+    border-bottom: solid 1px var(--vscode-sideBarSectionHeader-border);
+}
+
+._container_xa0gb_1 svg {
+    opacity: 0.8;
+}
+
+._provider_xa0gb_10 {
+    opacity: 0.8;
+    font-size: 12px;
+}
+
+._container_xa0gb_1 vscode-dropdown {
+    border-radius: 2px;
+    border: none;
+    background: none;
+}
+
+._container_xa0gb_1 vscode-dropdown:focus,
+._container_xa0gb_1 vscode-dropdown:focus-visible,
+._container_xa0gb_1 vscode-dropdown:focus-within,
+._container_xa0gb_1 vscode-dropdown:focus::part(listbox),
+._container_xa0gb_1 vscode-dropdown:focus-visible::part(listbox),
+._container_xa0gb_1 vscode-dropdown:focus-within::part(listbox) {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: -1px;
+}
+
+._container_xa0gb_1 vscode-dropdown::part(indicator) {
+    margin-inline-start: 6px;
+    opacity: 0.8;
+}
+
+._container_xa0gb_1 vscode-dropdown[disabled] {
+    opacity: 0.6;
+}
+
+._container_xa0gb_1 vscode-dropdown[disabled]::part(indicator) {
+    display: none;
+}
+
+._container_xa0gb_1 vscode-dropdown[disabled]::part(control),
+._container_xa0gb_1 vscode-dropdown[disabled]::part(listbox) {
+    cursor: default;
+}
+
+._container_xa0gb_1 vscode-dropdown::part(listbox) {
+    width: auto;
+    border-radius: 2px;
+    padding: 2px;
+    background-color: var(--vscode-dropdown-listBackground, var(--vscode-dropdown-background));
+}
+
+._container_xa0gb_1 vscode-dropdown[disabled]::part(listbox) {
+    cursor: pointer;
+}
+
+._selected-value_xa0gb_60 {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+._container_xa0gb_1 vscode-option[disabled] {
+    cursor: pointer;
+    opacity: unset;
+}
+
+._container_xa0gb_1 vscode-option::part(content) {
+    padding: 6px 8px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+}
+
+._badge_xa0gb_79 {
+    position: relative;
+    margin-left: auto;
+    padding: 3px 4px;
+    background: repeating-conic-gradient(#7048E8 50%, #00CBEC 75%, #A112FF 100%, #FF5543 125%, #7048E8 150%);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.025rem;
+    text-shadow: 0px 0px 1px #280065, 0px 1px 1px rgba(36, 0, 81, 1);
+    transition: box-shadow 150ms;
+    color: rgba(255,255,255,0.9);
+}
+
+._container_xa0gb_1 vscode-option:hover ._badge_xa0gb_79 {
+    box-shadow:
+        0px 0px 2px 1px var(--vscode-dropdown-listBackground, var(--vscode-dropdown-background)),
+        0px 0px 4px 0px var(--list-active-selection-foreground),
+        inset 0 0 10px 0px rgba(255,255,255,0.25);
+}
+
+._title-container_xa0gb_101:has(~ ._badge_xa0gb_79) {
+    margin-right: 0.5rem;
+}
+
+._disabled_xa0gb_105 {
+    opacity: 0.6;
+}
+._backdrop_60nqk_1 {
+    position: absolute;
+    inset: -100vh -100vw;
+    width: 200vw;
+    height: 200vh;
+    z-index: 1;
+    background-color: rgba(0 0 0 0.01);
+}
+
+._popup_60nqk_10 {
+    z-index: 2;
+
+    --notice-border-radius: 6px;
+    text-align: left;
+    box-sizing: border-box;
+    padding: 12px;
+
+    /* these properties need to be kept in sync with .pointy-bit, below */
+    background-color: var(--vscode-quickInput-background);
+    border: 1px solid var(--vscode-widget-border);
+
+    color: var(--vscode-quickInput-foreground);
+    box-shadow: 0 0 8px 2px var(--vscode-widget-shadow);
+    border-radius: var(--notice-border-radius);
+
+    position: absolute;
+    bottom: calc(100% + var(--notice-border-radius));
+    left: -3px;
+    width: calc(100vw - 1.5rem);
+}
+
+._popup-trail_60nqk_32 {
+    left: auto;
+    right: -3px;
+}
+
+._pointy-bit_60nqk_18 {
+    z-index: 3;
+
+    position: absolute;
+    left: calc(50% - 6px);
+    bottom: 100%;
+    rotate: -45deg;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+
+    /* these colors need to be kept in sync with .notice, above */
+    background-color: var(--vscode-quickInput-background);
+    border-left: 1px solid var(--vscode-widget-border);
+    border-bottom: 1px solid var(--vscode-widget-border);
+
+    /* no box shadow on this, it relies on overlapping the rest of the popup */
+}
+
+._popup-host_60nqk_56 {
+    position: relative;
+}
+
+._row_60nqk_60 {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+._action-button-container_60nqk_66 :nth-last-child(-n + 1) {
+    background-color: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+    border: var(--vscode-button-border);
+}
+
+._action-button-container_60nqk_66 :nth-last-child(-n + 1):hover {
+    background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+._popup_60nqk_10 h1,
+._popup_60nqk_10 p {
+    margin: 0;
+    font-size: inherit;
+}
+
+._action-button-container_60nqk_66 {
+    margin-top: 0.6rem;
+}
+
+._notice-text_60nqk_86 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: auto;
+    font-weight: 500;
+}
+
+._notice-text_60nqk_86 h1 {
+    font-weight: bold;
+}
+
+._notice-icon_60nqk_98 {
+    width: 24px;
+    height: 24px;
+}
+
+/* When there's no notices we don't want the container taking up space and capturing clicks */
+._popup_60nqk_10:empty {
+    display: none;
+}
+._popup_1ddn6_1 {
+    max-width: 300px;
+    cursor: default;
+}
+
+._container_1ddn6_6 {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+._popup_1ddn6_1 label {
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+._popup_1ddn6_1 label h1 {
+    text-transform: none;
+    font-weight: 600;
+    display: inline;
+    cursor: pointer;
+    user-select: none;
+}
+
+._popup_1ddn6_1 > p {
+    display: block;
+}
+
+._folders-list_1ddn6_29, ._enterprise-repo-list_1ddn6_29 {
+    margin: 1rem 0 0.5rem;
+}
+
+._enterprise-repo-list_1ddn6_29 h1 {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 11px;
+    opacity: 0.8;
+    margin-bottom: 0.25rem;
+}
+
+._enterprise-repo-list-item_1ddn6_41:first-of-type {
+    margin-top: 0.5rem;
+}
+
+._enterprise-repo-list-item_1ddn6_41 {
+    display: flex;
+    margin: 4px 0;
+}
+
+._enterprise-repo-list-item_1ddn6_41 ._repo-name_1ddn6_50 {
+    margin-left: 0.25rem;
+}
+
+._enterprise-repo-list-item_1ddn6_41 ._info-close_1ddn6_54 {
+    margin-left: auto;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px;
+    color: var(--vscode-icon-foreground);
+}
+
+._enterprise-repo-list-item_1ddn6_41 button {
+    all: unset;
+    display: flex;
+    cursor: pointer;
+    border-radius: 3px;
+    line-height: 1;
+}
+
+._enterprise-repo-list-item_1ddn6_41 button:hover {
+    background: var(--button-icon-hover-background);
+    outline: 1px dotted var(--contrast-active-border);
+    outline-offset: -1px;
+}
+
+._choose-repositories-button_1ddn6_76 {
+    margin-top: 0.75rem;
+    display: flex;
+    padding: 4px;
+    border-radius: 2px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    line-height: 18px;
+}
+
+._folders-list_1ddn6_29 > dt {
+    display: flex;
+    gap: 0.4rem;
+}
+
+._folders-list_1ddn6_29 > dd {
+    margin-left: 0.4rem;
+    padding-left: 0.8rem;
+    border-left: 1px solid var(--vscode-checkbox-border);
+}
+
+._folders-list_1ddn6_29 > dd + dt {
+    margin-top: 1rem;
+}
+
+._providers-list_1ddn6_102, ._provider-item_1ddn6_102 {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+._providers-list_1ddn6_102 {
+    margin-top: 0.4rem;
+    padding: 0.25rem 0 0.5rem;
+    font-size: 12px;
+}
+
+._providers-list_1ddn6_102 p {
+    margin-top: 0.2rem;
+    margin-left: 1.25rem;
+}
+
+._providers-list_1ddn6_102 p + p {
+    margin-top: 0.5rem;
+}
+
+._provider-label_1ddn6_123 {
+    font-weight: 600;
+}
+
+._provider-icon-and-name_1ddn6_127 {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+._provider-explanatory-text_1ddn6_133, ._provider-inline-state_1ddn6_133 {
+    opacity: 0.8;
+}
+
+._line-break-all_1ddn6_137 {
+    word-break: break-all;
+}
+
+._provider-item_1ddn6_102:not(:has(p)) {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+._provider-item_1ddn6_102 + ._provider-item_1ddn6_102 {
+    margin-top: 0.75rem;
+}
+
+._provider-inline-state_1ddn6_133 {
+    font-weight: normal;
+}
+
+._popup_1ddn6_1 i {
+    opacity: 0.8;
+}
+
+._popup_1ddn6_1 vscode-checkbox {
+    margin-top: 0;
+}
+
+/*
+    vscode-checkbox and vscode-button is missing the borders and focus styles that built-in VS
+    controls have (perhaps out of date?) so we need to add them in ourselves
+*/
+._popup_1ddn6_1 vscode-checkbox::part(control) {
+    background-color: var(--vscode-checkbox-background);
+    border: 1px solid var(--vscode-checkbox-border);
+}
+
+._popup_1ddn6_1 vscode-checkbox:focus::part(control),
+._popup_1ddn6_1 vscode-checkbox:focus-visible::part(control),
+._popup_1ddn6_1 vscode-checkbox:focus-within::part(control) {
+    border-color: var(--vscode-focusBorder);
+}
+
+._popup_1ddn6_1 vscode-button:focus::part(control),
+._popup_1ddn6_1 vscode-button:focus-visible::part(control),
+._popup_1ddn6_1 vscode-button:focus-within::part(control) {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: 2px;
+}
+
+._settings-btn_1ddn6_185 {
+    color: var(--vscode-editor-foreground);
+    border: 1px solid transparent;
+    border-radius: 3px;
+    position: relative;
+}
+
+._settings-btn_1ddn6_185 i {
+    width: 16px;
+    height: 16px;
+}
+
+._settings-btn-active_1ddn6_197 {
+    color: var(--vscode-inputOption-activeForeground);
+    border-color: var(--vscode-inputOption-activeBorder);
+    background-color: var(--vscode-inputOption-activeBackground);
+}
+
+._glowy-dot_1ddn6_203 {
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    background-color: var(--vscode-inputOption-activeBorder);
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    z-index: 2;
+}
+
+._glowy-dot_1ddn6_203::after {
+    content: '';
+    box-sizing: border-box;
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    border: 0.75px solid var(--vscode-inputOption-activeForeground);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    animation: 2.5s linear infinite _glowy_1ddn6_203;
+}
+
+@keyframes _glowy_1ddn6_203 {
+    50% {
+        transform: scale(300%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(300%);
+        opacity: 0;
+    }
+}
+
+._popup_1ddn6_1 ._hint_1ddn6_240 {
+    font-size: 11px;
+    line-height: 1.3;
+    opacity: 0.8;
+    margin-bottom: 0;
+    font-style: italic;
+}
+._link-button_119fp_1 {
+    background: none;
+    border: none;
+    color: var(--vscode-textLink-foreground);
+    cursor: pointer;
+    font-size: inherit;
+    text-decoration: underline;
+    display: contents; /* so our parent can tell us to truncate with ellipsis */
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font-weight: normal;
+}
+._link-button_19a8e_1 {
+    background: none;
+    border: none;
+    color: var(--vscode-button-secondaryForeground);
+    cursor: pointer;
+    font-size: inherit;
+    text-decoration: underline;
+    display: contents; /* so our parent can tell us to truncate with ellipsis */
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+._container_14sl5_1 {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    box-sizing: border-box;
+    /* Match the input width */
+    width: calc(100vw - 64px);
+    /* Fit in 6 results with the 7th peeking in */
+    max-height: 11.8rem;
+    z-index: 101;
+    background: var(--vscode-sideBar-background);
+    color: var(--vscode-sideBar-foreground);
+    border: 1px solid var(--vscode-widget-border);
+    box-shadow: 0 0 8px 2px var(--vscode-widget-shadow);
+    border-radius: 6px;
+    padding: 0.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+._heading-container_14sl5_21 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .25rem 0.5rem;
+}
+
+._heading-container_14sl5_21:has(+ ._selections-container_14sl5_28) {
+    margin-bottom: 0rem;
+}
+
+._heading_14sl5_21 {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0;
+}
+
+._selections-container_14sl5_28 {
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+}
+
+._selection-item_14sl5_44 {
+    display: flex;
+    align-items: center;
+    font-size: inherit;
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    color: currentColor;
+    background: transparent;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    gap: 0.3rem;
+}
+
+._title-and-description-container_14sl5_58 {
+    display: flex;
+    align-items: baseline;
+    text-align: left;
+    gap: 0.1rem;
+    overflow: hidden;
+}
+
+._warning-container_14sl5_66 {
+    margin: 0;
+}
+
+._show-warning_14sl5_70 {
+    flex-direction: column;
+    align-items: self-start;
+}
+
+._warning-description_14sl5_75 {
+    opacity: 0.6;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex: 1;
+}
+
+._selection-title_14sl5_83 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+._selection-description_14sl5_89 {
+    margin-left: 0.25rem;
+    opacity: 0.8;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex: 1;
+}
+
+._selection-item_14sl5_44:hover {
+    color: var(--vscode-list-hoverForeground);
+    background-color: var(--vscode-list-hoverBackground);
+}
+
+._selected_14sl5_103,
+._selected_14sl5_103._selection-item_14sl5_44:hover {
+    color: var(--vscode-list-activeSelectionForeground);
+    background: var(--vscode-list-activeSelectionBackground);
+}
+
+body[data-vscode-theme-kind='vscode-high-contrast-light'] ._selected_14sl5_103,
+body[data-vscode-theme-kind='vscode-high-contrast'] ._selected_14sl5_103 {
+    outline: 1px dashed var(--vscode-contrastActiveBorder);
+    outline-offset: -1px;
+}
+
+._separator_14sl5_115 {
+    all: unset;
+    margin: 0.5rem;
+    border-bottom: 1px solid var(--vscode-dropdown-border);
+}
+
+._empty-symbol-search-tip_14sl5_121 {
+    font-size: 11px;
+    padding: 0 0.5rem;
+    opacity: 0.7;
+    margin: 0 0 0.25rem 0;
+}
+
+._empty-symbol-search-tip_14sl5_121 i {
+    vertical-align: middle;
+}
+
+._ghost-text_14sl5_132 {
+    opacity: 0.7;
+}
+._inner-container_slyia_1 {
+    height: 100%;
+
+    /* popups use a screen to capture clicks outside the popups; this is
+       necessary so that the screen can extend to the extent of the view without
+       scrollbars */
+    overflow: clip;
+}
+
+._transcript-item_slyia_10 {
+    font-size: var(--vscode-font-size);
+    font-family: var(--vscode-font-family);
+    font-weight: var(--vscode-font-weight);
+    border-color: var(--vscode-sideBarSectionHeader-border);
+    padding: 1rem 1rem 1rem 1.25rem;
+    color: var(--vscode-foreground);
+}
+
+/* Apply a slight tint to the assistant transcript item. */
+body[data-vscode-theme-kind='vscode-light'] ._human-transcript-item_slyia_20,
+body[data-vscode-theme-kind='vscode-high-contrast-light'] ._human-transcript-item_slyia_20 {
+    /* slight dark tint */
+    background-color: rgb(0 0 0 / 4%);
+}
+
+body[data-vscode-theme-kind='vscode-dark'] ._human-transcript-item_slyia_20,
+body[data-vscode-theme-kind='vscode-high-contrast'] ._human-transcript-item_slyia_20 {
+    /* slight light tint */
+    background-color: rgb(255 255 255 / 4%);
+}
+
+._human-transcript-item_slyia_20::before {
+    background-color: var(--vscode-sideBar-foreground, currentColor);
+}
+
+._transcript-item_slyia_10 code,
+._transcript-item_slyia_10 pre {
+    font-family: var(--vscode-editor-font-family);
+    font-size: var(--vscode-editor-font-size);
+}
+
+._transcript-item_slyia_10 pre,
+._transcript-item_slyia_10 pre > code {
+    /* Our syntax highlighter emits colors intended for dark backgrounds only. */
+    background-color: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    margin-bottom: 0;
+}
+
+._transcript-item_slyia_10 pre {
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--vscode-sideBarSectionHeader-border);
+    border-bottom: none;
+}
+
+body[data-vscode-theme-kind='vscode-light'] ._transcript-item_slyia_10 pre,
+body[data-vscode-theme-kind='vscode-light'] ._transcript-item_slyia_10 pre > code {
+    /* Our syntax highlighter emits colors intended for dark backgrounds only. */
+    background-color: var(--code-background);
+    color: var(--code-foreground);
+}
+
+._transcript-item_slyia_10 ul:not(._transcript-action_slyia_64 *),
+._transcript-item_slyia_10 ol:not(._transcript-action_slyia_64 *) {
+    padding-left: 2rem;
+}
+
+._code-blocks-copy-button_slyia_69,
+._code-blocks-insert-button_slyia_70 {
+    background: var(--button-icon-background);
+    border-radius: var(--button-icon-corner-radius);
+    color: var(--foreground);
+}
+
+._code-blocks-copy-button_slyia_69:hover,
+._code-blocks-insert-button_slyia_70:hover {
+    background: var(--button-icon-hover-background);
+    outline: 1px dotted var(--contrast-active-border);
+    outline-offset: -1px;
+}
+
+._input-row_slyia_83 {
+    border-top: solid 1px var(--vscode-sideBarSectionHeader-border);
+    gap: 0.5rem;
+    padding: 0.75rem;
+}
+
+/* Container used for autogrowing, based on https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
+._chat-input-container_slyia_90 {
+    /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+    display: grid;
+}
+
+._chat-input-container_slyia_90::after {
+    /* Note the weird space! Needed to preventy jumpy behavior */
+    content: attr(data-value) ' ';
+
+    /* This is how textarea text behaves */
+    white-space: pre-wrap;
+
+    /* Hidden from view, clicks, and screen readers */
+    visibility: hidden;
+}
+
+/* Both elements need the same styling so the height matches */
+._chat-input_slyia_90,
+._chat-input-container_slyia_90::after {
+    box-sizing: border-box;
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    border: 1px solid transparent;
+    border-radius: 2px;
+
+    /* Extra right padding to ensure it doesn't overlap with enhanced context button */
+    padding: 0.5rem 32px 0.5rem 0.5rem;
+    font: inherit;
+    width: 100%;
+    overflow: hidden;
+
+    /* Don't allow the input box to become larger than the webview to avoid submit buttons going off the screen */
+    max-height: 80vh; /* 80% of viewport height */
+
+    /* Place on top of each other */
+    grid-area: 1 / 1 / 2 / 2;
+    resize: none;
+}
+
+/* Unset for the new chat ui */
+._new-chat-input_slyia_130,
+._new-chat-input-container_slyia_131::after {
+    min-height: unset;
+}
+
+._chat-input_slyia_90 {
+    border-color: var(--vscode-input-border, transparent);
+}
+
+._chat-input_slyia_90:focus,
+._chat-input_slyia_90:focus-visible,
+._chat-input_slyia_90:focus-within {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: -1px;
+}
+
+._chat-input-actions_slyia_146 {
+    position: absolute;
+    bottom: 6px;
+    left: 4px;
+
+    /* This is a small detail, but we always want clicks to fall through the textarea if buttons are disabled */
+    pointer-events: none;
+}
+
+._chat-input-actions_slyia_146 > * {
+    /* We have to set this explicitly, otherwise it will use the parent's value */
+    pointer-events: auto;
+}
+
+._chat-input-actions_slyia_146 [disabled] {
+    /* Disabled buttons just send their clicks to the textarea, similar to Slack’s implementation */
+    pointer-events: none;
+}
+
+._chat-button_slyia_165 {
+    margin-top: 0.5rem;
+    padding: 0.25rem;
+}
+
+._chat-input-context_slyia_170 {
+    opacity: 0.85;
+}
+
+._feedback-buttons_slyia_174 {
+    display: flex;
+    flex-direction: row;
+    gap: 0.15rem;
+}
+
+._edit-button_slyia_180 {
+    border-radius: 0.5rem;
+}
+
+._edit-button_slyia_180:hover {
+    background: none;
+}
+
+._edit-button-disabled_slyia_188 {
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+    cursor: pointer;
+}
+
+._edit-button_slyia_180[disabled] {
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+._suggestion-button_slyia_199 {
+    all: unset;
+    cursor: pointer;
+    font-size: 90%;
+    padding: 3px 6px;
+    background: var(--button-icon-background);
+    border-radius: var(--button-icon-corner-radius);
+    color: var(--foreground);
+}
+
+._suggestion-button_slyia_199:hover {
+    background: var(--button-icon-hover-background);
+    outline: 1px dotted var(--contrast-active-border);
+    outline-offset: -1px;
+}
+
+._suggestion-button_slyia_199 ._codicon_slyia_215 {
+    vertical-align: middle;
+    margin-right: 3px;
+}
+
+._submit-button_slyia_220 {
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    display: flex;
+    justify-content: center;
+}
+
+._submit-button_slyia_220,
+._submit-button-disabled_slyia_228 {
+    margin-bottom: 0;
+}
+
+._submit-button_slyia_220[disabled] {
+    opacity: 0.4;
+    cursor: default;
+}
+
+._submit-button_slyia_220 svg {
+    opacity: 1;
+}
+
+._thumbs-down-feedback-container_slyia_241 {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing) / 4);
+}
+
+._feedback-button_slyia_174[disabled] {
+    /* VSCodeButton's default cursor is not-allowed, but that's different to
+       native VS Code and feels off, especially when it quickly changes to
+       not-allowed after you submit feedback. So we reset it back to the
+       default cursor to fit in nicer with standard VS Code native behaviour */
+    cursor: default;
+}
+
+._textarea-disabled_slyia_255 {
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    opacity: 0.5;
+}
+._container_15chc_1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+._dots-holder_15chc_8 {
+    display: flex;
+    gap: 0.2rem;
+}
+
+._dot_15chc_8 {
+    animation: 1s _flash_15chc_1 0.5s infinite;
+    width: calc(var(--vscode-editor-font-size) / 2) !important;
+    height: calc(var(--vscode-editor-font-size) / 2) !important;
+    border-radius: 100%;
+    background-color: #b200f8;
+    opacity: 0.25;
+}
+
+._dot_15chc_8:nth-child(2) {
+    animation-delay: 0.6s;
+    background-color: #ff5543;
+}
+
+._dot_15chc_8:nth-child(3) {
+    animation-delay: 0.7s;
+    background-color: #00cbec;
+}
+
+@keyframes _flash_15chc_1 {
+    from {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.25;
+    }
+}._notice_1d3y4_1 {
+    box-sizing: border-box;
+    padding: 10px 10px 13px 10px;
+    margin-top: 15px;
+    width: 100%;
+
+    background: var(--vscode-sideBar-background);
+    color: var(--vscode-sideBar-foreground);
+    border: 1px solid var(--vscode-widget-border);
+    box-shadow: 0 0 8px 2px var(--vscode-widget-shadow);
+    border-radius: 6px;
+
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+/* When there's no notices we don't want the container taking up space and capturing clicks */
+._notice_1d3y4_1:empty {
+    display: none;
+}
+
+._notice_1d3y4_1 h1,
+._notice_1d3y4_1 p {
+    all: unset;
+}
+
+._notice-icon_1d3y4_28 {
+    width: 24px;
+    height: 24px;
+}
+._notice-text_1d3y4_32 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: auto;
+    font-weight: 500;
+}
+
+._notice-close_1d3y4_40 {
+    margin-top: -5px;
+    margin-right: -5px;
+}
+._icon_1tbd7_1 {
+    fill: var(--vscode-gitDecoration-untrackedResourceForeground, var(--vscode-textLink-foreground));
+    opacity: 0.9;
+}
+
+._trails_1tbd7_6 path {
+    opacity: 0.5;
+    animation: 1.5s _trail-fade_1tbd7_1 linear infinite alternate;
+}
+
+._trails_1tbd7_6 path:nth-child(1) {
+    animation-delay: 0;
+}
+._trails_1tbd7_6 path:nth-child(2) {
+    animation-delay: 0.4s;
+    
+}
+._trails_1tbd7_6 path:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+@keyframes _trail-fade_1tbd7_1 {
+    to { opacity: 0.1; }
+}._icon_1iut4_1 path {
+    fill: var(--vscode-textLink-foreground);
+    animation: 0s _sparkles_1iut4_1 linear infinite alternate;
+    opacity: 0.9;
+}
+
+._icon_1iut4_1 path:nth-child(1) {
+    animation-duration: 2.6s;
+    --faded-opacity: 0.35;
+}
+._icon_1iut4_1 path:nth-child(2) {
+    animation-duration: 2.1s;
+    --faded-opacity: 0.3;
+}
+._icon_1iut4_1 path:nth-child(3) {
+    animation-duration: 1.6s;
+    --faded-opacity: 0.25;
+}
+
+@keyframes _sparkles_1iut4_1 {
+    to { opacity: var(--faded-opacity); }
+}._notices_1mrpa_1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 15px 0 20px;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}._container_1muq1_1 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.25rem;
+    color: var(--vscode-editor-foreground);
+}
+
+._sections-container_1muq1_9 {
+    flex: 1;
+}
+
+._logo_1muq1_13 {
+    margin-bottom: 1rem;
+}
+
+._button-width-sizer_1muq1_17 {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+._button-stack_1muq1_25 {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+}
+
+._section_1muq1_9 {
+    background: var(--vscode-sideBar-background);
+    color: var(--vscode-sideBar-foreground);
+    border: 1px solid var(--vscode-widget-border);
+    box-shadow: 0 2px 16px 0 var(--vscode-widget-shadow);
+    border-radius: 4px;
+    margin-bottom: var(--spacing);
+    padding: var(--spacing);
+}
+
+@media (width >= 640px) {
+    ._section_1muq1_9 {
+        width: fit-content;
+        min-width: 300px;
+    }
+}
+
+._section_1muq1_9 h1 {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    margin: 0 0 0.75rem;
+}
+
+._section_1muq1_9 p {
+    margin: 15px 0 0;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+._button_1muq1_17 {
+    box-sizing: border-box;
+    justify-content: center;
+    padding: 0.25rem;
+    max-width: 300px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (width >= 640px) {
+    ._button_1muq1_17 {
+        margin-left: 0;
+    }
+}
+
+._terms_1muq1_78 {
+    font-size: 90%;
+    opacity: 0.8;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+._button_1muq1_17 img {
+    width: 16px;
+    margin-inline-end: 0.5rem;
+}

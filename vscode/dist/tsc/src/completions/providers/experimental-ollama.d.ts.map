@@ -1,0 +1,1 @@
+{"version":3,"file":"experimental-ollama.d.ts","sourceRoot":"","sources":["../../../../../src/completions/providers/experimental-ollama.ts"],"names":[],"mappings":"AAEA,OAAO,EAIH,KAAK,aAAa,EACrB,MAAM,0BAA0B,CAAA;AAajC,OAAO,EAGH,KAAK,cAAc,EAEtB,MAAM,YAAY,CAAA;AAmJnB,wBAAgB,0BAA0B,CAAC,UAAU,EAAE,MAAM,GAAG,OAAO,CAEtE;AAED,wBAAgB,oBAAoB,CAAC,aAAa,EAAE,aAAa,GAAG,cAAc,CAmCjF"}

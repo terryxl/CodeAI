@@ -1,0 +1,1 @@
+{"version":3,"file":"CodyNodeHttpAdapter.d.ts","sourceRoot":"","sources":["../../../../src/testutils/CodyNodeHttpAdapter.ts"],"names":[],"mappings":"AAAA,OAAO,eAAe,MAAM,4BAA4B,CAAA;AACxD,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,eAAe,CAAA;AAE5C,qBAAa,mBAAoB,SAAQ,eAAe;IACvC,SAAS,CAAC,OAAO,EAAE,OAAO,GAAG,OAAO,CAAC,IAAI,CAAC;CAS1D"}

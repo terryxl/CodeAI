@@ -1,0 +1,1 @@
+{"version":3,"file":"edit.d.ts","sourceRoot":"","sources":["../../../../src/code-actions/edit.ts"],"names":[],"mappings":";AAAA,OAAO,KAAK,MAAM,MAAM,QAAQ,CAAA;AAIhC,qBAAa,cAAe,YAAW,MAAM,CAAC,kBAAkB;IAC5D,gBAAuB,uBAAuB,0BAA0C;IAEjF,kBAAkB,CAAC,QAAQ,EAAE,MAAM,CAAC,YAAY,GAAG,MAAM,CAAC,UAAU,EAAE;IAwB7E,OAAO,CAAC,wBAAwB;IAyBhC,OAAO,CAAC,2BAA2B;CAuBtC"}

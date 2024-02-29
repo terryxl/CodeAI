@@ -1,0 +1,1 @@
+{"version":3,"file":"sections.d.ts","sourceRoot":"","sources":["../../../../../src/graph/lsp/sections.ts"],"names":[],"mappings":";AAAA,OAAO,KAAK,MAAM,MAAM,QAAQ,CAAA;AAMhC,MAAM,WAAW,eAAe;IAC5B,SAAS,EAAE,MAAM,GAAG,IAAI,CAAA;IACxB,QAAQ,EAAE,MAAM,CAAC,QAAQ,CAAA;CAC5B;AAED;;;;;GAKG;AACH,wBAAsB,wBAAwB,CAC1C,QAAQ,EAAE,MAAM,CAAC,YAAY,GAC9B,OAAO,CAAC,eAAe,EAAE,CAAC,CAe5B"}

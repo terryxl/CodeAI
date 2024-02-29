@@ -1,0 +1,1 @@
+{"version":3,"file":"language.d.ts","sourceRoot":"","sources":["../../../../src/tree-sitter/language.ts"],"names":[],"mappings":"AAAA,UAAU,cAAc;IACpB,UAAU,EAAE,MAAM,CAAA;IAClB,aAAa,EAAE,MAAM,CAAA;IACrB,QAAQ,EAAE,MAAM,GAAG,IAAI,CAAA;IACvB,YAAY,EAAE,MAAM,CAAA;CACvB;AAED,wBAAgB,iBAAiB,CAAC,UAAU,EAAE,MAAM,GAAG,cAAc,GAAG,IAAI,CA0C3E"}

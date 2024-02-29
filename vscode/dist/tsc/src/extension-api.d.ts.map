@@ -1,0 +1,1 @@
+{"version":3,"file":"extension-api.d.ts","sourceRoot":"","sources":["../../../src/extension-api.ts"],"names":[],"mappings":";AAAA,OAAO,KAAK,EAAE,aAAa,EAAE,MAAM,QAAQ,CAAA;AAC3C,OAAO,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAA;AAG5C,qBAAa,YAAY;IAKF,aAAa,EAAE,aAAa;IADxC,OAAO,EAAE,WAAW,GAAG,SAAS,CAAY;gBAChC,aAAa,EAAE,aAAa;CAOlD"}

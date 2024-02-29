@@ -1,0 +1,1 @@
+{"version":3,"file":"AuthProviderSimplified.d.ts","sourceRoot":"","sources":["../../../../src/services/AuthProviderSimplified.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,UAAU,EAAE,MAAM,kBAAkB,CAAA;AAElD,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,gBAAgB,CAAA;AAMlD,qBAAa,sBAAsB;IAClB,mBAAmB,CAC5B,mBAAmB,EAAE,YAAY,EACjC,MAAM,EAAE,UAAU,GACnB,OAAO,CAAC,IAAI,CAAC;CAMnB"}
