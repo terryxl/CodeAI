@@ -60,6 +60,7 @@ export class TreeViewProvider implements vscode.TreeDataProvider<vscode.TreeItem
         private readonly featureFlagProvider: FeatureFlagProvider
     ) {
         this.treeItems = getCodyTreeItems(type)
+        this.treeItems = this.treeItems.filter(t => t.show !== false)
         void this.refresh()
     }
 

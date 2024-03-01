@@ -9,30 +9,30 @@ const chatOption = {
     label: `$(${exports.ASK_QUESTION_COMMAND.icon}) ${exports.ASK_QUESTION_COMMAND.description}`,
     description: exports.ASK_QUESTION_COMMAND.prompt,
     key: exports.ASK_QUESTION_COMMAND.key,
-    alwaysShow: true,
-    type: 'default',
+    alwaysShow: false,
+    type: "default",
     command: exports.ASK_QUESTION_COMMAND.command.command,
 };
 const fixOption = {
     label: `$(${exports.EDIT_COMMAND.icon}) ${exports.EDIT_COMMAND.description}`,
     description: exports.EDIT_COMMAND.prompt,
     key: exports.EDIT_COMMAND.key,
-    alwaysShow: true,
-    type: 'default',
+    alwaysShow: false,
+    type: "default",
     command: exports.ASK_QUESTION_COMMAND.command.command,
 };
 const configOption = {
-    label: '$(gear) Configure Custom Commands...',
-    description: 'Manage your custom reusable commands',
-    key: '',
-    command: 'cody.menu.commands-settings',
+    label: "$(gear) Configure Custom Commands...",
+    description: "Manage your custom reusable commands",
+    key: "",
+    command: "cody.menu.commands-settings",
 };
 const addOption = {
-    label: '$(diff-added) New Custom Command...',
+    label: "$(diff-added) New Custom Command...",
     alwaysShow: true,
-    description: 'Create a new reusable command',
-    key: '',
-    command: 'cody.menu.custom.build',
+    description: "Create a new reusable command",
+    key: "",
+    command: "cody.menu.custom.build",
 };
 exports.CommandMenuOption = {
     chat: chatOption,

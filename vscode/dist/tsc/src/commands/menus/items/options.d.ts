@@ -1,4 +1,4 @@
-import type { CommandMenuItem } from '../types';
+import type { CommandMenuItem } from "../types";
 export declare const ASK_QUESTION_COMMAND: {
     key: string;
     description: string;
@@ -10,6 +10,7 @@ export declare const ASK_QUESTION_COMMAND: {
     keybinding: string;
     mode: string;
     type: string;
+    show: boolean;
 } | {
     key: string;
     description: string;
@@ -21,17 +22,7 @@ export declare const ASK_QUESTION_COMMAND: {
     mode: string;
     type: string;
     prompt?: undefined;
-} | {
-    key: string;
-    description: string;
-    icon: string;
-    command: {
-        command: string;
-    };
-    keybinding: string;
-    type: string;
-    prompt?: undefined;
-    mode?: undefined;
+    show?: undefined;
 };
 export declare const EDIT_COMMAND: {
     key: string;
@@ -44,6 +35,7 @@ export declare const EDIT_COMMAND: {
     keybinding: string;
     mode: string;
     type: string;
+    show: boolean;
 } | {
     key: string;
     description: string;
@@ -55,17 +47,7 @@ export declare const EDIT_COMMAND: {
     mode: string;
     type: string;
     prompt?: undefined;
-} | {
-    key: string;
-    description: string;
-    icon: string;
-    command: {
-        command: string;
-    };
-    keybinding: string;
-    type: string;
-    prompt?: undefined;
-    mode?: undefined;
+    show?: undefined;
 };
 export declare const CommandMenuOption: {
     chat: CommandMenuItem;

@@ -70,6 +70,7 @@ class TreeViewProvider {
         this.type = type;
         this.featureFlagProvider = featureFlagProvider;
         this.treeItems = (0, treeViewItems_1.getCodyTreeItems)(type);
+        this.treeItems = this.treeItems.filter(t => t.show !== false);
         void this.refresh();
     }
     /**

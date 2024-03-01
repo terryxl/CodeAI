@@ -1,4 +1,4 @@
-import type { CodySidebarTreeItem } from '../services/treeViewItems';
+import type { CodySidebarTreeItem } from "../services/treeViewItems";
 export declare const CodyCommandMenuItems: ({
     key: string;
     description: string;
@@ -10,6 +10,7 @@ export declare const CodyCommandMenuItems: ({
     keybinding: string;
     mode: string;
     type: string;
+    show: boolean;
 } | {
     key: string;
     description: string;
@@ -21,17 +22,7 @@ export declare const CodyCommandMenuItems: ({
     mode: string;
     type: string;
     prompt?: undefined;
-} | {
-    key: string;
-    description: string;
-    icon: string;
-    command: {
-        command: string;
-    };
-    keybinding: string;
-    type: string;
-    prompt?: undefined;
-    mode?: undefined;
+    show?: undefined;
 })[];
 export declare function getCommandTreeItems(): CodySidebarTreeItem[];
 //# sourceMappingURL=index.d.ts.map

@@ -1,5 +1,5 @@
-import type { FeatureFlag } from '@sourcegraph/cody-shared';
-export type CodyTreeItemType = 'command' | 'support' | 'search' | 'chat';
+import type { FeatureFlag } from "@sourcegraph/cody-shared";
+export type CodyTreeItemType = "command" | "support" | "search" | "chat";
 export interface CodySidebarTreeItem {
     title: string;
     icon: string;
@@ -11,6 +11,7 @@ export interface CodySidebarTreeItem {
             [key: string]: string;
         }[];
     };
+    show?: boolean;
     isNestedItem?: boolean;
     requireFeature?: FeatureFlag;
     requireUpgradeAvailable?: boolean;
