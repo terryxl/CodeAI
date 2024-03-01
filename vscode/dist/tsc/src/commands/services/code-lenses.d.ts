@@ -1,5 +1,5 @@
 /// <reference path="../../../../../src/fileUri.d.ts" />
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 /**
  * Adds Code lenses for triggering Command Menu
  */

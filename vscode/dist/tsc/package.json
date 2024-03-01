@@ -212,8 +212,8 @@
             "activitybar": [
                 {
                     "id": "cody",
-                    "title": "Cody",
-                    "icon": "resources/cody.svg"
+                    "title": "码友",
+                    "icon": "resources/icon.ico"
                 }
             ]
         },
@@ -537,7 +537,7 @@
         ],
         "submenus": [
             {
-                "label": "Cody",
+                "label": "码友",
                 "id": "cody.submenu"
             }
         ],
@@ -728,7 +728,7 @@
         },
         "configuration": {
             "type": "object",
-            "title": "Cody",
+            "title": "码友",
             "properties": {
                 "cody.serverEndpoint": {
                     "order": 1,

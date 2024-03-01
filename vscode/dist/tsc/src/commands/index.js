@@ -16,7 +16,7 @@ exports.CodyCommandMenuItems = [
     },
     {
         key: 'edit',
-        description: 'Edit Code',
+        description: '编辑代码',
         prompt: 'Start a code edit',
         icon: 'wand',
         command: { command: 'cody.command.edit-code' },
@@ -26,7 +26,7 @@ exports.CodyCommandMenuItems = [
     },
     {
         key: 'doc',
-        description: 'Document Code',
+        description: '代码文档',
         icon: 'book',
         command: { command: 'cody.command.document-code' },
         keybinding: '',
@@ -35,7 +35,7 @@ exports.CodyCommandMenuItems = [
     },
     {
         key: 'explain',
-        description: 'Explain Code',
+        description: '解读代码',
         icon: 'file-binary',
         command: { command: 'cody.command.explain-code' },
         keybinding: '',
@@ -44,7 +44,7 @@ exports.CodyCommandMenuItems = [
     },
     {
         key: 'test',
-        description: 'Generate Unit Tests',
+        description: '生成单元测试',
         icon: 'package',
         command: { command: 'cody.command.unit-tests' },
         keybinding: '',
@@ -53,7 +53,7 @@ exports.CodyCommandMenuItems = [
     },
     {
         key: 'smell',
-        description: 'Find Code Smells',
+        description: '代码优化',
         icon: 'checklist',
         command: { command: 'cody.command.smell-code' },
         keybinding: '',
@@ -62,7 +62,7 @@ exports.CodyCommandMenuItems = [
     },
     {
         key: 'custom',
-        description: 'Custom Commands',
+        description: '自定义命令',
         icon: 'tools',
         command: { command: 'cody.menu.custom-commands' },
         keybinding: `${osIcon}⇧C`,

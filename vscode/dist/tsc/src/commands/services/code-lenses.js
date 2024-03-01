@@ -42,8 +42,8 @@ class CommandCodeLenses {
     constructor() {
         this.provideCodeLenses = this.provideCodeLenses.bind(this);
         this.updateConfig();
-        vscode.workspace.onDidChangeConfiguration(e => {
-            if (e.affectsConfiguration('cody')) {
+        vscode.workspace.onDidChangeConfiguration((e) => {
+            if (e.affectsConfiguration("cody")) {
                 this.updateConfig();
             }
         });
@@ -55,10 +55,10 @@ class CommandCodeLenses {
         if (!this.isEnabled) {
             return;
         }
-        this._disposables.push(vscode.languages.registerCodeLensProvider({ scheme: 'file' }, this));
-        this._disposables.push(vscode.commands.registerCommand('cody.editor.codelens.click', async (lens) => {
-            telemetry_1.telemetryService.log('CodyVSCodeExtension:command:codelens:clicked');
-            telemetry_v2_1.telemetryRecorder.recordEvent('cody.command.codelens', 'clicked');
+        this._disposables.push(vscode.languages.registerCodeLensProvider({ scheme: "file" }, this));
+        this._disposables.push(vscode.commands.registerCommand("cody.editor.codelens.click", async (lens) => {
+            telemetry_1.telemetryService.log("CodyVSCodeExtension:command:codelens:clicked");
+            telemetry_v2_1.telemetryRecorder.recordEvent("cody.command.codelens", "clicked");
             const clickedLens = lens;
             await this.onCodeLensClick(clickedLens);
         }));
@@ -69,9 +69,9 @@ class CommandCodeLenses {
      * Update the configurations
      */
     updateConfig() {
-        const config = vscode.workspace.getConfiguration('cody');
-        this.isEnabled = config.get('commandCodeLenses');
-        this.addTestEnabled = config.get('internal.unstable');
+        const config = vscode.workspace.getConfiguration("cody");
+        this.isEnabled = config.get("commandCodeLenses");
+        this.addTestEnabled = config.get("internal.unstable");
         if (this.isEnabled && !this._disposables.length) {
             this.init();
         }
@@ -86,7 +86,7 @@ class CommandCodeLenses {
         }
         token.onCancellationRequested(() => []);
         const editor = (0, active_editor_1.getEditor)()?.active;
-        if (editor?.document !== document || document.languageId === 'json') {
+        if (editor?.document !== document || document.languageId === "json") {
             return [];
         }
         // For test files, adds code lenses for each symbol
@@ -103,7 +103,7 @@ class CommandCodeLenses {
             const selection = new vscode.Selection(range.start, range.end);
             codeLenses.push(new vscode.CodeLens(range, {
                 ...commandLenses.cody,
-                arguments: [{ name: 'cody.menu.commands', selection }],
+                arguments: [{ name: "cody.menu.commands", selection }],
             }));
             linesWithLenses.add(range.start.line);
         }
@@ -113,8 +113,8 @@ class CommandCodeLenses {
         const codeLenses = [];
         const linesWithLenses = new Set();
         // Get a list of symbols from the document, filter out symbols that are not functions / classes / methods
-        const allSymbols = await vscode.commands.executeCommand('vscode.executeDocumentSymbolProvider', doc);
-        const symbols = allSymbols?.filter(symbol => symbol.kind === vscode.SymbolKind.Function ||
+        const allSymbols = await vscode.commands.executeCommand("vscode.executeDocumentSymbolProvider", doc);
+        const symbols = allSymbols?.filter((symbol) => symbol.kind === vscode.SymbolKind.Function ||
             symbol.kind === vscode.SymbolKind.Class ||
             symbol.kind === vscode.SymbolKind.Method ||
             symbol.kind === vscode.SymbolKind.Constructor) ?? [];
@@ -127,7 +127,9 @@ class CommandCodeLenses {
             const selection = new vscode.Selection(startLine, 0, range.end.line + 1, 0);
             codeLenses.push(new vscode.CodeLens(range, {
                 ...commandLenses.test,
-                arguments: [{ name: 'cody.command.tests-cases', selection }],
+                arguments: [
+                    { name: "cody.command.tests-cases", selection },
+                ],
             }));
             linesWithLenses.add(startLine);
         }
@@ -142,7 +144,7 @@ class CommandCodeLenses {
         if (activeEditor) {
             activeEditor.selection = lens.selection;
         }
-        await vscode.commands.executeCommand(lens.name, 'codeLens');
+        await vscode.commands.executeCommand(lens.name, "codeLens");
     }
     /**
      * Fire an event to notify VS Code that the code lenses have changed.
@@ -170,13 +172,13 @@ class CommandCodeLenses {
 exports.CommandCodeLenses = CommandCodeLenses;
 const commandLenses = {
     cody: {
-        title: '$(cody-logo) Cody',
-        command: 'cody.editor.codelens.click',
-        tooltip: 'Open command menu',
+        title: "$(cody-logo) 码友",
+        command: "cody.editor.codelens.click",
+        tooltip: "Open command menu",
     },
     test: {
-        title: '$(cody-logo) Add More Tests',
-        command: 'cody.editor.codelens.click',
-        tooltip: 'Generate new test cases',
+        title: "$(cody-logo) Add More Tests",
+        command: "cody.editor.codelens.click",
+        tooltip: "Generate new test cases",
     },
 };
