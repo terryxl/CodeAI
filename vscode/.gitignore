@@ -1,6 +1,5 @@
 node_modules/
 out/
 .vscode-test/
-.vscode-test-web/
 resources/wasm/
 GITHUB_CHANGELOG.md
