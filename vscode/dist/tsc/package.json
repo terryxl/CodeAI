@@ -37,7 +37,8 @@
         "test:unit": "vitest",
         "vscode:prepublish": "pnpm -s run build",
         "test:unit:tree-sitter-queries": "vitest ./src/tree-sitter/query-tests/*.test.ts",
-        "github-changelog": "ts-node-transpile-only ./scripts/github-changelog.ts"
+        "github-changelog": "ts-node-transpile-only ./scripts/github-changelog.ts",
+        "pub:loc": "pnpm build && pnpm release:dry-run && code --install-extension dist/cody.vsix"
     },
     "categories": [
         "Programming Languages",
@@ -287,14 +288,14 @@
             {
                 "command": "cody.command.explain-code",
                 "category": "Cody Command",
-                "title": "Explain Code",
+                "title": "解读代码",
                 "icon": "$(output)",
                 "when": "cody.activated && editorFocus"
             },
             {
                 "command": "cody.command.unit-tests",
                 "category": "Cody Command",
-                "title": "Generate Unit Tests",
+                "title": "生成单元测试",
                 "icon": "$(package)",
                 "when": "cody.activated && editorTextFocus"
             },
@@ -308,7 +309,7 @@
             {
                 "command": "cody.command.smell-code",
                 "category": "Cody Command",
-                "title": "Find Code Smells",
+                "title": "代码优化",
                 "icon": "$(checklist)",
                 "when": "cody.activated && editorFocus"
             },
@@ -602,37 +603,37 @@
             "cody.submenu": [
                 {
                     "command": "cody.chat.panel.new",
-                    "when": "cody.activated",
+                    "when": "cody.activated && false",
                     "group": "ask"
                 },
                 {
                     "command": "cody.command.explain-code",
                     "when": "cody.activated",
-                    "group": "command"
+                    "group": "command@1"
                 },
                 {
                     "command": "cody.command.edit-code",
-                    "when": "cody.activated",
+                    "when": "cody.activated && false",
                     "group": "ask"
                 },
                 {
                     "command": "cody.command.unit-tests",
                     "when": "cody.activated",
-                    "group": "command"
+                    "group": "command@3"
                 },
                 {
                     "command": "cody.command.document-code",
-                    "when": "cody.activated",
+                    "when": "cody.activated && false",
                     "group": "command"
                 },
                 {
                     "command": "cody.command.smell-code",
                     "when": "cody.activated",
-                    "group": "command"
+                    "group": "command@2"
                 },
                 {
                     "command": "cody.menu.custom-commands",
-                    "when": "cody.activated",
+                    "when": "cody.activated && false",
                     "group": "custom-commands"
                 },
                 {
