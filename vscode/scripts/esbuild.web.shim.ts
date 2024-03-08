@@ -1,3 +1,3 @@
 export let process = {
-    env: {},
+    env: { CODY_TESTING: "true" },
 };

@@ -18631,14 +18631,12 @@ const styles = {
 
 const SEARCH_DEBOUNCE_MS = 400;
 class ResultsCache {
-  constructor() {
-    this.cache = new LRUCache({
-      max: 100,
-      ttl: 1e3 * 60 * 60
-      // 1 hour
-    });
-    this.lastReset = 0;
-  }
+  cache = new LRUCache({
+    max: 100,
+    ttl: 1e3 * 60 * 60
+    // 1 hour
+  });
+  lastReset = 0;
   set(query, results, afterReset) {
     const curTime = Date.now();
     if (curTime - this.lastReset > afterReset) {

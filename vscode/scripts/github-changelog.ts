@@ -48,7 +48,7 @@ function extractSection(
     let previousVersion = ''
 
     const lines = changelog.split('\n')
-    const changes = []
+    const changes: any = []
     let found = false
     for (const line of lines) {
         if (found) {

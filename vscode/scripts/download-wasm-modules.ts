@@ -81,7 +81,7 @@ function copyFilesToDistDir(): void {
 }
 
 function getMissingFiles(urls: string[]): string[] {
-    const missingFiles = []
+    const missingFiles: any = []
 
     for (const url of urls) {
         const filePath = getFilePathFromURL(url)

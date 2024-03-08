@@ -559,7 +559,7 @@ describe('Agent', () => {
             // Check the network requests to ensure no requests include context from ignored files
             const { requests } = await client.request('testing/networkRequests', null)
 
-            const groupedMsgs = []
+            const groupedMsgs: any = []
             for (const req of requests) {
                 // Get the messages from the request body
                 const messages = JSON.parse(req.body || '{}')?.messages as {

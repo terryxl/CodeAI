@@ -16132,8 +16132,8 @@ const timeout = 1e4;
 class GuardrailsPost {
   constructor(postSnippet) {
     this.postSnippet = postSnippet;
-    this.currentRequests = /* @__PURE__ */ new Map();
   }
+  currentRequests = /* @__PURE__ */ new Map();
   searchAttribution(snippet) {
     let request = this.currentRequests.get(snippet);
     if (request === void 0) {
@@ -16162,6 +16162,9 @@ class GuardrailsPost {
   }
 }
 class AttributionSearchSync {
+  promise;
+  resolve;
+  reject;
   constructor() {
     this.promise = new Promise((resolve, reject) => {
       this.resolve = resolve;
@@ -18865,14 +18868,15 @@ class RateLimitError extends Error {
     this.upgradeIsAvailable = upgradeIsAvailable;
     this.limit = limit;
     this.retryAfter = retryAfter;
-    this.name = RateLimitError.errorName;
     this.userMessage = `You've used all ${feature} for ${upgradeIsAvailable ? "the month" : "today"}.`;
     this.retryAfterDate = retryAfter ? /^\d+$/.test(retryAfter) ? new Date(Date.now() + parseInt(retryAfter, 10) * 1e3) : new Date(retryAfter) : void 0;
     this.retryMessage = this.retryAfterDate ? formatRetryAfterDate(this.retryAfterDate) : void 0;
   }
-  static {
-    this.errorName = "RateLimitError";
-  }
+  static errorName = "RateLimitError";
+  name = RateLimitError.errorName;
+  userMessage;
+  retryAfterDate;
+  retryMessage;
 }
 
 var classnames = {exports: {}};
@@ -33615,12 +33619,6 @@ function createCodeBlockActionButton(type, text, title, iconSvg, codeBlockAction
 class GuardrailsStatusController {
   constructor(container) {
     this.container = container;
-    this.statusSpinning = `<i class="codicon codicon-loading ${styles$h.codiconLoading}"></i>`;
-    this.statusPass = '<i class="codicon codicon-pass"></i>';
-    this.statusFailed = "Guardrails Check Failed";
-    this.statusUnavailable = "Guardrails API Error";
-    this.iconClass = "guardrails-icon";
-    this.statusClass = "guardrails-status";
     this.findOrAppend(this.iconClass, () => {
       const icon = document.createElement("div");
       icon.innerHTML = ShieldIcon;
@@ -33634,6 +33632,13 @@ class GuardrailsStatusController {
       return status;
     });
   }
+  statusSpinning = `<i class="codicon codicon-loading ${styles$h.codiconLoading}"></i>`;
+  statusPass = '<i class="codicon codicon-pass"></i>';
+  statusFailed = "Guardrails Check Failed";
+  statusUnavailable = "Guardrails API Error";
+  iconClass = "guardrails-icon";
+  statusClass = "guardrails-status";
+  status;
   /**
    * setPending displays a spinner next
    * to the attribution shield icon.
