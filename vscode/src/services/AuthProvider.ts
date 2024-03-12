@@ -44,7 +44,7 @@ export class AuthProvider {
     constructor(
         private config: Pick<
             ConfigurationWithAccessToken,
-            'serverEndpoint' | 'accessToken' | 'customHeaders'
+            'serverEndpoint' | 'accessToken' | 'customHeaders' | 'modelsVendor'
         >
     ) {
         this.authStatus.endpoint = 'init'
@@ -239,8 +239,6 @@ export class AuthProvider {
         const userInfo = await this.client.getCurrentUserInfo()
 
         if (!isDotCom) {
-            const hasVerifiedEmail = false
-
             // check first if it's a network error
             if (isError(userInfo)) {
                 if (isNetworkError(userInfo)) {
@@ -252,8 +250,8 @@ export class AuthProvider {
             return newAuthStatus(
                 endpoint,
                 isDotCom,
-                !isError(userInfo),
-                hasVerifiedEmail,
+                !isError(userInfo) && !!token,
+                userInfo.hasVerifiedEmail,
                 enabled,
                 /* userCanUpgrade: */ false,
                 version,
@@ -307,11 +305,12 @@ export class AuthProvider {
         token: string | null,
         customHeaders?: Record<string, string> | null
     ): Promise<{ authStatus: AuthStatus; isLoggedIn: boolean }> {
-        const endpoint = formatURL(uri) || ''
+        const endpoint = this.config.serverEndpoint || formatURL(uri) || ''
         const config = {
             serverEndpoint: endpoint,
             accessToken: token,
             customHeaders: customHeaders || this.config.customHeaders,
+            modelsVendor: this.config.modelsVendor
         }
         const authStatus = await this.makeAuthStatus(config)
         const isLoggedIn = isAuthed(authStatus)

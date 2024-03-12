@@ -21,7 +21,7 @@ export interface SidebarChatWebview extends Omit<vscode.Webview, 'postMessage'> 
 
 export interface SidebarViewOptions extends MessageProviderOptions {
     extensionUri: vscode.Uri
-    config: Pick<Configuration, 'isRunningInsideAgent'>
+    config: Pick<Configuration, 'isRunningInsideAgent' | 'modelsVendor'>
 }
 
 export class SidebarViewController implements vscode.WebviewViewProvider {

@@ -14,7 +14,9 @@ interface ExternalServices {
     /** Update configuration for all of the services in this interface. */
     onConfigurationChange: (newConfig: ExternalServicesConfiguration) => void;
 }
-type ExternalServicesConfiguration = Pick<ConfigurationWithAccessToken, 'serverEndpoint' | 'codebase' | 'useContext' | 'customHeaders' | 'accessToken' | 'debugEnable' | 'experimentalTracing'> & LocalEmbeddingsConfig;
+type ExternalServicesConfiguration = Pick<ConfigurationWithAccessToken, 'serverEndpoint' | 'codebase' | 'useContext' | 'customHeaders' | 'accessToken' | 'debugEnable' | 'experimentalTracing'> & LocalEmbeddingsConfig & {
+    ModelsVender?: string;
+};
 export declare function configureExternalServices(context: vscode.ExtensionContext, initialConfig: ExternalServicesConfiguration, platform: Pick<PlatformContext, 'createLocalEmbeddingsController' | 'createCompletionsClient' | 'createSentryService' | 'createOpenTelemetryService' | 'createSymfRunner'>): Promise<ExternalServices>;
 export {};
 //# sourceMappingURL=external-services.d.ts.map

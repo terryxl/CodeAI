@@ -4,7 +4,7 @@ import { dependentAbortController } from '../../common/abortController'
 import { addCustomUserAgent } from '../graphql/client'
 
 import { SourcegraphCompletionsClient } from './client'
-import type { CompletionCallbacks, CompletionParameters, Event } from './types'
+import type { CompletionCallbacks, CompletionParameters, Event, MessageAzure } from './types'
 
 export class SourcegraphBrowserCompletionsClient extends SourcegraphCompletionsClient {
     protected _streamWithCallbacks(
@@ -16,9 +16,16 @@ export class SourcegraphBrowserCompletionsClient extends SourcegraphCompletionsC
         const headersInstance = new Headers(this.config.customHeaders as HeadersInit)
         addCustomUserAgent(headersInstance)
         headersInstance.set('Content-Type', 'application/json; charset=utf-8')
-        if (this.config.accessToken) {
-            headersInstance.set('Authorization', `token ${this.config.accessToken}`)
+
+        let payload: { messages: MessageAzure[] } | CompletionParameters = params
+
+        if (params.vendor === 'Azure') {
+            payload = { messages: params.messages as MessageAzure[] }
+            this.config.accessToken && headersInstance.set('Api-Key', this.config.accessToken)
+        } else {
+            this.config.accessToken && headersInstance.set('Authorization', `token ${this.config.accessToken}`)
         }
+
         const parameters = new URLSearchParams(window.location.search)
         const trace = parameters.get('trace')
         if (trace) {
@@ -30,11 +37,16 @@ export class SourcegraphBrowserCompletionsClient extends SourcegraphCompletionsC
         fetchEventSource(this.completionsEndpoint, {
             method: 'POST',
             headers: Object.fromEntries(headersInstance.entries()),
-            body: JSON.stringify(params),
+            body: JSON.stringify(payload),
             signal: abort.signal,
             openWhenHidden: isRunningInWebWorker, // otherwise tries to call document.addEventListener
             async onopen(response) {
-                if (!response.ok && response.headers.get('content-type') !== 'text/event-stream') {
+                if (response.ok && response.headers.get('content-type') === 'application/json') {
+                    const res = await response.json()
+                    const text = res?.choices[0]?.message?.content
+                    cb.onChange(text)
+                }
+                else if (!response.ok && response.headers.get('content-type') !== 'text/event-stream') {
                     let errorMessage: null | string = null
                     try {
                         errorMessage = await response.text()

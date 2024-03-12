@@ -5,6 +5,13 @@ export enum ModelUsage {
     Edit = 'edit',
 }
 
+export enum ModelVendor {
+    Sourcegraph = 'Sourcegraph',
+    Azure = 'Azure',
+}
+
+export type ModelVendorType = keyof typeof ModelVendor
+
 // Utility to narrow a model type to a specific model usage
 type HasUsage<T, I> = T extends { usage: readonly ModelUsage[] }
     ? I extends T['usage'][number]

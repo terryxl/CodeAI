@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-import { getSimplePreamble, wrapInActiveSpan, type Message } from '@sourcegraph/cody-shared'
+import { getSimplePreamble, wrapInActiveSpan, type Message, ChatEventSource } from '@sourcegraph/cody-shared'
 
 import { logDebug } from '../../log'
 
@@ -9,13 +9,13 @@ import { PromptBuilder } from '../../prompt-builder'
 import type { ContextItem } from '../../prompt-builder/types'
 import { sortContextItems } from './agentContextSorting'
 
-interface PromptInfo {
-    prompt: Message[]
-    newContextUsed: ContextItem[]
+export interface PromptInfo<T = Message> {
+    prompt: T[]
+    newContextUsed?: ContextItem[]
 }
 
-export interface IPrompter {
-    makePrompt(chat: SimpleChatModel, charLimit: number): Promise<PromptInfo>
+export interface IPrompter<T = Message> {
+    makePrompt(chat: SimpleChatModel, charLimit?: number): Promise<PromptInfo<T>>
 }
 
 const ENHANCED_CONTEXT_ALLOCATION = 0.6 // Enhanced context should take up 60% of the context window

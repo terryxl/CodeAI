@@ -34266,7 +34266,8 @@ const Transcript = React.memo(function TranscriptContent({
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: transcriptContainerRef, className: classNames(className, styles$e.container), children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: scrollAnchoredContainerRef, className: classNames(styles$e.scrollAnchoredContainer), children: [
-      !!chatModels?.length && ChatModelDropdownMenu && onCurrentChatModelChange && userInfo && userInfo.isDotComUser && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      !!chatModels?.length && ChatModelDropdownMenu && onCurrentChatModelChange && userInfo && // userInfo.isDotComUser &&
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
         ChatModelDropdownMenu,
         {
           models: chatModels,
@@ -36480,7 +36481,7 @@ const useShowNotice = (currentVersion, probablyNewInstall) => {
   }
   const [showNotice, setShowNotice] = reactExports.useState(
     /* Version different to what's already dismissed means time for a notice */
-    localStorage.getItem(key) !== currentVersion
+    localStorage.getItem(key) !== null && localStorage.getItem(key) !== currentVersion
   );
   const setDismissed = () => {
     localStorage.setItem(key, currentVersion);
@@ -36537,14 +36538,6 @@ const Notices = ({ probablyNewInstall }) => /* @__PURE__ */ jsxRuntimeExports.js
   /* @__PURE__ */ jsxRuntimeExports.jsx(OnboardingAutocompleteNotice, {})
 ] });
 
-const onboardingSplashImage = ""+new URL('cody-onboarding-splash-41a4ddcf.svg', import.meta.url).href+"";
-
-const signInLogoGitHub = ""+new URL('sign-in-logo-github-a075fc88.svg', import.meta.url).href+"";
-
-const signInLogoGitLab = ""+new URL('sign-in-logo-gitlab-fbafd4e0.svg', import.meta.url).href+"";
-
-const signInLogoGoogle = ""+new URL('sign-in-logo-google-f12c4bf0.svg', import.meta.url).href+"";
-
 const container = "_container_1muq1_1";
 const sectionsContainer = "_sections-container_1muq1_9";
 const logo = "_logo_1muq1_13";
@@ -36564,28 +36557,6 @@ const styles = {
 	terms: terms
 };
 
-const WebLogin = ({ telemetryService, vscodeAPI }) => {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("ol", { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://sourcegraph.com/sign-up", target: "site", children: "Sign Up at Sourcegraph.com" }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://sourcegraph.com/user/settings/tokens", target: "site", children: "Generate an Access Token" }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "a",
-      {
-        href: "about:blank",
-        onClick: (event) => {
-          telemetryService.log("CodyVSCodeExtension:auth:clickSignInWeb");
-          vscodeAPI.postMessage({
-            command: "simplified-onboarding",
-            onboardingKind: "web-sign-in-token"
-          });
-          event.preventDefault();
-          event.stopPropagation();
-        },
-        children: "Add the Access Token to VS Code"
-      }
-    ) })
-  ] });
-};
 const LoginSimplified = ({
   simplifiedLoginRedirect,
   telemetryService,
@@ -36596,92 +36567,18 @@ const LoginSimplified = ({
     telemetryService.log("CodyVSCodeExtension:auth:clickOtherSignInOptions");
     vscodeAPI.postMessage({ command: "auth", authKind: "signin" });
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles.container, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles.sectionsContainer, children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: onboardingSplashImage, alt: "Hi, I'm Cody", className: styles.logo }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles.section, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "Cody Free or Cody Pro" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonWidthSizer, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonStack, children: uiKindIsWeb ? /* @__PURE__ */ jsxRuntimeExports.jsx(WebLogin, { telemetryService, vscodeAPI }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            VSCodeButton,
-            {
-              className: styles.button,
-              type: "button",
-              onClick: () => {
-                telemetryService.log(
-                  "CodyVSCodeExtension:auth:simplifiedSignInGitHubClick"
-                );
-                simplifiedLoginRedirect("github");
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: signInLogoGitHub, alt: "GitHub logo" }),
-                "Sign In with GitHub"
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            VSCodeButton,
-            {
-              className: styles.button,
-              type: "button",
-              onClick: () => {
-                telemetryService.log(
-                  "CodyVSCodeExtension:auth:simplifiedSignInGitLabClick"
-                );
-                simplifiedLoginRedirect("gitlab");
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: signInLogoGitLab, alt: "GitLab logo" }),
-                "Sign In with GitLab"
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            VSCodeButton,
-            {
-              className: styles.button,
-              type: "button",
-              onClick: () => {
-                telemetryService.log(
-                  "CodyVSCodeExtension:auth:simplifiedSignInGoogleClick"
-                );
-                simplifiedLoginRedirect("google");
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: signInLogoGoogle, alt: "Google logo" }),
-                "Sign In with Google"
-              ]
-            }
-          )
-        ] }) }) })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles.section, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "Cody Enterprise" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonWidthSizer, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonStack, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          VSCodeButton,
-          {
-            className: styles.button,
-            type: "button",
-            onClick: otherSignInClick,
-            children: "Sign In to Your Enterprise Instance"
-          }
-        ) }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
-          "Learn more about",
-          " ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://sourcegraph.com/cloud", children: "Sourcegraph Enterprise" })
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles.terms, children: [
-      "By signing in to Cody you agree to our",
-      " ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://about.sourcegraph.com/terms", children: "Terms of Service" }),
-      " and",
-      " ",
-      /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://about.sourcegraph.com/terms/privacy", children: "Privacy Policy" })
-    ] })
-  ] });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.container, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.sectionsContainer, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.section, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonWidthSizer, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonStack, children: uiKindIsWeb ? (
+    // <WebLogin telemetryService={telemetryService} vscodeAPI={vscodeAPI} />
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      VSCodeButton,
+      {
+        className: styles.button,
+        type: "button",
+        onClick: otherSignInClick,
+        children: "使用海尔账号登录"
+      }
+    )
+  ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {}) }) }) }) }) });
 };
 
 function createWebviewTelemetryService(vscodeAPI) {

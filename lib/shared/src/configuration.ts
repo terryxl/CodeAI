@@ -1,3 +1,5 @@
+import { ModelVendorType } from "./models/types"
+
 export type ConfigurationUseContext = 'embeddings' | 'keyword' | 'none' | 'blended' | 'unified'
 
 /**
@@ -72,6 +74,8 @@ export interface Configuration {
     isRunningInsideAgent?: boolean
     agentIDE?: 'VSCode' | 'JetBrains' | 'Neovim' | 'Emacs'
     autocompleteTimeouts: AutocompleteTimeouts
+
+    modelsVendor?: ModelVendorType
 
     testingLocalEmbeddingsModel: string | undefined
     testingLocalEmbeddingsEndpoint: string | undefined

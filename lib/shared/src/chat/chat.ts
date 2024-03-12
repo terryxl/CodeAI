@@ -1,9 +1,11 @@
+import { ModelVendorType } from '../models/types'
 import { ANSWER_TOKENS } from '../prompt/constants'
 import type { Message } from '../sourcegraph-api'
 import type { SourcegraphCompletionsClient } from '../sourcegraph-api/completions/client'
 import type {
     CompletionGeneratorValue,
     CompletionParameters,
+    MessageAzure,
 } from '../sourcegraph-api/completions/types'
 
 type ChatParameters = Omit<CompletionParameters, 'messages'>
@@ -19,12 +21,12 @@ export class ChatClient {
     constructor(private completions: SourcegraphCompletionsClient) {}
 
     public chat(
-        messages: Message[],
+        messages: Message[] | MessageAzure[],
         params: Partial<ChatParameters>,
-        abortSignal?: AbortSignal
+        abortSignal?: AbortSignal,
+        vendor?: ModelVendorType,
     ): AsyncGenerator<CompletionGeneratorValue> {
-        const isLastMessageFromHuman = messages.length > 0 && messages.at(-1)!.speaker === 'human'
-
+        const isLastMessageFromHuman = messages.length > 0 && (messages.at(-1) as Message).speaker === 'human'
         const augmentedMessages =
             // HACK: The fireworks chat inference endpoints requires the last message to be from a
             // human. This will be the case in most of the prompts but if for some reason we have an
@@ -34,7 +36,7 @@ export class ChatClient {
                     ? messages
                     : messages.slice(0, -1)
                 : isLastMessageFromHuman
-                  ? messages.concat([{ speaker: 'assistant' }])
+                  ? (messages as Message[]).concat([{ speaker: 'assistant' }])
                   : messages
 
         return this.completions.stream(
@@ -42,6 +44,7 @@ export class ChatClient {
                 ...DEFAULT_CHAT_COMPLETION_PARAMETERS,
                 ...params,
                 messages: augmentedMessages,
+                vendor
             },
             abortSignal
         )

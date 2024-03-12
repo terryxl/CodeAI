@@ -214,7 +214,8 @@ export const Transcript: React.FunctionComponent<
                     ChatModelDropdownMenu &&
                     onCurrentChatModelChange &&
                     userInfo &&
-                    userInfo.isDotComUser && (
+                    // userInfo.isDotComUser &&
+                    (
                         <ChatModelDropdownMenu
                             models={chatModels}
                             disabled={transcript.length > 1}

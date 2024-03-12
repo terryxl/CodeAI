@@ -2,6 +2,7 @@ import type { ModelProvider } from '.'
 import { ModelUsage } from './types'
 
 // The models must first be added to the custom chat models list in https://sourcegraph.com/github.com/sourcegraph/sourcegraph/-/blob/internal/completions/httpapi/chat.go?L48-51
+
 export const DEFAULT_DOT_COM_MODELS = [
     {
         title: 'Claude 2.0',
@@ -9,6 +10,15 @@ export const DEFAULT_DOT_COM_MODELS = [
         provider: 'Anthropic',
         default: true,
         codyProOnly: false,
+        usage: [ModelUsage.Chat, ModelUsage.Edit],
+    },
+    {
+        title: 'GPT-4',
+        model: 'gpt-4',
+        provider: 'OpenAI',
+        vendor: 'Azure',
+        default: true,
+        codyProOnly: true,
         usage: [ModelUsage.Chat, ModelUsage.Edit],
     },
     {

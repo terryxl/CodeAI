@@ -31,6 +31,7 @@ const openai_1 = require("./models/openai");
 const claude_1 = require("./models/claude");
 const prompt_builder_1 = require("../../prompt-builder");
 const INTERACTION_MODELS = {
+    'gpt-4': claude_1.claude,
     'anthropic/claude-2.0': claude_1.claude,
     'anthropic/claude-2.1': claude_1.claude,
     'anthropic/claude-instant-1.2': claude_1.claude,

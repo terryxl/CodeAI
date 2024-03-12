@@ -915,6 +915,16 @@
                     "type": "boolean",
                     "markdownDescription": "[INTERNAL ONLY] Enable all unstable experimental features.",
                     "default": false
+                },
+                "cody.models.vender": {
+                    "order": 99,
+                    "type": "string",
+                    "enum": [
+                        "Azure",
+                        "Sourcegraph"
+                    ],
+                    "markdownDescription": "The plugin ai modals apis providers.",
+                    "default": "Azure"
                 }
             }
         },

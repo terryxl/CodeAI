@@ -8,7 +8,7 @@ import type { ConfigurationWithAccessToken } from '../../configuration'
 import { logDebug, logError } from '../../logger'
 import { addTraceparent, wrapInActiveSpan } from '../../tracing'
 import { isError } from '../../utils'
-import { DOTCOM_URL, isDotCom } from '../environments'
+import { DOTCOM_URL, DOTCOM_AZURE_URL, isDotCom } from '../environments'
 
 import {
     CONTEXT_SEARCH_QUERY,
@@ -257,7 +257,7 @@ export interface event {
 
 export type GraphQLAPIClientConfig = Pick<
     ConfigurationWithAccessToken,
-    'serverEndpoint' | 'accessToken' | 'customHeaders'
+    'serverEndpoint' | 'accessToken' | 'customHeaders' | 'modelsVendor'
 > &
     Pick<Partial<ConfigurationWithAccessToken>, 'telemetryLevel'>
 
@@ -294,6 +294,7 @@ export class SourcegraphGraphQLAPIClient {
 
     constructor(config: GraphQLAPIClientConfig | null = null) {
         this._config = config
+        this.dotcomUrl = config?.modelsVendor === 'Azure' ? DOTCOM_AZURE_URL : DOTCOM_URL
     }
 
     public onConfigurationChange(newConfig: GraphQLAPIClientConfig): void {
@@ -318,15 +319,16 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getSiteVersion(): Promise<string | Error> {
-        return this.fetchSourcegraphAPI<APIResponse<SiteVersionResponse>>(
-            CURRENT_SITE_VERSION_QUERY,
-            {}
-        ).then(response =>
-            extractDataOrError(
-                response,
-                data => data.site?.productVersion ?? new Error('site version not found')
-            )
-        )
+        return "264357_2024-03-08_5.3-04cd87dc07d4";
+        // return this.fetchSourcegraphAPI<APIResponse<SiteVersionResponse>>(
+        //     CURRENT_SITE_VERSION_QUERY,
+        //     {}
+        // )
+        // .then(response => extractDataOrError(
+        //         response,
+        //         data => data.site?.productVersion ?? new Error('site version not found')
+        //     )
+        // ).catch(e => "264357_2024-03-08_5.3-04cd87dc07d4")//HAIAR MOCKING
     }
 
     public async getSiteIdentification(): Promise<{ siteid: string; hashedLicenseKey: string } | Error> {
@@ -401,14 +403,22 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getCurrentUserInfo(): Promise<CurrentUserInfo | Error> {
-        return this.fetchSourcegraphAPI<APIResponse<CurrentUserInfoResponse>>(
-            CURRENT_USER_INFO_QUERY,
-            {}
-        ).then(response =>
-            extractDataOrError(response, data =>
-                data.currentUser ? { ...data.currentUser } : new Error('current user not found')
-            )
-        )
+        return {
+            id: "test",
+            hasVerifiedEmail: true,
+            username: 'test',
+            displayName: 'Test',
+            avatarURL: '',
+            primaryEmail: { email: 'test@haier.com' },
+        } as CurrentUserInfo
+        // return this.fetchSourcegraphAPI<APIResponse<CurrentUserInfoResponse>>(
+        //     CURRENT_USER_INFO_QUERY,
+        //     {}
+        // ).then(response =>
+        //     extractDataOrError(response, data =>
+        //         data.currentUser ? { ...data.currentUser } : new Error('current user not found')
+        //     )
+        // )
     }
 
     /**
@@ -427,6 +437,8 @@ export class SourcegraphGraphQLAPIClient {
 
     public async getCodyLLMConfiguration(): Promise<undefined | CodyLLMSiteConfiguration | Error> {
         // fetch Cody LLM provider separately for backward compatability
+        if (!this.isDotCom()) return
+
         const [configResponse, providerResponse] = await Promise.all([
             this.fetchSourcegraphAPI<APIResponse<CodyLLMSiteConfigurationResponse>>(
                 CURRENT_SITE_CODY_LLM_CONFIGURATION
@@ -729,6 +741,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getEvaluatedFeatureFlags(): Promise<Record<string, boolean> | Error> {
+        if (!this.isDotCom()) return {}
         return this.fetchSourcegraphAPI<APIResponse<EvaluatedFeatureFlagsResponse>>(
             GET_FEATURE_FLAGS_QUERY,
             {}
@@ -743,6 +756,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async evaluateFeatureFlag(flagName: string): Promise<boolean | null | Error> {
+        if (!this.isDotCom()) return null
         return this.fetchSourcegraphAPI<APIResponse<EvaluateFeatureFlagResponse>>(
             EVALUATE_FEATURE_FLAG_QUERY,
             {
@@ -850,11 +864,11 @@ export class ConfigFeaturesSingleton {
             attribution: false,
         })
         // Initiate the first fetch and set up a recurring fetch every 30 seconds
-        this.refreshConfigFeatures()
-        // Fetch config features periodically every 30 seconds only if isDotCom is false
-        if (!graphqlClient.isDotCom()) {
-            setInterval(() => this.refreshConfigFeatures(), 30000)
-        }
+        if (graphqlClient.isDotCom()) this.refreshConfigFeatures()
+        // // Fetch config features periodically every 30 seconds only if isDotCom is false
+        // if (!graphqlClient.isDotCom()) {
+        //     setInterval(() => this.refreshConfigFeatures(), 30000)
+        // } HAIAR MOCKING
     }
 
     // Static method to get the singleton instance

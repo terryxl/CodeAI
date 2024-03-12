@@ -3,6 +3,11 @@ export declare enum ModelUsage {
     Chat = "chat",
     Edit = "edit"
 }
+export declare enum ModelVender {
+    Sourcegraph = "Sourcegraph",
+    Azure = "Azure"
+}
+export type ModelVenderType = keyof typeof ModelVender;
 type HasUsage<T, I> = T extends {
     usage: readonly ModelUsage[];
 } ? I extends T['usage'][number] ? T : never : never;

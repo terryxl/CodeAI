@@ -1,3 +1,4 @@
+import { ModelVenderType } from "../../models/types";
 interface DoneEvent {
     type: 'done';
 }
@@ -26,6 +27,7 @@ export interface CompletionParameters {
     topK?: number;
     topP?: number;
     model?: string;
+    vender?: ModelVenderType;
 }
 export interface CompletionCallbacks {
     onChange: (text: string) => void;

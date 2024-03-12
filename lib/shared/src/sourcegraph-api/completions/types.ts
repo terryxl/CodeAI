@@ -1,3 +1,5 @@
+import { ModelVendorType } from "../../models/types"
+
 interface DoneEvent {
     type: 'done'
 }
@@ -13,9 +15,14 @@ interface ErrorEvent {
 
 export type Event = DoneEvent | CompletionEvent | ErrorEvent
 
-export interface Message {
+export type Message = {
     speaker: 'human' | 'assistant'
     text?: string
+}
+
+export type MessageAzure = {
+    role: 'user' | 'system'
+    content: string
 }
 
 export interface CompletionResponse {
@@ -25,13 +32,14 @@ export interface CompletionResponse {
 
 export interface CompletionParameters {
     fast?: boolean
-    messages: Message[]
+    messages: Message[] | MessageAzure[]
     maxTokensToSample: number
     temperature?: number
     stopSequences?: string[]
     topK?: number
     topP?: number
     model?: string
+    vendor?: ModelVendorType
 }
 
 export interface CompletionCallbacks {

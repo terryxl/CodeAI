@@ -148,6 +148,13 @@ declare const properties: {
         markdownDescription: string;
         default: boolean;
     };
+    "cody.models.vender": {
+        order: number;
+        type: string;
+        enum: string[];
+        markdownDescription: string;
+        default: string;
+    };
 };
 export declare function defaultConfigurationValue(key: string): any;
 export type ConfigurationKeysMap = {

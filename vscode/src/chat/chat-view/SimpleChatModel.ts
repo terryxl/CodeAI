@@ -10,6 +10,7 @@ import {
     type Message,
     type TranscriptJSON,
     isCodyIgnoredFile,
+    type MessageAzure,
 } from '@sourcegraph/cody-shared'
 
 import { contextItemsToContextFiles, getChatPanelTitle } from './chat-helpers'

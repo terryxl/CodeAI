@@ -143,7 +143,7 @@ export {
     truncateTextNearestLine,
     truncateTextStart,
 } from './prompt/truncation'
-export type { Message } from './sourcegraph-api'
+export type { Message, MessageAzure } from './sourcegraph-api'
 export { SourcegraphBrowserCompletionsClient } from './sourcegraph-api/completions/browserClient'
 export { SourcegraphCompletionsClient } from './sourcegraph-api/completions/client'
 export type { CompletionLogger, CompletionsClientConfig } from './sourcegraph-api/completions/client'
@@ -152,7 +152,7 @@ export type {
     CompletionResponse,
     Event,
 } from './sourcegraph-api/completions/types'
-export { DOTCOM_URL, LOCAL_APP_URL, isDotCom } from './sourcegraph-api/environments'
+export { DOTCOM_URL, DOTCOM_AZURE_URL, LOCAL_APP_URL, isDotCom } from './sourcegraph-api/environments'
 export {
     AbortError,
     NetworkError,

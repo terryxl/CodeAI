@@ -19,6 +19,7 @@ import { claude } from './models/claude'
 import { PromptBuilder } from '../../prompt-builder'
 
 const INTERACTION_MODELS: Record<EditModel, EditLLMInteraction> = {
+    'gpt-4': claude,
     'anthropic/claude-2.0': claude,
     'anthropic/claude-2.1': claude,
     'anthropic/claude-instant-1.2': claude,

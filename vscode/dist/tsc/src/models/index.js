@@ -2,9 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.editModel = exports.chatModel = void 0;
 const LocalStorageProvider_1 = require("../services/LocalStorageProvider");
+const dotcom_1 = require("@sourcegraph/cody-shared/src/models/dotcom");
 async function setModel(modelID, storageKey) {
     // Store the selected model in local storage to retrieve later
     return LocalStorageProvider_1.localStorage.set(storageKey, modelID);
+}
+function getCustomModel(authProvider, models, storageKey) {
+    const model = getModel(authProvider, models, storageKey);
+    return (models || dotcom_1.DEFAULT_DOT_COM_MODELS).find(m => m.model === model);
 }
 function getModel(authProvider, models, storageKey) {
     const authStatus = authProvider.getAuthStatus();
@@ -36,6 +41,7 @@ function getModel(authProvider, models, storageKey) {
 function createModelAccessor(storageKey) {
     return {
         get: (authProvider, models) => getModel(authProvider, models, storageKey),
+        getModel: (authProvider, models) => getCustomModel(authProvider, models, storageKey),
         set: (modelID) => setModel(modelID, storageKey),
     };
 }

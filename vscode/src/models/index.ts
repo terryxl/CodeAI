@@ -1,10 +1,20 @@
 import type { ChatModel, EditModel, ModelProvider } from '@sourcegraph/cody-shared'
 import type { AuthProvider } from '../services/AuthProvider'
 import { localStorage } from '../services/LocalStorageProvider'
+import { DEFAULT_DOT_COM_MODELS } from '@sourcegraph/cody-shared/src/models/dotcom'
 
 async function setModel(modelID: EditModel, storageKey: string) {
     // Store the selected model in local storage to retrieve later
     return localStorage.set(storageKey, modelID)
+}
+
+function getCustomModel (
+    authProvider: AuthProvider,
+    models: ModelProvider[],
+    storageKey: string
+): ModelProvider {
+    const model = getModel(authProvider, models, storageKey)
+    return (models || DEFAULT_DOT_COM_MODELS).find(m => m.model === model)
 }
 
 function getModel<T extends string>(
@@ -45,6 +55,8 @@ function createModelAccessor<T extends string>(storageKey: string) {
     return {
         get: (authProvider: AuthProvider, models: ModelProvider[]) =>
             getModel<T>(authProvider, models, storageKey),
+        getModel: (authProvider: AuthProvider, models: ModelProvider[]) =>
+            getCustomModel(authProvider, models, storageKey),
         set: (modelID: T) => setModel(modelID, storageKey),
     }
 }

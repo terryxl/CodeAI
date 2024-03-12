@@ -58,6 +58,7 @@ export interface ChatSession {
  */
 export declare class SimpleChatPanelProvider implements vscode.Disposable, ChatSession {
     private chatModel;
+    private model;
     private config;
     private readonly authProvider;
     private readonly chatClient;

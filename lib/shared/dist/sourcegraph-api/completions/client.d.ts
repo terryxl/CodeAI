@@ -1,6 +1,6 @@
-import type { Span } from '@opentelemetry/api';
-import type { ConfigurationWithAccessToken } from '../../configuration';
-import type { CompletionCallbacks, CompletionGeneratorValue, CompletionParameters, CompletionResponse, Event } from './types';
+import type { Span } from "@opentelemetry/api";
+import type { ConfigurationWithAccessToken } from "../../configuration";
+import type { CompletionCallbacks, CompletionGeneratorValue, CompletionParameters, CompletionResponse, Event } from "./types";
 export interface CompletionLogger {
     startCompletion(params: CompletionParameters | unknown, endpoint: string): undefined | {
         onError: (error: string, rawError?: unknown) => void;
@@ -8,7 +8,9 @@ export interface CompletionLogger {
         onEvents: (events: Event[]) => void;
     };
 }
-export type CompletionsClientConfig = Pick<ConfigurationWithAccessToken, 'serverEndpoint' | 'accessToken' | 'debugEnable' | 'customHeaders'>;
+export type CompletionsClientConfig = Pick<ConfigurationWithAccessToken, "serverEndpoint" | "accessToken" | "debugEnable" | "customHeaders"> & {
+    ModelsVender?: string;
+};
 /**
  * Access the chat based LLM APIs via a Sourcegraph server instance.
  *

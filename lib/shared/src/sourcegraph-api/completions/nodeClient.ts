@@ -68,7 +68,7 @@ export class SourcegraphNodeCompletionsClient extends SourcegraphCompletionsClie
                         // responses afterwards.
                         'Accept-Encoding': 'gzip;q=0',
                         ...(this.config.accessToken
-                            ? { Authorization: `token ${this.config.accessToken}` }
+                            ? params.vendor === 'Azure' ? { 'Api-Key': this.config.accessToken } : { Authorization: `token ${this.config.accessToken}` }
                             : null),
                         ...(customUserAgent ? { 'User-Agent': customUserAgent } : null),
                         ...this.config.customHeaders,
@@ -202,7 +202,7 @@ export class SourcegraphNodeCompletionsClient extends SourcegraphCompletionsClie
                 }
             })
 
-            request.write(JSON.stringify(params))
+            request.write(JSON.stringify(params.vendor === 'Azure' ? { messages: params.messages } : params))
             request.end()
 
             onAbort(signal, () => request.destroy())

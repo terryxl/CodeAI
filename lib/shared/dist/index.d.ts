@@ -53,7 +53,7 @@ export { SourcegraphBrowserCompletionsClient } from './sourcegraph-api/completio
 export { SourcegraphCompletionsClient } from './sourcegraph-api/completions/client';
 export type { CompletionLogger, CompletionsClientConfig } from './sourcegraph-api/completions/client';
 export type { CompletionParameters, CompletionResponse, Event, } from './sourcegraph-api/completions/types';
-export { DOTCOM_URL, LOCAL_APP_URL, isDotCom } from './sourcegraph-api/environments';
+export { DOTCOM_URL, DOTCOM_AZURE_URL, LOCAL_APP_URL, isDotCom } from './sourcegraph-api/environments';
 export { AbortError, NetworkError, RateLimitError, TimeoutError, TracedError, isAbortError, isAuthError, isNetworkError, isRateLimitError, } from './sourcegraph-api/errors';
 export { SourcegraphGraphQLAPIClient, graphqlClient } from './sourcegraph-api/graphql';
 export { ConfigFeaturesSingleton, addCustomUserAgent, customUserAgent, isNodeResponse, setUserAgent, type BrowserOrNodeResponse, type GraphQLAPIClientConfig, type LogEventMode, } from './sourcegraph-api/graphql/client';

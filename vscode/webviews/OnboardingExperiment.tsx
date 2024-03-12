@@ -72,16 +72,22 @@ export const LoginSimplified: React.FunctionComponent<React.PropsWithoutRef<Logi
     return (
         <div className={styles.container}>
             <div className={styles.sectionsContainer}>
-                <img src={onboardingSplashImage} alt="Hi, I'm Cody" className={styles.logo} />
+                {/* <img src={onboardingSplashImage} alt="Hi, I'm Cody" className={styles.logo} /> */}
                 <div className={styles.section}>
-                    <h1>Cody Free or Cody Pro</h1>
                     <div className={styles.buttonWidthSizer}>
                         <div className={styles.buttonStack}>
                             {uiKindIsWeb ? (
-                                <WebLogin telemetryService={telemetryService} vscodeAPI={vscodeAPI} />
+                                // <WebLogin telemetryService={telemetryService} vscodeAPI={vscodeAPI} />
+                                <VSCodeButton
+                                    className={styles.button}
+                                    type="button"
+                                    onClick={otherSignInClick}
+                                >
+                                    使用海尔账号登录
+                                </VSCodeButton>
                             ) : (
                                 <>
-                                    <VSCodeButton
+                                    {/* <VSCodeButton
                                         className={styles.button}
                                         type="button"
                                         onClick={() => {
@@ -119,13 +125,13 @@ export const LoginSimplified: React.FunctionComponent<React.PropsWithoutRef<Logi
                                     >
                                         <img src={signInLogoGoogle} alt="Google logo" />
                                         Sign In with Google
-                                    </VSCodeButton>
+                                    </VSCodeButton> */}
                                 </>
                             )}
                         </div>
                     </div>
                 </div>
-                <div className={styles.section}>
+                {/* <div className={styles.section}>
                     <h1>Cody Enterprise</h1>
                     <div className={styles.buttonWidthSizer}>
                         <div className={styles.buttonStack}>
@@ -142,13 +148,13 @@ export const LoginSimplified: React.FunctionComponent<React.PropsWithoutRef<Logi
                         Learn more about{' '}
                         <a href="https://sourcegraph.com/cloud">Sourcegraph Enterprise</a>
                     </p>
-                </div>
+                </div> */}
             </div>
-            <div className={styles.terms}>
+            {/* <div className={styles.terms}>
                 By signing in to Cody you agree to our{' '}
                 <a href="https://about.sourcegraph.com/terms">Terms of Service</a> and{' '}
                 <a href="https://about.sourcegraph.com/terms/privacy">Privacy Policy</a>
-            </div>
+            </div> */}
         </div>
     )
 }

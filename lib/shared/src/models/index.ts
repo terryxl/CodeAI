@@ -1,6 +1,6 @@
 import { isDotCom } from '../sourcegraph-api/environments'
 import { DEFAULT_DOT_COM_MODELS } from './dotcom'
-import type { ModelUsage } from './types'
+import type { ModelUsage, ModelVendorType } from './types'
 import { getProviderName } from './utils'
 
 /**
@@ -13,6 +13,7 @@ export class ModelProvider {
     public codyProOnly = false
     public provider: string
     public readonly title: string
+    public vendor?: ModelVendorType = 'Sourcegraph'
 
     constructor(
         public readonly model: string,
@@ -55,10 +56,15 @@ export class ModelProvider {
         currentModel?: string
     ): ModelProvider[] {
         const isDotComUser = !endpoint || (endpoint && isDotCom(endpoint))
+        const providers: ModelProvider[] = []
+        if (!isDotComUser) {
+            providers.push(...ModelProvider.dotComProviders.filter(m => m.vendor === 'Azure'))
+            providers.push(...Array.from(ModelProvider.privateProviders.values()))
+        }
         const models = (
             isDotComUser
-                ? ModelProvider.dotComProviders
-                : Array.from(ModelProvider.privateProviders.values())
+                ? ModelProvider.dotComProviders.filter(m => m.vendor !== 'Azure')
+                : providers
         ).filter(model => model.usage.includes(type))
 
         if (!isDotComUser) {

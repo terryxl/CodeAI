@@ -7,6 +7,14 @@ export declare const DEFAULT_DOT_COM_MODELS: [{
     readonly codyProOnly: false;
     readonly usage: [ModelUsage.Chat, ModelUsage.Edit];
 }, {
+    readonly title: "GPT-4";
+    readonly model: "gpt-4";
+    readonly provider: "OpenAI";
+    readonly vender: "Azure";
+    readonly default: false;
+    readonly codyProOnly: true;
+    readonly usage: [ModelUsage.Chat, ModelUsage.Edit];
+}, {
     readonly title: "Claude 2.1 Preview";
     readonly model: "anthropic/claude-2.1";
     readonly provider: "Anthropic";

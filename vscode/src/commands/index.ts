@@ -6,14 +6,13 @@ const osIcon = isMac() ? "⌥" : "Alt+";
 export const CodyCommandMenuItems = [
     {
         key: "ask",
-        description: "聊天",
+        description: "对话",
         prompt: "Start a new chat",
         icon: "comment",
         command: { command: "cody.chat.panel.new" },
         keybinding: `${osIcon}L`,
         mode: "ask",
         type: "default",
-        show: false,
     },
     {
         key: "edit",
@@ -61,6 +60,7 @@ export const CodyCommandMenuItems = [
         keybinding: "",
         mode: "edit",
         type: "default",
+        show: false,
     },
     // {
     //     key: 'custom',

@@ -8,6 +8,7 @@ import {
     type FeatureFlagProvider,
     type Guardrails,
     type Configuration,
+    ChatEventSource,
 } from '@sourcegraph/cody-shared'
 
 import type { LocalEmbeddingsController } from '../../local-context/local-embeddings'
@@ -30,7 +31,7 @@ type ChatID = string
 
 export type ChatPanelConfig = Pick<
     ConfigurationWithAccessToken,
-    'experimentalGuardrails' | 'experimentalSymfContext' | 'internalUnstable' | 'useContext'
+    'experimentalGuardrails' | 'experimentalSymfContext' | 'internalUnstable' | 'useContext' | 'modelsVendor'
 >
 
 export interface ChatViewProviderWebview extends Omit<vscode.Webview, 'postMessage'> {
@@ -124,8 +125,8 @@ export class ChatPanelsManager implements vscode.Disposable {
         this.supportTreeViewProvider.syncAuthStatus(authStatus)
     }
 
-    public async getChatPanel(): Promise<SimpleChatPanelProvider> {
-        const provider = await this.createWebviewPanel()
+    public async getChatPanel(source?: ChatEventSource): Promise<SimpleChatPanelProvider> {
+        const provider = await this.createWebviewPanel(undefined,undefined,undefined,source)
 
         if (this.options.config.isRunningInsideAgent) {
             // Never reuse webviews when running inside the agent.
@@ -142,7 +143,8 @@ export class ChatPanelsManager implements vscode.Disposable {
     public async createWebviewPanel(
         chatID?: string,
         chatQuestion?: string,
-        panel?: vscode.WebviewPanel
+        panel?: vscode.WebviewPanel,
+        source?: ChatEventSource
     ): Promise<SimpleChatPanelProvider> {
         if (chatID && this.panelProviders.map(p => p.sessionID).includes(chatID)) {
             const provider = this.panelProviders.find(p => p.sessionID === chatID)
@@ -175,7 +177,7 @@ export class ChatPanelsManager implements vscode.Disposable {
         // Get the view column of the current active chat panel so that we can open a new one on top of it
         const activePanelViewColumn = this.activePanelProvider?.webviewPanel?.viewColumn
 
-        const provider = this.createProvider()
+        const provider = this.createProvider(source)
         if (chatID) {
             await provider.restoreSession(chatID)
         } else {
@@ -214,7 +216,7 @@ export class ChatPanelsManager implements vscode.Disposable {
     /**
      * Creates a provider for the chat panel.
      */
-    private createProvider(): SimpleChatPanelProvider {
+    private createProvider(source?: ChatEventSource): SimpleChatPanelProvider {
         const authProvider = this.options.authProvider
         const authStatus = authProvider.getAuthStatus()
         if (authStatus?.configOverwrites?.chatModel) {
@@ -238,6 +240,7 @@ export class ChatPanelsManager implements vscode.Disposable {
             enterpriseContext: isConsumer ? null : this.enterpriseContext,
             models,
             guardrails: this.guardrails,
+            source
         })
     }
 

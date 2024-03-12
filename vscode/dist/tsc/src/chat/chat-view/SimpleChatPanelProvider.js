@@ -82,6 +82,7 @@ const utils_2 = require("../../services/open-telemetry/utils");
  */
 class SimpleChatPanelProvider {
     chatModel;
+    model;
     config;
     authProvider;
     chatClient;
@@ -112,7 +113,8 @@ class SimpleChatPanelProvider {
         this.remoteSearch = enterpriseContext?.createRemoteSearch() || null;
         this.editor = editor;
         this.treeView = treeView;
-        this.chatModel = new SimpleChatModel_1.SimpleChatModel(models_1.chatModel.get(authProvider, models));
+        this.model = models_1.chatModel.getModel(authProvider, models);
+        this.chatModel = new SimpleChatModel_1.SimpleChatModel(this.model.model);
         this.guardrails = guardrails;
         if (test_support_1.TestSupport.instance) {
             test_support_1.TestSupport.instance.chatPanelProvider.set(this);

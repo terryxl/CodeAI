@@ -24,7 +24,7 @@ const useShowNotice = (currentVersion: string, probablyNewInstall: boolean): [bo
 
     const [showNotice, setShowNotice] = useState<boolean>(
         /* Version different to what's already dismissed means time for a notice */
-        localStorage.getItem(key) !== currentVersion
+        localStorage.getItem(key) !== null && localStorage.getItem(key) !== currentVersion
     )
 
     const setDismissed = (): void => {

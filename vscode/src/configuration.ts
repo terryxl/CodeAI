@@ -1,23 +1,24 @@
-import * as vscode from 'vscode'
+import * as vscode from "vscode";
 
 import {
     DOTCOM_URL,
+    DOTCOM_AZURE_URL,
     type Configuration,
     type ConfigurationUseContext,
     type ConfigurationWithAccessToken,
-} from '@sourcegraph/cody-shared'
+} from "@sourcegraph/cody-shared";
 
 import {
     CONFIG_KEY,
     getConfigEnumValues,
     type ConfigKeys,
     type ConfigurationKeysMap,
-} from './configuration-keys'
-import { localStorage } from './services/LocalStorageProvider'
-import { getAccessToken } from './services/SecretStorageProvider'
+} from "./configuration-keys";
+import { localStorage } from "./services/LocalStorageProvider";
+import { getAccessToken } from "./services/SecretStorageProvider";
 
 interface ConfigGetter {
-    get<T>(section: (typeof CONFIG_KEY)[ConfigKeys], defaultValue?: T): T
+    get<T>(section: typeof CONFIG_KEY[ConfigKeys], defaultValue?: T): T;
 }
 
 /**
@@ -26,84 +27,106 @@ interface ConfigGetter {
 export function getConfiguration(
     config: ConfigGetter = vscode.workspace.getConfiguration()
 ): Configuration {
-    const isTesting = process.env.CODY_TESTING === 'true'
+    const isTesting = process.env.CODY_TESTING === "true";
 
     function getHiddenSetting<T>(configKey: string, defaultValue?: T): T {
-        return config.get<T>(`cody.${configKey}` as any, defaultValue)
+        return config.get<T>(`cody.${configKey}` as any, defaultValue);
     }
 
-    let debugRegex: RegExp | null = null
+    let debugRegex: RegExp | null = null;
     try {
-        const debugPattern: string | null = config.get<string | null>(CONFIG_KEY.debugFilter, null)
+        const debugPattern: string | null = config.get<string | null>(
+            CONFIG_KEY.debugFilter,
+            null
+        );
         if (debugPattern) {
-            if (debugPattern === '*') {
-                debugRegex = /.*/
+            if (debugPattern === "*") {
+                debugRegex = /.*/;
             } else {
-                debugRegex = new RegExp(debugPattern)
+                debugRegex = new RegExp(debugPattern);
             }
         }
     } catch (error: any) {
         void vscode.window.showErrorMessage(
             "Error parsing cody.debug.filter regex - using default '*'",
             error
-        )
-        debugRegex = /.*/
+        );
+        debugRegex = /.*/;
     }
 
     let autocompleteAdvancedProvider = config.get<
-        Configuration['autocompleteAdvancedProvider'] | 'unstable-ollama' | 'unstable-fireworks'
-    >(CONFIG_KEY.autocompleteAdvancedProvider, null)
+        | Configuration["autocompleteAdvancedProvider"]
+        | "unstable-ollama"
+        | "unstable-fireworks"
+    >(CONFIG_KEY.autocompleteAdvancedProvider, null);
 
     // Handle deprecated provider identifiers
     switch (autocompleteAdvancedProvider) {
-        case 'unstable-fireworks':
-            autocompleteAdvancedProvider = 'fireworks'
-            break
-        case 'unstable-ollama':
-            autocompleteAdvancedProvider = 'experimental-ollama'
-            break
+        case "unstable-fireworks":
+            autocompleteAdvancedProvider = "fireworks";
+            break;
+        case "unstable-ollama":
+            autocompleteAdvancedProvider = "experimental-ollama";
+            break;
     }
 
     // check if the configured enum values are valid
     const configKeys = [
-        'autocompleteAdvancedProvider',
-        'autocompleteAdvancedModel',
-    ] as (keyof ConfigurationKeysMap)[]
+        "autocompleteAdvancedProvider",
+        "autocompleteAdvancedModel",
+    ] as (keyof ConfigurationKeysMap)[];
 
     for (const configVal of configKeys) {
-        const key = configVal.replaceAll(/([A-Z])/g, '.$1').toLowerCase()
-        const value: string | null = config.get(CONFIG_KEY[configVal])
-        checkValidEnumValues(key, value)
+        const key = configVal.replaceAll(/([A-Z])/g, ".$1").toLowerCase();
+        const value: string | null = config.get(CONFIG_KEY[configVal]);
+        checkValidEnumValues(key, value);
     }
 
-    const autocompleteExperimentalGraphContext: 'bfg' | null = getHiddenSetting(
-        'autocomplete.experimental.graphContext',
+    const autocompleteExperimentalGraphContext: "bfg" | null = getHiddenSetting(
+        "autocomplete.experimental.graphContext",
         null
-    )
+    );
 
     return {
         proxy: config.get<string | null>(CONFIG_KEY.proxy, null),
         codebase: sanitizeCodebase(config.get(CONFIG_KEY.codebase)),
-        customHeaders: config.get<object>(CONFIG_KEY.customHeaders, {}) as Record<string, string>,
-        useContext: config.get<ConfigurationUseContext>(CONFIG_KEY.useContext) || 'embeddings',
+        customHeaders: config.get<object>(
+            CONFIG_KEY.customHeaders,
+            {}
+        ) as Record<string, string>,
+        useContext:
+            config.get<ConfigurationUseContext>(CONFIG_KEY.useContext) ||
+            "embeddings",
         debugEnable: config.get<boolean>(CONFIG_KEY.debugEnable, false),
         debugVerbose: config.get<boolean>(CONFIG_KEY.debugVerbose, false),
         debugFilter: debugRegex,
-        telemetryLevel: config.get<'all' | 'off'>(CONFIG_KEY.telemetryLevel, 'all'),
+        telemetryLevel: config.get<"all" | "off">(
+            CONFIG_KEY.telemetryLevel,
+            "all"
+        ),
         autocomplete: config.get(CONFIG_KEY.autocompleteEnabled, true),
         autocompleteLanguages: config.get(CONFIG_KEY.autocompleteLanguages, {
-            '*': true,
+            "*": true,
         }),
-        chatPreInstruction: config.get(CONFIG_KEY.chatPreInstruction, ''),
+        chatPreInstruction: config.get(CONFIG_KEY.chatPreInstruction, ""),
         commandCodeLenses: config.get(CONFIG_KEY.commandCodeLenses, false),
-        editorTitleCommandIcon: config.get(CONFIG_KEY.editorTitleCommandIcon, true),
+        editorTitleCommandIcon: config.get(
+            CONFIG_KEY.editorTitleCommandIcon,
+            true
+        ),
         autocompleteAdvancedProvider,
-        autocompleteAdvancedModel: config.get<string | null>(CONFIG_KEY.autocompleteAdvancedModel, null),
+        autocompleteAdvancedModel: config.get<string | null>(
+            CONFIG_KEY.autocompleteAdvancedModel,
+            null
+        ),
         autocompleteCompleteSuggestWidgetSelection: config.get(
             CONFIG_KEY.autocompleteCompleteSuggestWidgetSelection,
             true
         ),
-        autocompleteFormatOnAccept: config.get(CONFIG_KEY.autocompleteFormatOnAccept, true),
+        autocompleteFormatOnAccept: config.get(
+            CONFIG_KEY.autocompleteFormatOnAccept,
+            true
+        ),
         autocompleteDisableInsideComments: config.get(
             CONFIG_KEY.autocompleteDisableInsideComments,
             false
@@ -115,32 +138,41 @@ export function getConfiguration(
          * Hidden settings for internal use only.
          */
 
-        internalUnstable: getHiddenSetting('internal.unstable', isTesting),
+        internalUnstable: getHiddenSetting("internal.unstable", isTesting),
 
         autocompleteExperimentalGraphContext,
-        experimentalSimpleChatContext: getHiddenSetting('experimental.simpleChatContext', true),
-        experimentalSymfContext: getHiddenSetting('experimental.symfContext', true),
+        experimentalSimpleChatContext: getHiddenSetting(
+            "experimental.simpleChatContext",
+            true
+        ),
+        experimentalSymfContext: getHiddenSetting(
+            "experimental.symfContext",
+            true
+        ),
 
-        experimentalGuardrails: getHiddenSetting('experimental.guardrails', isTesting),
-        experimentalTracing: getHiddenSetting('experimental.tracing', false),
+        experimentalGuardrails: getHiddenSetting(
+            "experimental.guardrails",
+            isTesting
+        ),
+        experimentalTracing: getHiddenSetting("experimental.tracing", false),
 
         autocompleteExperimentalDynamicMultilineCompletions: getHiddenSetting(
-            'autocomplete.experimental.dynamicMultilineCompletions',
+            "autocomplete.experimental.dynamicMultilineCompletions",
             false
         ),
         autocompleteExperimentalHotStreak: getHiddenSetting(
-            'autocomplete.experimental.hotStreak',
+            "autocomplete.experimental.hotStreak",
             false
         ),
         autocompleteExperimentalOllamaOptions: getHiddenSetting(
-            'autocomplete.experimental.ollamaOptions',
+            "autocomplete.experimental.ollamaOptions",
             {
-                url: 'http://localhost:11434',
-                model: 'codellama:7b-code',
+                url: "http://localhost:11434",
+                model: "codellama:7b-code",
             }
         ),
         autocompleteExperimentalSmartThrottle: getHiddenSetting(
-            'autocomplete.experimental.smartThrottle',
+            "autocomplete.experimental.smartThrottle",
             false
         ),
 
@@ -148,58 +180,80 @@ export function getConfiguration(
         // We currently use this flag for the agent to provide more helpful error messages
         // when something goes wrong, and to suppress event logging in the agent.
         // Rely on this flag sparingly.
-        isRunningInsideAgent: getHiddenSetting('advanced.agent.running', false),
-        agentIDE: getHiddenSetting<'VSCode' | 'JetBrains' | 'Neovim' | 'Emacs'>('advanced.agent.ide'),
+        isRunningInsideAgent: getHiddenSetting("advanced.agent.running", false),
+        agentIDE: getHiddenSetting<"VSCode" | "JetBrains" | "Neovim" | "Emacs">(
+            "advanced.agent.ide"
+        ),
         autocompleteTimeouts: {
             multiline: getHiddenSetting<number | undefined>(
-                'autocomplete.advanced.timeout.multiline',
+                "autocomplete.advanced.timeout.multiline",
                 undefined
             ),
             singleline: getHiddenSetting<number | undefined>(
-                'autocomplete.advanced.timeout.singleline',
+                "autocomplete.advanced.timeout.singleline",
                 undefined
             ),
         },
 
+        modelsVendor: config.get(CONFIG_KEY.modelsVendor, "Azure"),
+
         testingLocalEmbeddingsModel: isTesting
-            ? getHiddenSetting<string | undefined>('testing.localEmbeddings.model', undefined)
+            ? getHiddenSetting<string | undefined>(
+                  "testing.localEmbeddings.model",
+                  undefined
+              )
             : undefined,
         testingLocalEmbeddingsEndpoint: isTesting
-            ? getHiddenSetting<string | undefined>('testing.localEmbeddings.endpoint', undefined)
+            ? getHiddenSetting<string | undefined>(
+                  "testing.localEmbeddings.endpoint",
+                  undefined
+              )
             : undefined,
         testingLocalEmbeddingsIndexLibraryPath: isTesting
-            ? getHiddenSetting<string | undefined>('testing.localEmbeddings.indexLibraryPath', undefined)
+            ? getHiddenSetting<string | undefined>(
+                  "testing.localEmbeddings.indexLibraryPath",
+                  undefined
+              )
             : undefined,
-    }
+    };
 }
 
 function sanitizeCodebase(codebase: string | undefined): string {
     if (!codebase) {
-        return ''
+        return "";
     }
-    const protocolRegexp = /^(https?):\/\//
-    const trailingSlashRegexp = /\/$/
-    return codebase.replace(protocolRegexp, '').trim().replace(trailingSlashRegexp, '')
+    const protocolRegexp = /^(https?):\/\//;
+    const trailingSlashRegexp = /\/$/;
+    return codebase
+        .replace(protocolRegexp, "")
+        .trim()
+        .replace(trailingSlashRegexp, "");
 }
 
-export const getFullConfig = async (): Promise<ConfigurationWithAccessToken> => {
-    const config = getConfiguration()
-    const isTesting = process.env.CODY_TESTING === 'true'
-    const serverEndpoint =
-        localStorage?.getEndpoint() || (isTesting ? 'http://localhost:49300/' : DOTCOM_URL.href)
-    const accessToken = (await getAccessToken()) || null
-    return { ...config, accessToken, serverEndpoint }
-}
+export const getFullConfig =
+    async (): Promise<ConfigurationWithAccessToken> => {
+        const config = getConfiguration();
+        const isTesting = process.env.CODY_TESTING === "true";
+        const serverEndpoint =
+            localStorage?.getEndpoint() ||
+            (isTesting
+                ? "http://localhost:49300/"
+                : config.modelsVendor === "Azure"
+                ? DOTCOM_AZURE_URL.href
+                : DOTCOM_URL.href);
+        const accessToken = (await getAccessToken()) || null;
+        return { ...config, accessToken, serverEndpoint };
+    };
 
 function checkValidEnumValues(configName: string, value: string | null): void {
-    const validEnumValues = getConfigEnumValues(`cody.${configName}`)
+    const validEnumValues = getConfigEnumValues(`cody.${configName}`);
     if (value) {
         if (!validEnumValues.includes(value)) {
             void vscode.window.showErrorMessage(
                 `Invalid value for ${configName}: ${value}. Valid values are: ${validEnumValues.join(
-                    ', '
+                    ", "
                 )}`
-            )
+            );
         }
     }
 }

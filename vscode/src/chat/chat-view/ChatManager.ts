@@ -2,7 +2,7 @@ import { debounce } from 'lodash'
 import * as uuid from 'uuid'
 import * as vscode from 'vscode'
 
-import { ModelProvider, type ChatClient, type Guardrails } from '@sourcegraph/cody-shared'
+import { ModelProvider, type ChatClient, type Guardrails, ChatEventSource } from '@sourcegraph/cody-shared'
 
 import type { View } from '../../../webviews/NavBar'
 import { CODY_PASSTHROUGH_VSCODE_OPEN_COMMAND_ID } from '../../commands/utils/display-text'
@@ -86,8 +86,8 @@ export class ChatManager implements vscode.Disposable {
         )
     }
 
-    private async getChatProvider(): Promise<SimpleChatPanelProvider> {
-        const provider = await this.chatPanelsManager.getChatPanel()
+    private async getChatProvider(source?: ChatEventSource): Promise<SimpleChatPanelProvider> {
+        const provider = await this.chatPanelsManager.getChatPanel(source)
         return provider
     }
 
@@ -119,8 +119,8 @@ export class ChatManager implements vscode.Disposable {
      * Execute a chat request in a new chat panel
      */
     public async executeChat(args: ExecuteChatArguments): Promise<ChatSession | undefined> {
-        const provider = await this.getChatProvider()
-        await provider?.handleUserMessageSubmission(
+        const provider = await this.getChatProvider(args?.source)
+        await provider?.handleUserMessageFn(
             uuid.v4(),
             args.text,
             args?.submitType,

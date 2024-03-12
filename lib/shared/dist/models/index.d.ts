@@ -1,4 +1,4 @@
-import type { ModelUsage } from './types';
+import type { ModelUsage, ModelVenderType } from './types';
 /**
  * ModelProvider manages available chat and edit models.
  * It stores a set of available providers and methods to add,
@@ -11,6 +11,7 @@ export declare class ModelProvider {
     codyProOnly: boolean;
     provider: string;
     readonly title: string;
+    vender?: ModelVenderType;
     constructor(model: string, usage: ModelUsage[], isDefaultModel?: boolean);
     private static privateProviders;
     private static dotComProviders;
