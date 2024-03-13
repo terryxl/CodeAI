@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-import { getSimplePreamble, wrapInActiveSpan, type Message, ChatEventSource } from '@sourcegraph/cody-shared'
+import { getSimplePreamble, wrapInActiveSpan, type Message } from '@sourcegraph/cody-shared'
 
 import { logDebug } from '../../log'
 

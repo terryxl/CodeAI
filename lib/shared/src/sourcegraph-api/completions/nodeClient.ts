@@ -10,7 +10,7 @@ import { toPartialUtf8String } from '../utils'
 
 import { SourcegraphCompletionsClient } from './client'
 import { parseEvents } from './parse'
-import type { CompletionCallbacks, CompletionParameters } from './types'
+import type { CompletionCallbacks, CompletionParameters, MessageAzure } from './types'
 import { getTraceparentHeaders, recordErrorToSpan, tracer } from '../../tracing'
 
 const isTemperatureZero = process.env.CODY_TEMPERATURE_ZERO === 'true'
@@ -58,25 +58,30 @@ export class SourcegraphNodeCompletionsClient extends SourcegraphCompletionsClie
                 }
             }
 
+            const payload: { messages: MessageAzure[], stream: boolean } | CompletionParameters =
+                this.config.modelsVendor === 'Azure' ? { messages: params.messages as MessageAzure[], stream: true }
+                : params
+
             const request = requestFn(
                 this.completionsEndpoint,
                 {
                     method: 'POST',
+                    timeout: 50000,
                     headers: {
                         'Content-Type': 'application/json',
                         // Disable gzip compression since the sg instance will start to batch
                         // responses afterwards.
                         'Accept-Encoding': 'gzip;q=0',
                         ...(this.config.accessToken
-                            ? params.vendor === 'Azure' ? { 'Api-Key': this.config.accessToken } : { Authorization: `token ${this.config.accessToken}` }
+                            ? this.config.modelsVendor === 'Azure' ? { 'Api-Key': this.config.accessToken } : { Authorization: `token ${this.config.accessToken}` }
                             : null),
                         ...(customUserAgent ? { 'User-Agent': customUserAgent } : null),
                         ...this.config.customHeaders,
                         ...getTraceparentHeaders(),
                     },
                     // So we can send requests to the Sourcegraph local development instance, which has an incompatible cert.
-                    rejectUnauthorized:
-                        process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0' && !this.config.debugEnable,
+                    // rejectUnauthorized:
+                        // process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0' && !this.config.debugEnable,
                 },
                 (res: http.IncomingMessage) => {
                     const { 'set-cookie': _setCookie, ...safeHeaders } = res.headers
@@ -156,23 +161,30 @@ export class SourcegraphNodeCompletionsClient extends SourcegraphCompletionsClie
                         // text/event-stream messages are always UTF-8, but a chunk
                         // may terminate in the middle of a character
                         const { str, buf } = toPartialUtf8String(Buffer.concat([bufferBin, chunk]))
-                        bufferText += str
-                        bufferBin = buf
 
-                        const parseResult = parseEvents(bufferText)
-                        if (isError(parseResult)) {
-                            logError(
-                                'SourcegraphNodeCompletionsClient',
-                                'isError(parseEvents(bufferText))',
-                                parseResult
-                            )
-                            return
+                        let parseResult: any
+                        if (this.config.modelsVendor === 'Azure') {
+                            const obj = JSON.parse(str.startsWith('data:') ? str.slice(5) : str)
+                            parseResult = { events: [this.formatCompletion(obj)]}
+                        }
+                        else {
+                            bufferText += str
+                            parseResult = parseEvents(bufferText)
+                            if (isError(parseResult)) {
+                                logError(
+                                    'SourcegraphNodeCompletionsClient',
+                                    'isError(parseEvents(bufferText))',
+                                    parseResult
+                                )
+                                return
+                            }
+                            bufferText = parseResult.remainingBuffer
+                            bufferBin = buf
                         }
 
                         didSendMessage = true
                         log?.onEvents(parseResult.events)
                         this.sendEvents(parseResult.events, cb, span)
-                        bufferText = parseResult.remainingBuffer
                     })
 
                     res.on('error', e => handleError(e))
@@ -198,11 +210,11 @@ export class SourcegraphNodeCompletionsClient extends SourcegraphCompletionsClie
             // We still want to close the request.
             request.on('close', () => {
                 if (!didSendMessage) {
-                    onErrorOnce(new Error('Connection unexpectedly closed'))
+                    onErrorOnce(new Error('Connection unexpectedly closed' + this.completionsEndpoint + JSON.stringify(request.getHeaders()) + JSON.stringify(payload)))
                 }
             })
 
-            request.write(JSON.stringify(params.vendor === 'Azure' ? { messages: params.messages } : params))
+            request.write(JSON.stringify(payload))
             request.end()
 
             onAbort(signal, () => request.destroy())

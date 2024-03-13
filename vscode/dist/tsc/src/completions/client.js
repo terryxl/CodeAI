@@ -10,6 +10,8 @@ const api_1 = require("@opentelemetry/api");
  */
 function createClient(config, logger) {
     function complete(params, abortController) {
+        if (config.modelsVendor === 'Azure')
+            return;
         const url = new URL('/.api/completions/code', config.serverEndpoint).href;
         const log = logger?.startCompletion(params, url);
         const { signal } = abortController;

@@ -1,4 +1,4 @@
-import { ModelVendorType } from "../../models/types"
+import type { ModelVendorType } from "../../models/types"
 
 interface DoneEvent {
     type: 'done'
@@ -21,7 +21,7 @@ export type Message = {
 }
 
 export type MessageAzure = {
-    role: 'user' | 'system'
+    role: 'user' | 'system' | 'assistant'
     content: string
 }
 

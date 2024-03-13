@@ -212,7 +212,6 @@ class AuthProvider {
         const isDotCom = this.client.isDotCom();
         const userInfo = await this.client.getCurrentUserInfo();
         if (!isDotCom) {
-            const hasVerifiedEmail = false;
             // check first if it's a network error
             if ((0, cody_shared_1.isError)(userInfo)) {
                 if (isNetworkError(userInfo)) {
@@ -220,7 +219,7 @@ class AuthProvider {
                 }
                 return { ...protocol_1.unauthenticatedStatus, endpoint };
             }
-            return (0, utils_1.newAuthStatus)(endpoint, isDotCom, !(0, cody_shared_1.isError)(userInfo), hasVerifiedEmail, enabled, 
+            return (0, utils_1.newAuthStatus)(endpoint, isDotCom, !(0, cody_shared_1.isError)(userInfo) && !!token, userInfo.hasVerifiedEmail, enabled, 
             /* userCanUpgrade: */ false, version, userInfo.avatarURL, userInfo.username, userInfo.displayName, userInfo.primaryEmail?.email, configOverwrites);
         }
         const isCodyEnabled = true;
@@ -243,11 +242,12 @@ class AuthProvider {
     }
     // It processes the authentication steps and stores the login info before sharing the auth status with chatview
     async auth(uri, token, customHeaders) {
-        const endpoint = formatURL(uri) || '';
+        const endpoint = this.config.serverEndpoint || formatURL(uri) || '';
         const config = {
             serverEndpoint: endpoint,
             accessToken: token,
             customHeaders: customHeaders || this.config.customHeaders,
+            modelsVendor: this.config.modelsVendor
         };
         const authStatus = await this.makeAuthStatus(config);
         const isLoggedIn = (0, protocol_1.isLoggedIn)(authStatus);

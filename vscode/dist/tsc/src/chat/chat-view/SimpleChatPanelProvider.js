@@ -53,6 +53,7 @@ const models_1 = require("../../models");
 const utilts_1 = require("../../models/utilts");
 const tracing_1 = require("@sourcegraph/cody-shared/src/tracing");
 const utils_2 = require("../../services/open-telemetry/utils");
+const PromptAzure_1 = require("./PromptAzure");
 /**
  * SimpleChatPanelProvider is the view controller class for the chat panel.
  * It handles all events sent from the view, keeps track of the underlying chat model,
@@ -93,8 +94,10 @@ class SimpleChatPanelProvider {
     editor;
     treeView;
     guardrails;
+    source;
     remoteSearch;
     repoPicker;
+    handleUserMessageFn;
     history = new ChatHistoryManager_1.ChatHistoryManager();
     contextFilesQueryCancellation;
     disposables = [];
@@ -102,7 +105,7 @@ class SimpleChatPanelProvider {
         vscode.Disposable.from(...this.disposables).dispose();
         this.disposables = [];
     }
-    constructor({ config, extensionUri, authProvider, chatClient, localEmbeddings, symf, editor, treeView, models, guardrails, enterpriseContext, }) {
+    constructor({ config, extensionUri, authProvider, chatClient, localEmbeddings, symf, editor, treeView, models, guardrails, enterpriseContext, source, }) {
         this.config = config;
         this.extensionUri = extensionUri;
         this.authProvider = authProvider;
@@ -113,9 +116,14 @@ class SimpleChatPanelProvider {
         this.remoteSearch = enterpriseContext?.createRemoteSearch() || null;
         this.editor = editor;
         this.treeView = treeView;
+        this.source = source;
         this.model = models_1.chatModel.getModel(authProvider, models);
         this.chatModel = new SimpleChatModel_1.SimpleChatModel(this.model.model);
         this.guardrails = guardrails;
+        this.handleUserMessageFn =
+            this.config.modelsVendor === "Azure"
+                ? this.handleUserMessageSubmissionForAzure
+                : this.handleUserMessageSubmission;
         if (test_support_1.TestSupport.instance) {
             test_support_1.TestSupport.instance.chatPanelProvider.set(this);
         }
@@ -127,7 +135,9 @@ class SimpleChatPanelProvider {
         if (this.localEmbeddings) {
             this.disposables.push(this.contextStatusAggregator.addProvider(this.localEmbeddings));
         }
-        this.codebaseStatusProvider = new CodebaseStatusProvider_1.CodebaseStatusProvider(this.editor, this.config.experimentalSymfContext ? this.symf : null, enterpriseContext ? enterpriseContext.getCodebaseRepoIdMapper() : null);
+        this.codebaseStatusProvider = new CodebaseStatusProvider_1.CodebaseStatusProvider(this.editor, this.config.experimentalSymfContext ? this.symf : null, enterpriseContext
+            ? enterpriseContext.getCodebaseRepoIdMapper()
+            : null);
         this.disposables.push(this.contextStatusAggregator.addProvider(this.codebaseStatusProvider));
         if (this.remoteSearch) {
             this.disposables.push(
@@ -153,85 +163,85 @@ class SimpleChatPanelProvider {
      */
     async onDidReceiveMessage(message) {
         switch (message.command) {
-            case 'ready':
+            case "ready":
                 await this.handleReady();
                 break;
-            case 'initialized':
+            case "initialized":
                 await this.handleInitialized();
                 break;
-            case 'submit': {
-                await this.handleUserMessageSubmission(uuid.v4(), message.text, message.submitType, message.contextFiles ?? [], message.addEnhancedContext ?? false, 'chat');
+            case "submit": {
+                await this.handleUserMessageFn(uuid.v4(), message.text, message.submitType, message.contextFiles ?? [], message.addEnhancedContext ?? false, "chat");
                 break;
             }
-            case 'edit': {
+            case "edit": {
                 await this.handleEdit(uuid.v4(), message.text, message.index, message.contextFiles ?? [], message.addEnhancedContext || false);
                 break;
             }
-            case 'abort':
+            case "abort":
                 this.handleAbort();
                 break;
-            case 'chatModel':
+            case "chatModel":
                 this.handleSetChatModel(message.model);
                 break;
-            case 'get-chat-models':
+            case "get-chat-models":
                 this.postChatModels();
                 break;
-            case 'getUserContext':
+            case "getUserContext":
                 await this.handleGetUserContextFilesCandidates(message.query);
                 break;
-            case 'insert':
+            case "insert":
                 await (0, codeblock_action_tracker_1.handleCodeFromInsertAtCursor)(message.text, message.metadata);
                 break;
-            case 'copy':
-                await (0, codeblock_action_tracker_1.handleCopiedCode)(message.text, message.eventType === 'Button', message.metadata);
+            case "copy":
+                await (0, codeblock_action_tracker_1.handleCopiedCode)(message.text, message.eventType === "Button", message.metadata);
                 break;
-            case 'links':
+            case "links":
                 void (0, workspace_action_1.openExternalLinks)(message.value);
                 break;
-            case 'openFile':
+            case "openFile":
                 await (0, chat_helpers_1.openFile)(message.uri, message.range, this.webviewPanel?.viewColumn);
                 break;
-            case 'openLocalFileWithRange':
+            case "openLocalFileWithRange":
                 await (0, workspace_action_1.openLocalFileWithRange)(message.filePath, message.range);
                 break;
-            case 'newFile':
+            case "newFile":
                 (0, codeblock_action_tracker_1.handleCodeFromSaveToNewFile)(message.text, message.metadata);
                 await this.editor.createWorkspaceFile(message.text);
                 break;
-            case 'context/get-remote-search-repos': {
+            case "context/get-remote-search-repos": {
                 await this.postMessage({
-                    type: 'context/remote-repos',
+                    type: "context/remote-repos",
                     repos: this.chatModel.getSelectedRepos() ?? [],
                 });
                 break;
             }
-            case 'context/choose-remote-search-repo': {
+            case "context/choose-remote-search-repo": {
                 await this.handleChooseRemoteSearchRepo(message.explicitRepos);
                 break;
             }
-            case 'context/remove-remote-search-repo':
+            case "context/remove-remote-search-repo":
                 void this.handleRemoveRemoteSearchRepo(message.repoId);
                 break;
-            case 'embeddings/index':
+            case "embeddings/index":
                 void this.localEmbeddings?.index();
                 break;
-            case 'symf/index': {
+            case "symf/index": {
                 void this.handleSymfIndex();
                 break;
             }
-            case 'show-page':
-                await vscode.commands.executeCommand('cody.show-page', message.page);
+            case "show-page":
+                await vscode.commands.executeCommand("cody.show-page", message.page);
                 break;
-            case 'attribution-search':
+            case "attribution-search":
                 await this.handleAttributionSearch(message.snippet);
                 break;
-            case 'restoreHistory':
+            case "restoreHistory":
                 await this.restoreSession(message.chatID);
                 break;
-            case 'reset':
+            case "reset":
                 await this.clearAndRestartSession();
                 break;
-            case 'event':
+            case "event":
                 telemetry_1.telemetryService.log(message.eventName, message.properties);
                 break;
             default:
@@ -252,26 +262,26 @@ class SimpleChatPanelProvider {
             serverEndpoint: config.serverEndpoint,
             experimentalGuardrails: config.experimentalGuardrails,
         };
-        const workspaceFolderUris = vscode.workspace.workspaceFolders?.map(folder => folder.uri.toString()) ?? [];
+        const workspaceFolderUris = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.toString()) ?? [];
         await this.postMessage({
-            type: 'config',
+            type: "config",
             config: configForWebview,
             authStatus,
             workspaceFolderUris,
         });
-        (0, log_1.logDebug)('SimpleChatPanelProvider', 'updateViewConfig', {
+        (0, log_1.logDebug)("SimpleChatPanelProvider", "updateViewConfig", {
             verbose: configForWebview,
         });
     }
     initDoer = new InitDoer_1.InitDoer();
     async handleInitialized() {
-        (0, log_1.logDebug)('SimpleChatPanelProvider', 'handleInitialized');
+        (0, log_1.logDebug)("SimpleChatPanelProvider", "handleInitialized");
         // HACK: this call is necessary to get the webview to set the chatID state,
         // which is necessary on deserialization. It should be invoked before the
         // other initializers run (otherwise, it might interfere with other view
         // state)
         await this.webview?.postMessage({
-            type: 'transcript',
+            type: "transcript",
             messages: [],
             isMessageInProgress: false,
             chatID: this.chatModel.sessionID,
@@ -284,7 +294,7 @@ class SimpleChatPanelProvider {
      * Handles user input text for both new and edit submissions
      */
     async handleUserMessageSubmission(requestID, inputText, submitType, userContextFiles, addEnhancedContext, source) {
-        return tracing_1.tracer.startActiveSpan('chat.submit', async (span) => {
+        return tracing_1.tracer.startActiveSpan("chat.submit", async (span) => {
             const useFusedContextPromise = cody_shared_1.featureFlagProvider.evaluateFeatureFlag(cody_shared_1.FeatureFlag.CodyChatFusedContext);
             const authStatus = this.authProvider.getAuthStatus();
             const sharedProperties = {
@@ -293,30 +303,37 @@ class SimpleChatPanelProvider {
                 source,
                 traceId: span.spanContext().traceId,
             };
-            telemetry_1.telemetryService.log('CodyVSCodeExtension:chat-question:submitted', sharedProperties);
-            telemetry_v2_1.telemetryRecorder.recordEvent('cody.chat-question', 'submitted', {
+            telemetry_1.telemetryService.log("CodyVSCodeExtension:chat-question:submitted", sharedProperties);
+            telemetry_v2_1.telemetryRecorder.recordEvent("cody.chat-question", "submitted", {
                 metadata: {
                     // Flag indicating this is a transcript event to go through ML data pipeline. Only for DotCom users
                     // See https://github.com/sourcegraph/sourcegraph/pull/59524
-                    recordsPrivateMetadataTranscript: authStatus.endpoint && (0, cody_shared_1.isDotCom)(authStatus.endpoint) ? 1 : 0,
+                    recordsPrivateMetadataTranscript: authStatus.endpoint &&
+                        (0, cody_shared_1.isDotCom)(authStatus.endpoint)
+                        ? 1
+                        : 0,
                 },
                 privateMetadata: {
                     ...sharedProperties,
                     // 🚨 SECURITY: chat transcripts are to be included only for DotCom users AND for V2 telemetry
                     // V2 telemetry exports privateMetadata only for DotCom users
                     // the condition below is an additional safeguard measure
-                    promptText: authStatus.endpoint && (0, cody_shared_1.isDotCom)(authStatus.endpoint) ? inputText : undefined,
+                    promptText: authStatus.endpoint &&
+                        (0, cody_shared_1.isDotCom)(authStatus.endpoint)
+                        ? inputText
+                        : undefined,
                 },
             });
-            tracing_1.tracer.startActiveSpan('chat.submit.firstToken', async (firstTokenSpan) => {
-                span.setAttribute('sampled', true);
+            tracing_1.tracer.startActiveSpan("chat.submit.firstToken", async (firstTokenSpan) => {
+                span.setAttribute("sampled", true);
                 if (inputText.match(/^\/reset$/)) {
-                    span.addEvent('clearAndRestartSession');
+                    span.addEvent("clearAndRestartSession");
                     span.end();
                     return this.clearAndRestartSession();
                 }
-                if (submitType === 'user-newchat' && !this.chatModel.isEmpty()) {
-                    span.addEvent('clearAndRestartSession');
+                if (submitType === "user-newchat" &&
+                    !this.chatModel.isEmpty()) {
+                    span.addEvent("clearAndRestartSession");
                     await this.clearAndRestartSession();
                 }
                 const displayText = userContextFiles?.length
@@ -324,10 +341,13 @@ class SimpleChatPanelProvider {
                     : inputText;
                 const promptText = inputText;
                 this.chatModel.addHumanMessage({ text: promptText }, displayText);
-                await this.saveSession({ inputText, inputContextFiles: userContextFiles });
+                await this.saveSession({
+                    inputText,
+                    inputContextFiles: userContextFiles,
+                });
                 this.postEmptyMessageInProgress();
                 const userContextItems = await contextFilesToContextItems(this.editor, userContextFiles || [], true);
-                span.setAttribute('strategy', this.config.useContext);
+                span.setAttribute("strategy", this.config.useContext);
                 const prompter = new prompt_1.DefaultPrompter(userContextItems, addEnhancedContext
                     ? async (text, maxChars) => (0, context_1.getEnhancedContext)({
                         strategy: this.config.useContext,
@@ -335,11 +355,16 @@ class SimpleChatPanelProvider {
                         text,
                         providers: {
                             localEmbeddings: this.localEmbeddings,
-                            symf: this.config.experimentalSymfContext ? this.symf : null,
+                            symf: this.config
+                                .experimentalSymfContext
+                                ? this.symf
+                                : null,
                             remoteSearch: this.remoteSearch,
                         },
                         featureFlags: {
-                            fusedContext: this.config.internalUnstable || (await useFusedContextPromise),
+                            fusedContext: this.config
+                                .internalUnstable ||
+                                (await useFusedContextPromise),
                         },
                         hints: { maxChars },
                     })
@@ -351,22 +376,26 @@ class SimpleChatPanelProvider {
                         traceId: span.spanContext().traceId,
                     };
                     span.setAttributes(properties);
-                    telemetry_1.telemetryService.log('CodyVSCodeExtension:chat-question:executed', properties, {
+                    telemetry_1.telemetryService.log("CodyVSCodeExtension:chat-question:executed", properties, {
                         hasV2Event: true,
                     });
-                    telemetry_v2_1.telemetryRecorder.recordEvent('cody.chat-question', 'executed', {
+                    telemetry_v2_1.telemetryRecorder.recordEvent("cody.chat-question", "executed", {
                         metadata: {
                             ...contextSummary,
                             // Flag indicating this is a transcript event to go through ML data pipeline. Only for DotCom users
                             // See https://github.com/sourcegraph/sourcegraph/pull/59524
-                            recordsPrivateMetadataTranscript: authStatus.endpoint && (0, cody_shared_1.isDotCom)(authStatus.endpoint) ? 1 : 0,
+                            recordsPrivateMetadataTranscript: authStatus.endpoint &&
+                                (0, cody_shared_1.isDotCom)(authStatus.endpoint)
+                                ? 1
+                                : 0,
                         },
                         privateMetadata: {
                             properties,
                             // 🚨 SECURITY: chat transcripts are to be included only for DotCom users AND for V2 telemetry
                             // V2 telemetry exports privateMetadata only for DotCom users
                             // the condition below is an additional safeguard measure
-                            promptText: authStatus.endpoint && (0, cody_shared_1.isDotCom)(authStatus.endpoint)
+                            promptText: authStatus.endpoint &&
+                                (0, cody_shared_1.isDotCom)(authStatus.endpoint)
                                 ? promptText
                                 : undefined,
                         },
@@ -378,7 +407,72 @@ class SimpleChatPanelProvider {
                 }
                 catch (error) {
                     if ((0, cody_shared_1.isRateLimitError)(error)) {
-                        this.postError(error, 'transcript');
+                        this.postError(error, "transcript");
+                    }
+                    else {
+                        this.postError((0, cody_shared_1.isError)(error)
+                            ? error
+                            : new Error(`Error generating assistant response: ${error}`));
+                    }
+                    (0, tracing_1.recordErrorToSpan)(span, error);
+                }
+            });
+        });
+    }
+    async handleUserMessageSubmissionForAzure(requestID, inputText, submitType, userContextFiles, addEnhancedContext, source) {
+        return tracing_1.tracer.startActiveSpan("chat.submit", async (span) => {
+            const authStatus = this.authProvider.getAuthStatus();
+            const sharedProperties = {
+                requestID,
+                chatModel: this.chatModel.modelID,
+                source: this.source,
+                traceId: span.spanContext().traceId,
+            };
+            telemetry_1.telemetryService.log("CodyVSCodeExtension:chat-question:submitted", sharedProperties);
+            telemetry_v2_1.telemetryRecorder.recordEvent("cody.chat-question", "submitted", {
+                metadata: {
+                    // Flag indicating this is a transcript event to go through ML data pipeline. Only for DotCom users
+                    // See https://github.com/sourcegraph/sourcegraph/pull/59524
+                    recordsPrivateMetadataTranscript: authStatus.endpoint &&
+                        (0, cody_shared_1.isDotCom)(authStatus.endpoint)
+                        ? 1
+                        : 0,
+                },
+                privateMetadata: {
+                    ...sharedProperties,
+                    // 🚨 SECURITY: chat transcripts are to be included only for DotCom users AND for V2 telemetry
+                    // V2 telemetry exports privateMetadata only for DotCom users
+                    // the condition below is an additional safeguard measure
+                    promptText: authStatus.endpoint &&
+                        (0, cody_shared_1.isDotCom)(authStatus.endpoint)
+                        ? inputText
+                        : undefined,
+                },
+            });
+            tracing_1.tracer.startActiveSpan("chat.submit.firstToken", async (firstTokenSpan) => {
+                span.setAttribute("sampled", true);
+                if (inputText.match(/^\/reset$/)) {
+                    span.addEvent("clearAndRestartSession");
+                    span.end();
+                    return this.clearAndRestartSession();
+                }
+                if (submitType === "user-newchat" &&
+                    !this.chatModel.isEmpty()) {
+                    span.addEvent("clearAndRestartSession");
+                    await this.clearAndRestartSession();
+                }
+                const promptText = inputText;
+                this.chatModel.addHumanMessage({ text: promptText }, inputText);
+                const userContextItems = await contextFilesToContextItems(this.editor, userContextFiles || [], true);
+                span.setAttribute("strategy", this.config.useContext);
+                const prompter = new PromptAzure_1.AzuerPrompter(userContextItems, submitType);
+                try {
+                    const prompt = await this.buildPrompt(prompter);
+                    this.streamAssistantResponse(requestID, prompt, span, firstTokenSpan);
+                }
+                catch (error) {
+                    if ((0, cody_shared_1.isRateLimitError)(error)) {
+                        this.postError(error, "transcript");
                     }
                     else {
                         this.postError((0, cody_shared_1.isError)(error)
@@ -398,55 +492,59 @@ class SimpleChatPanelProvider {
      * When no index is provided, default to the last human message.
      */
     async handleEdit(requestID, text, index, contextFiles = [], addEnhancedContext = true) {
-        telemetry_1.telemetryService.log('CodyVSCodeExtension:editChatButton:clicked', undefined, {
+        telemetry_1.telemetryService.log("CodyVSCodeExtension:editChatButton:clicked", undefined, {
             hasV2Event: true,
         });
-        telemetry_v2_1.telemetryRecorder.recordEvent('cody.editChatButton', 'clicked');
+        telemetry_v2_1.telemetryRecorder.recordEvent("cody.editChatButton", "clicked");
         try {
-            const humanMessage = index ?? this.chatModel.getLastSpeakerMessageIndex('human');
+            const humanMessage = index ?? this.chatModel.getLastSpeakerMessageIndex("human");
             if (humanMessage === undefined) {
                 return;
             }
-            this.chatModel.removeMessagesFromIndex(humanMessage, 'human');
-            return await this.handleUserMessageSubmission(requestID, text, 'user', contextFiles, addEnhancedContext);
+            this.chatModel.removeMessagesFromIndex(humanMessage, "human");
+            return await this.handleUserMessageFn(requestID, text, "user", contextFiles, addEnhancedContext);
         }
         catch {
-            this.postError(new Error('Failed to edit prompt'), 'transcript');
+            this.postError(new Error("Failed to edit prompt"), "transcript");
         }
     }
     handleAbort() {
         this.cancelInProgressCompletion();
-        telemetry_1.telemetryService.log('CodyVSCodeExtension:abortButton:clicked', { source: 'sidebar' }, { hasV2Event: true });
-        telemetry_v2_1.telemetryRecorder.recordEvent('cody.sidebar.abortButton', 'clicked');
+        telemetry_1.telemetryService.log("CodyVSCodeExtension:abortButton:clicked", { source: "sidebar" }, { hasV2Event: true });
+        telemetry_v2_1.telemetryRecorder.recordEvent("cody.sidebar.abortButton", "clicked");
     }
     async handleSetChatModel(modelID) {
         this.chatModel.modelID = modelID;
         await models_1.chatModel.set(modelID);
     }
     async handleGetUserContextFilesCandidates(query) {
-        const source = 'chat';
+        const source = "chat";
         if (!query.length) {
-            telemetry_1.telemetryService.log('CodyVSCodeExtension:at-mention:executed', { source });
-            telemetry_v2_1.telemetryRecorder.recordEvent('cody.at-mention', 'executed', { privateMetadata: { source } });
+            telemetry_1.telemetryService.log("CodyVSCodeExtension:at-mention:executed", {
+                source,
+            });
+            telemetry_v2_1.telemetryRecorder.recordEvent("cody.at-mention", "executed", {
+                privateMetadata: { source },
+            });
             const tabs = (0, editor_context_1.getOpenTabsContextFile)();
             void this.postMessage({
-                type: 'userContextFiles',
+                type: "userContextFiles",
                 userContextFiles: tabs,
             });
             return;
         }
         // Log when query only has 1 char to avoid logging the same query repeatedly
         if (query.length === 1) {
-            const type = query.startsWith('#') ? 'symbol' : 'file';
+            const type = query.startsWith("#") ? "symbol" : "file";
             telemetry_1.telemetryService.log(`CodyVSCodeExtension:at-mention:${type}:executed`, { source });
-            telemetry_v2_1.telemetryRecorder.recordEvent(`cody.at-mention.${type}`, 'executed', {
+            telemetry_v2_1.telemetryRecorder.recordEvent(`cody.at-mention.${type}`, "executed", {
                 privateMetadata: { source },
             });
         }
         const cancellation = new vscode.CancellationTokenSource();
         try {
             const MAX_RESULTS = 20;
-            if (query.startsWith('#')) {
+            if (query.startsWith("#")) {
                 // It would be nice if the VS Code symbols API supports
                 // cancellation, but it doesn't
                 const symbolResults = await (0, editor_context_1.getSymbolContextFiles)(query.slice(1), MAX_RESULTS);
@@ -456,7 +554,7 @@ class SimpleChatPanelProvider {
                 // processed after later faster requests)
                 if (!cancellation.token.isCancellationRequested) {
                     await this.postMessage({
-                        type: 'userContextFiles',
+                        type: "userContextFiles",
                         userContextFiles: symbolResults,
                     });
                 }
@@ -469,7 +567,7 @@ class SimpleChatPanelProvider {
                 // processed after later faster requests)
                 if (!cancellation.token.isCancellationRequested) {
                     await this.postMessage({
-                        type: 'userContextFiles',
+                        type: "userContextFiles",
                         userContextFiles: fileResults,
                     });
                 }
@@ -496,24 +594,24 @@ class SimpleChatPanelProvider {
             const attribution = await this.guardrails.searchAttribution(snippet);
             if ((0, cody_shared_1.isError)(attribution)) {
                 await this.postMessage({
-                    type: 'attribution',
+                    type: "attribution",
                     snippet,
                     error: attribution.message,
                 });
                 return;
             }
             await this.postMessage({
-                type: 'attribution',
+                type: "attribution",
                 snippet,
                 attribution: {
-                    repositoryNames: attribution.repositories.map(r => r.name),
+                    repositoryNames: attribution.repositories.map((r) => r.name),
                     limitHit: attribution.limitHit,
                 },
             });
         }
         catch (error) {
             await this.postMessage({
-                type: 'attribution',
+                type: "attribution",
                 snippet,
                 error: `${error}`,
             });
@@ -538,19 +636,19 @@ class SimpleChatPanelProvider {
     // #region view updaters
     // =======================================================================
     postEmptyMessageInProgress() {
-        this.postViewTranscript({ speaker: 'assistant' });
+        this.postViewTranscript({ speaker: "assistant" });
     }
     postViewTranscript(messageInProgress) {
         const messages = this.chatModel
             .getMessagesWithContext()
-            .map(m => (0, SimpleChatModel_1.toViewMessage)(m));
+            .map((m) => (0, SimpleChatModel_1.toViewMessage)(m));
         if (messageInProgress) {
             messages.push(messageInProgress);
         }
         // We never await on postMessage, because it can sometimes hang indefinitely:
         // https://github.com/microsoft/vscode/issues/159431
         void this.postMessage({
-            type: 'transcript',
+            type: "transcript",
             messages,
             isMessageInProgress: !!messageInProgress,
             chatID: this.chatModel.sessionID,
@@ -562,18 +660,18 @@ class SimpleChatPanelProvider {
      * Display error message in webview as part of the chat transcript, or as a system banner alongside the chat.
      */
     postError(error, type) {
-        (0, log_1.logDebug)('SimpleChatPanelProvider: postError', error.message);
+        (0, log_1.logDebug)("SimpleChatPanelProvider: postError", error.message);
         // Add error to transcript
-        if (type === 'transcript') {
+        if (type === "transcript") {
             this.chatModel.addErrorAsBotMessage(error);
             this.postViewTranscript();
             void this.postMessage({
-                type: 'transcript-errors',
+                type: "transcript-errors",
                 isTranscriptError: true,
             });
             return;
         }
-        void this.postMessage({ type: 'errors', errors: error.message });
+        void this.postMessage({ type: "errors", errors: error.message });
     }
     postChatModels() {
         const authStatus = this.authProvider.getAuthStatus();
@@ -589,14 +687,14 @@ class SimpleChatPanelProvider {
         }
         const models = cody_shared_1.ModelProvider.get(types_1.ModelUsage.Chat, authStatus.endpoint, this.chatModel.modelID);
         void this.postMessage({
-            type: 'chatModels',
+            type: "chatModels",
             models,
         });
     }
     postContextStatus() {
-        (0, log_1.logDebug)('SimpleChatPanelProvider', 'postContextStatusToWebView', JSON.stringify(this.contextStatusAggregator.status));
+        (0, log_1.logDebug)("SimpleChatPanelProvider", "postContextStatusToWebView", JSON.stringify(this.contextStatusAggregator.status));
         void this.postMessage({
-            type: 'enhanced-context',
+            type: "enhanced-context",
             enhancedContextStatus: {
                 groups: this.contextStatusAggregator.status,
             },
@@ -627,7 +725,7 @@ class SimpleChatPanelProvider {
         const maxChars = (0, utilts_1.getContextWindowForModel)(this.authProvider.getAuthStatus(), this.chatModel.modelID);
         const { prompt, newContextUsed } = await prompter.makePrompt(this.chatModel, maxChars);
         // Update UI based on prompt construction
-        this.chatModel.setNewContextUsed(newContextUsed);
+        newContextUsed && this.chatModel.setNewContextUsed(newContextUsed);
         if (sendTelemetry) {
             // Create a summary of how many code snippets of each context source are being
             // included in the prompt
@@ -654,22 +752,22 @@ class SimpleChatPanelProvider {
                 return;
             }
             firstTokenMeasured = true;
-            span.addEvent('firstToken');
+            span.addEvent("firstToken");
             firstTokenSpan.end();
         }
         this.postEmptyMessageInProgress();
         this.sendLLMRequest(prompt, {
-            update: content => {
+            update: (content) => {
                 measureFirstToken();
-                span.addEvent('update');
+                span.addEvent("update");
                 this.postViewTranscript((0, SimpleChatModel_1.toViewMessage)({
                     message: {
-                        speaker: 'assistant',
+                        speaker: "assistant",
                         text: content,
                     },
                 }));
             },
-            close: content => {
+            close: (content) => {
                 measureFirstToken();
                 (0, utils_2.recordExposedExperimentsToSpan)(span);
                 span.end();
@@ -677,7 +775,7 @@ class SimpleChatPanelProvider {
             },
             error: (partialResponse, error) => {
                 if (!isAbortError(error)) {
-                    this.postError(error, 'transcript');
+                    this.postError(error, "transcript");
                 }
                 try {
                     // We should still add the partial response if there was an error
@@ -685,7 +783,7 @@ class SimpleChatPanelProvider {
                     this.addBotMessage(requestID, partialResponse);
                 }
                 catch {
-                    console.error('Streaming Error', error);
+                    console.error("Streaming Error", error);
                 }
                 (0, tracing_1.recordErrorToSpan)(span, error);
             },
@@ -696,36 +794,36 @@ class SimpleChatPanelProvider {
      * with the response.
      */
     async sendLLMRequest(prompt, callbacks) {
-        let lastContent = '';
+        let lastContent = "";
         const typewriter = new cody_shared_1.Typewriter({
-            update: content => {
+            update: (content) => {
                 lastContent = content;
                 callbacks.update(content);
             },
             close: () => {
                 callbacks.close(lastContent);
             },
-            error: error => {
+            error: (error) => {
                 callbacks.error(lastContent, error);
             },
         });
         this.cancelInProgressCompletion();
         const abortController = new AbortController();
         this.completionCanceller = () => abortController.abort();
-        const stream = this.chatClient.chat(prompt, { model: this.chatModel.modelID }, abortController.signal);
+        const stream = this.chatClient.chat(prompt, { model: this.chatModel.modelID }, abortController.signal, this.config.modelsVendor);
         for await (const message of stream) {
             switch (message.type) {
-                case 'change': {
+                case "change": {
                     typewriter.update(message.text);
                     break;
                 }
-                case 'complete': {
+                case "complete": {
                     this.completionCanceller = undefined;
                     typewriter.close();
                     typewriter.stop();
                     break;
                 }
-                case 'error': {
+                case "error": {
                     this.cancelInProgressCompletion();
                     typewriter.close();
                     typewriter.stop(message.error);
@@ -744,7 +842,7 @@ class SimpleChatPanelProvider {
      * Finalizes adding a bot message to the chat model and triggers an update to the view.
      */
     addBotMessage(requestID, rawResponse) {
-        const displayText = (0, cody_shared_1.reformatBotMessageForChat)(rawResponse, '');
+        const displayText = (0, cody_shared_1.reformatBotMessageForChat)(rawResponse, "");
         this.chatModel.addBotMessage({ text: rawResponse }, displayText);
         void this.saveSession();
         this.postViewTranscript();
@@ -753,20 +851,24 @@ class SimpleChatPanelProvider {
         const codeCount = (0, utils_1.countGeneratedCode)(rawResponse);
         if (codeCount?.charCount) {
             // const metadata = lastInteraction?.getHumanMessage().metadata
-            telemetry_1.telemetryService.log('CodyVSCodeExtension:chatResponse:hasCode', { ...codeCount, requestID }, { hasV2Event: true });
-            telemetry_v2_1.telemetryRecorder.recordEvent('cody.chatResponse.new', 'hasCode', {
+            telemetry_1.telemetryService.log("CodyVSCodeExtension:chatResponse:hasCode", { ...codeCount, requestID }, { hasV2Event: true });
+            telemetry_v2_1.telemetryRecorder.recordEvent("cody.chatResponse.new", "hasCode", {
                 metadata: {
                     ...codeCount,
                     // Flag indicating this is a transcript event to go through ML data pipeline. Only for dotcom users
                     // See https://github.com/sourcegraph/sourcegraph/pull/59524
-                    recordsPrivateMetadataTranscript: authStatus.endpoint && (0, cody_shared_1.isDotCom)(authStatus.endpoint) ? 1 : 0,
+                    recordsPrivateMetadataTranscript: authStatus.endpoint && (0, cody_shared_1.isDotCom)(authStatus.endpoint)
+                        ? 1
+                        : 0,
                 },
                 privateMetadata: {
                     requestID,
                     // 🚨 SECURITY: chat transcripts are to be included only for DotCom users AND for V2 telemetry
                     // V2 telemetry exports privateMetadata only for DotCom users
                     // the condition below is an aditional safegaurd measure
-                    responseText: authStatus.endpoint && (0, cody_shared_1.isDotCom)(authStatus.endpoint) ? rawResponse : undefined,
+                    responseText: authStatus.endpoint && (0, cody_shared_1.isDotCom)(authStatus.endpoint)
+                        ? rawResponse
+                        : undefined,
                 },
             });
         }
@@ -801,7 +903,9 @@ class SimpleChatPanelProvider {
         this.chatModel = newModel;
         // Restore per-chat enhanced context settings
         if (this.remoteSearch) {
-            const repos = this.chatModel.getSelectedRepos() || (await this.repoPicker?.getDefaultRepos()) || [];
+            const repos = this.chatModel.getSelectedRepos() ||
+                (await this.repoPicker?.getDefaultRepos()) ||
+                [];
             this.remoteSearch.setRepos(repos, remote_search_1.RepoInclusion.Manual);
         }
         this.postViewTranscript();
@@ -810,7 +914,7 @@ class SimpleChatPanelProvider {
         const allHistory = await this.history.saveChat(this.authProvider.getAuthStatus(), this.chatModel.toTranscriptJSON(), humanInput);
         if (allHistory) {
             void this.postMessage({
-                type: 'history',
+                type: "history",
                 localHistory: allHistory,
             });
         }
@@ -848,10 +952,9 @@ class SimpleChatPanelProvider {
             return this.webviewPanel;
         }
         const viewType = ChatManager_1.CodyChatPanelViewType;
-        const panelTitle = this.history.getChat(this.authProvider.getAuthStatus(), this.chatModel.sessionID)
-            ?.chatTitle || (0, chat_helpers_1.getChatPanelTitle)(lastQuestion);
+        const panelTitle = this.history.getChat(this.authProvider.getAuthStatus(), this.chatModel.sessionID)?.chatTitle || (0, chat_helpers_1.getChatPanelTitle)(lastQuestion);
         const viewColumn = activePanelViewColumn || vscode.ViewColumn.Beside;
-        const webviewPath = vscode.Uri.joinPath(this.extensionUri, 'dist', 'webviews');
+        const webviewPath = vscode.Uri.joinPath(this.extensionUri, "dist", "webviews");
         const panel = vscode.window.createWebviewPanel(viewType, panelTitle, { viewColumn, preserveFocus: true }, {
             enableScripts: true,
             retainContextWhenHidden: true,
@@ -865,7 +968,7 @@ class SimpleChatPanelProvider {
      * Revives the chat panel when the extension is reactivated.
      */
     async revive(webviewPanel) {
-        (0, log_1.logDebug)('SimpleChatPanelProvider:revive', 'registering webview panel');
+        (0, log_1.logDebug)("SimpleChatPanelProvider:revive", "registering webview panel");
         await this.registerWebviewPanel(webviewPanel);
     }
     /**
@@ -873,12 +976,12 @@ class SimpleChatPanelProvider {
      * Also stores the panel reference and disposes it when closed.
      */
     async registerWebviewPanel(panel) {
-        (0, log_1.logDebug)('SimpleChatPanelProvider:registerWebviewPanel', 'registering webview panel');
+        (0, log_1.logDebug)("SimpleChatPanelProvider:registerWebviewPanel", "registering webview panel");
         if (this.webviewPanel || this.webview) {
-            throw new Error('Webview or webview panel already registered');
+            throw new Error("Webview or webview panel already registered");
         }
-        const webviewPath = vscode.Uri.joinPath(this.extensionUri, 'dist', 'webviews');
-        panel.iconPath = vscode.Uri.joinPath(this.extensionUri, 'resources', 'active-chat-icon.svg');
+        const webviewPath = vscode.Uri.joinPath(this.extensionUri, "dist", "webviews");
+        panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "resources", "active-chat-icon.svg");
         // Reset the webview options to ensure localResourceRoots is up-to-date
         panel.webview.options = {
             enableScripts: true,
@@ -898,13 +1001,16 @@ class SimpleChatPanelProvider {
             panel.dispose();
         });
         // Let the webview know if it is active
-        panel.onDidChangeViewState(event => this.postMessage({ type: 'webview-state', isActive: event.webviewPanel.active }));
-        this.disposables.push(panel.webview.onDidReceiveMessage(message => this.onDidReceiveMessage((0, cody_shared_1.hydrateAfterPostMessage)(message, uri => vscode.Uri.from(uri)))));
+        panel.onDidChangeViewState((event) => this.postMessage({
+            type: "webview-state",
+            isActive: event.webviewPanel.active,
+        }));
+        this.disposables.push(panel.webview.onDidReceiveMessage((message) => this.onDidReceiveMessage((0, cody_shared_1.hydrateAfterPostMessage)(message, (uri) => vscode.Uri.from(uri)))));
         // Used for keeping sidebar chat view closed when webview panel is enabled
-        await vscode.commands.executeCommand('setContext', ChatManager_1.CodyChatPanelViewType, true);
+        await vscode.commands.executeCommand("setContext", ChatManager_1.CodyChatPanelViewType, true);
         const configFeatures = await cody_shared_1.ConfigFeaturesSingleton.getInstance().getConfigFeatures();
         void this.postMessage({
-            type: 'setConfigFeatures',
+            type: "setConfigFeatures",
             configFeatures: {
                 chat: configFeatures.chat,
                 attribution: configFeatures.attribution,
@@ -913,13 +1019,13 @@ class SimpleChatPanelProvider {
         return panel;
     }
     async setWebviewView(view) {
-        if (view !== 'chat') {
+        if (view !== "chat") {
             // Only chat view is supported in the webview panel.
             // When a different view is requested,
             // Set context to notifiy the webview panel to close.
             // This should close the webview panel and open the login view in the sidebar.
-            await vscode.commands.executeCommand('setContext', ChatManager_1.CodyChatPanelViewType, false);
-            await vscode.commands.executeCommand('setContext', 'cody.activated', false);
+            await vscode.commands.executeCommand("setContext", ChatManager_1.CodyChatPanelViewType, false);
+            await vscode.commands.executeCommand("setContext", "cody.activated", false);
             return;
         }
         if (!this.webviewPanel) {
@@ -927,7 +1033,7 @@ class SimpleChatPanelProvider {
         }
         this.webviewPanel?.reveal();
         await this.postMessage({
-            type: 'view',
+            type: "view",
             view: view,
         });
     }
@@ -937,14 +1043,16 @@ class SimpleChatPanelProvider {
     // =======================================================================
     setChatTitle(title) {
         // Skip storing default chat title
-        if (title !== 'New Chat') {
+        if (title !== "New Chat") {
             this.chatModel.setCustomChatTitle(title);
         }
         this.postChatTitle();
     }
     // Convenience function for tests
     getViewTranscript() {
-        return this.chatModel.getMessagesWithContext().map(m => (0, SimpleChatModel_1.toViewMessage)(m));
+        return this.chatModel
+            .getMessagesWithContext()
+            .map((m) => (0, SimpleChatModel_1.toViewMessage)(m));
     }
 }
 exports.SimpleChatPanelProvider = SimpleChatPanelProvider;
@@ -953,7 +1061,7 @@ async function newChatModelfromTranscriptJSON(json, modelID) {
         return [
             {
                 message: {
-                    speaker: 'human',
+                    speaker: "human",
                     text: interaction.humanMessage.text,
                 },
                 displayText: interaction.humanMessage.displayText,
@@ -961,7 +1069,7 @@ async function newChatModelfromTranscriptJSON(json, modelID) {
             },
             {
                 message: {
-                    speaker: 'assistant',
+                    speaker: "assistant",
                     text: interaction.assistantMessage.text,
                 },
                 displayText: interaction.assistantMessage.displayText,
@@ -986,7 +1094,7 @@ async function contextFilesToContextItems(editor, files, fetchContent) {
         return {
             uri: file.uri,
             range,
-            text: text || '',
+            text: text || "",
             source: file.source,
         };
     }))).filter(cody_shared_1.isDefined);
@@ -1006,13 +1114,13 @@ function deserializedContextFilesToContextItems(files, contextMessages) {
         if (!text) {
             const contextMessage = contextByFile.get(file.uri.toString());
             if (contextMessage) {
-                text = (0, chat_helpers_1.stripContextWrapper)(contextMessage.text || '');
+                text = (0, chat_helpers_1.stripContextWrapper)(contextMessage.text || "");
             }
         }
         return {
             uri: file.uri,
             range,
-            text: text || '',
+            text: text || "",
             source: file.source,
             repoName: file.repoName,
             revision: file.revision,
@@ -1021,5 +1129,5 @@ function deserializedContextFilesToContextItems(files, contextMessages) {
     });
 }
 function isAbortError(error) {
-    return error.message === 'aborted' || error.message === 'socket hang up';
+    return error.message === "aborted" || error.message === "socket hang up";
 }

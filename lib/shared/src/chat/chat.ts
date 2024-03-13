@@ -1,4 +1,4 @@
-import { ModelVendorType } from '../models/types'
+import type { ModelVendorType } from '../models/types'
 import { ANSWER_TOKENS } from '../prompt/constants'
 import type { Message } from '../sourcegraph-api'
 import type { SourcegraphCompletionsClient } from '../sourcegraph-api/completions/client'
@@ -26,7 +26,7 @@ export class ChatClient {
         abortSignal?: AbortSignal,
         vendor?: ModelVendorType,
     ): AsyncGenerator<CompletionGeneratorValue> {
-        const isLastMessageFromHuman = messages.length > 0 && (messages.at(-1) as Message).speaker === 'human'
+        const isLastMessageFromHuman = messages.length > 0 && (messages.at(-1) as Message)!.speaker === 'human'
         const augmentedMessages =
             // HACK: The fireworks chat inference endpoints requires the last message to be from a
             // human. This will be the case in most of the prompts but if for some reason we have an

@@ -8,6 +8,7 @@ import type {
     Event,
 } from "./types";
 import { recordErrorToSpan } from "../../tracing";
+import { logDebug } from '../../logger'
 
 export interface CompletionLogger {
     startCompletion(
@@ -30,8 +31,8 @@ export interface CompletionLogger {
 
 export type CompletionsClientConfig = Pick<
     ConfigurationWithAccessToken,
-    "serverEndpoint" | "accessToken" | "debugEnable" | "customHeaders"
-> & { modelsVendor?: string };
+    "serverEndpoint" | "accessToken" | "debugEnable" | "customHeaders" | 'modelsVendor'
+>;
 
 /**
  * Access the chat based LLM APIs via a Sourcegraph server instance.
@@ -41,6 +42,7 @@ export type CompletionsClientConfig = Pick<
  */
 export abstract class SourcegraphCompletionsClient {
     private errorEncountered = false;
+    public completions: string[] = []
 
     constructor(
         protected config: CompletionsClientConfig,
@@ -80,6 +82,7 @@ export abstract class SourcegraphCompletionsClient {
                     }
                     this.errorEncountered = true;
                     cb.onError(error);
+                    this.completions = []
                     break;
                 }
                 case "done": {
@@ -88,11 +91,24 @@ export abstract class SourcegraphCompletionsClient {
                     }
                     // reset errorEncountered for next request
                     this.errorEncountered = false;
+                    this.completions = []
                     span?.end();
                     break;
                 }
             }
         }
+    }
+
+    protected formatCompletion(obj: any): Event {
+        if (this.config.modelsVendor !== "Azure") return obj
+        const stopReason = obj?.choices?.[0]?.finish_reason || ''
+        this.completions.push(obj?.choices?.[0]?.delta?.content || '')
+        const res: Event = {
+            type: stopReason ? 'done' : obj.type || 'completion',
+            stopReason: '',
+            completion: this.completions.join('')
+        }
+        return res
     }
 
     protected abstract _streamWithCallbacks(

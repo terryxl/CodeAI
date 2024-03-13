@@ -444,7 +444,7 @@ export const EnhancedContextSettings: React.FunctionComponent<EnhancedContextSet
                     </div>
                 </div>
             </PopupFrame>
-            <VSCodeButton
+            {/* <VSCodeButton
                 className={classNames(
                     popupStyles.popupHost,
                     styles.settingsBtn,
@@ -458,7 +458,7 @@ export const EnhancedContextSettings: React.FunctionComponent<EnhancedContextSet
             >
                 <i className="codicon codicon-sparkle" />
                 {isOpen || hasOpenedBefore ? null : <div className={styles.glowyDot} />}
-            </VSCodeButton>
+            </VSCodeButton> HAIAR MOCKING */}
         </div>
     )
 }

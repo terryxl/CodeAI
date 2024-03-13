@@ -25,7 +25,7 @@ const useShowNotice = (currentVersion, probablyNewInstall) => {
     }
     const [showNotice, setShowNotice] = (0, react_1.useState)(
     /* Version different to what's already dismissed means time for a notice */
-    localStorage.getItem(key) !== currentVersion);
+    localStorage.getItem(key) !== null && localStorage.getItem(key) !== currentVersion);
     const setDismissed = () => {
         localStorage.setItem(key, currentVersion);
         setShowNotice(false);

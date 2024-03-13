@@ -1,2 +1,2 @@
-export type { Message } from './completions/types';
+export type { Message, MessageAzure } from './completions/types';
 //# sourceMappingURL=index.d.ts.map

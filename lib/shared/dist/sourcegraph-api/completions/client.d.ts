@@ -8,9 +8,7 @@ export interface CompletionLogger {
         onEvents: (events: Event[]) => void;
     };
 }
-export type CompletionsClientConfig = Pick<ConfigurationWithAccessToken, "serverEndpoint" | "accessToken" | "debugEnable" | "customHeaders"> & {
-    ModelsVender?: string;
-};
+export type CompletionsClientConfig = Pick<ConfigurationWithAccessToken, "serverEndpoint" | "accessToken" | "debugEnable" | "customHeaders" | 'modelsVendor'>;
 /**
  * Access the chat based LLM APIs via a Sourcegraph server instance.
  *
@@ -21,10 +19,12 @@ export declare abstract class SourcegraphCompletionsClient {
     protected config: CompletionsClientConfig;
     protected logger?: CompletionLogger | undefined;
     private errorEncountered;
+    completions: string[];
     constructor(config: CompletionsClientConfig, logger?: CompletionLogger | undefined);
     onConfigurationChange(newConfig: CompletionsClientConfig): void;
     protected get completionsEndpoint(): string;
     protected sendEvents(events: Event[], cb: CompletionCallbacks, span?: Span): void;
+    protected formatCompletion(obj: any): Event;
     protected abstract _streamWithCallbacks(params: CompletionParameters, cb: CompletionCallbacks, signal?: AbortSignal): void;
     stream(params: CompletionParameters, signal?: AbortSignal): AsyncGenerator<CompletionGeneratorValue>;
 }

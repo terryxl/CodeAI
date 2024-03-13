@@ -36,7 +36,7 @@ export const CodyCommandMenuItems = [
     // },
     {
         key: "explain",
-        description: "解读代码",
+        description: "代码解释",
         icon: "file-binary",
         command: { command: "cody.command.explain-code" },
         keybinding: "",

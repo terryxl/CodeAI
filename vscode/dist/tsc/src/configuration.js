@@ -27,7 +27,6 @@ exports.getFullConfig = exports.getConfiguration = void 0;
 const vscode = __importStar(require("vscode"));
 const cody_shared_1 = require("@sourcegraph/cody-shared");
 const configuration_keys_1 = require("./configuration-keys");
-const LocalStorageProvider_1 = require("./services/LocalStorageProvider");
 const SecretStorageProvider_1 = require("./services/SecretStorageProvider");
 /**
  * All configuration values, with some sanitization performed.
@@ -124,7 +123,7 @@ function getConfiguration(config = vscode.workspace.getConfiguration()) {
             multiline: getHiddenSetting("autocomplete.advanced.timeout.multiline", undefined),
             singleline: getHiddenSetting("autocomplete.advanced.timeout.singleline", undefined),
         },
-        ModelsVender: config.get(configuration_keys_1.CONFIG_KEY.modelsVender, "Azure"),
+        modelsVendor: config.get(configuration_keys_1.CONFIG_KEY.modelsVendor, "Azure"),
         testingLocalEmbeddingsModel: isTesting
             ? getHiddenSetting("testing.localEmbeddings.model", undefined)
             : undefined,
@@ -151,12 +150,11 @@ function sanitizeCodebase(codebase) {
 const getFullConfig = async () => {
     const config = getConfiguration();
     const isTesting = process.env.CODY_TESTING === "true";
-    const serverEndpoint = LocalStorageProvider_1.localStorage?.getEndpoint() ||
-        (isTesting
-            ? "http://localhost:49300/"
-            : config.ModelsVender === "Azure"
-                ? cody_shared_1.DOTCOM_AZURE_URL.href
-                : cody_shared_1.DOTCOM_URL.href);
+    const serverEndpoint = isTesting
+        ? "http://localhost:49300/"
+        : config.modelsVendor === "Azure"
+            ? cody_shared_1.DOTCOM_AZURE_URL.href
+            : cody_shared_1.DOTCOM_URL.href;
     const accessToken = (await (0, SecretStorageProvider_1.getAccessToken)()) || null;
     return { ...config, accessToken, serverEndpoint };
 };

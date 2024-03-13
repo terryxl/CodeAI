@@ -292,7 +292,7 @@ const TextArea: React.FunctionComponent<ChatUITextAreaProps> = ({
     isWebviewActive,
 }) => {
     const inputRef = useRef<HTMLTextAreaElement>(null)
-    const tips = '(@ to include files or symbols)'
+    const tips = ''//'(@ to include files or symbols)'  HAIAR MOCKING
     const placeholder = isNewChat ? `Message ${tips}` : `Follow-Up Message ${tips}`
     const disabledPlaceHolder = 'Chat has been disabled by your Enterprise instance site administrator'
 

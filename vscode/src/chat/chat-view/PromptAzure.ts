@@ -1,18 +1,19 @@
-import { wrapInActiveSpan, type Message, MessageAzure } from '@sourcegraph/cody-shared'
-
+import { wrapInActiveSpan } from '@sourcegraph/cody-shared'
+import type { Message, MessageAzure } from '@sourcegraph/cody-shared'
 import { logDebug } from '../../log'
 
 import type { MessageWithContext, SimpleChatModel } from './SimpleChatModel'
 import { PromptBuilder } from '../../prompt-builder'
 import type { ContextItem } from '../../prompt-builder/types'
 import { sortContextItems } from './agentContextSorting'
-import { IPrompter } from './prompt'
+import type { IPrompter } from './prompt'
 
 const ENHANCED_CONTEXT_ALLOCATION = 0.6 // Enhanced context should take up 60% of the context window
 
 export class AzuerPrompter implements IPrompter<MessageAzure> {
     constructor(
         private explicitContext: ContextItem[],
+        private submitType?: string,
         private getEnhancedContext?: (query: string, charLimit: number) => Promise<ContextItem[]>
     ) {}
     // Constructs the raw prompt to send to the LLM, with message order reversed, so we can construct
@@ -119,7 +120,7 @@ export class AzuerPrompter implements IPrompter<MessageAzure> {
     private transfer(msg: Message[]): MessageAzure[] {
         return (msg || []).reduce((acc: MessageAzure[], curr: Message) => {
             acc.push({
-                role: 'user',
+                role: curr.speaker && curr.speaker === 'assistant' ? curr.speaker : this.submitType === 'user-newchat' ? 'system' : 'user',
                 content: curr.text
             })
             return acc;

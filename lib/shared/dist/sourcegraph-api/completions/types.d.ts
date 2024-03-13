@@ -1,4 +1,4 @@
-import { ModelVenderType } from "../../models/types";
+import type { ModelVendorType } from "../../models/types";
 interface DoneEvent {
     type: 'done';
 }
@@ -10,24 +10,28 @@ interface ErrorEvent {
     error: string;
 }
 export type Event = DoneEvent | CompletionEvent | ErrorEvent;
-export interface Message {
+export type Message = {
     speaker: 'human' | 'assistant';
     text?: string;
-}
+};
+export type MessageAzure = {
+    role: 'user' | 'system' | 'assistant';
+    content: string;
+};
 export interface CompletionResponse {
     completion: string;
     stopReason: string;
 }
 export interface CompletionParameters {
     fast?: boolean;
-    messages: Message[];
+    messages: Message[] | MessageAzure[];
     maxTokensToSample: number;
     temperature?: number;
     stopSequences?: string[];
     topK?: number;
     topP?: number;
     model?: string;
-    vender?: ModelVenderType;
+    vendor?: ModelVendorType;
 }
 export interface CompletionCallbacks {
     onChange: (text: string) => void;

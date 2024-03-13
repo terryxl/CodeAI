@@ -34365,27 +34365,27 @@ const ChatActions = React.memo(function ContextFilesContent({
   const isMac = isMacOS();
   const osIcon = isMac ? "⌘" : "Ctrl+";
   const actions = [
-    {
-      name: "Cancel Edit",
-      keybind: "ESC",
-      onClick: onCancelEditClick,
-      focus: false,
-      when: isEditing && !isEmptyChat
-    },
-    {
-      name: "Edit Last Message",
-      keybind: `${osIcon}K`,
-      onClick: onEditLastMessageClick,
-      focus: true,
-      when: !isEmptyChat && !isEditing && !disableEditLastMessage
-    },
-    {
-      name: "← Return to Previous Chat",
-      keybind: "",
-      onClick: onRestoreLastChatClick,
-      focus: false,
-      when: isEmptyChat && onRestoreLastChatClick !== void 0
-    },
+    // {
+    //     name: 'Cancel Edit',
+    //     keybind: 'ESC',
+    //     onClick: onCancelEditClick,
+    //     focus: false,
+    //     when: isEditing && !isEmptyChat,
+    // },
+    // {
+    //     name: 'Edit Last Message',
+    //     keybind: `${osIcon}K`,
+    //     onClick: onEditLastMessageClick,
+    //     focus: true,
+    //     when: !isEmptyChat && !isEditing && !disableEditLastMessage,
+    // },
+    // {
+    //     name: '← Return to Previous Chat',
+    //     keybind: '',
+    //     onClick: onRestoreLastChatClick,
+    //     focus: false,
+    //     when: isEmptyChat && onRestoreLastChatClick !== undefined,
+    // },  HAIAR MOCKING
     {
       name: "Start New Chat",
       keybind: `${osIcon}/`,
@@ -35586,70 +35586,49 @@ const EnhancedContextSettings = ({
     setOpen(false);
     restoreFocusTarget.current?.focus();
   }, [setOpen]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: classNames(popupStyles.popupHost), children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      PopupFrame,
-      {
-        isOpen,
-        onDismiss: handleDismiss,
-        classNames: [popupStyles.popupTrail, styles$a.popup],
-        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles$a.container, children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            VSCodeCheckbox,
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: classNames(popupStyles.popupHost), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    PopupFrame,
+    {
+      isOpen,
+      onDismiss: handleDismiss,
+      classNames: [popupStyles.popupTrail, styles$a.popup],
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles$a.container, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          VSCodeCheckbox,
+          {
+            onChange: enabledChanged,
+            checked: enabled,
+            id: "enhanced-context-checkbox",
+            ref: autofocusTarget
+          }
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "enhanced-context-checkbox", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "Enhanced Context ✨" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+            "Automatically include additional context from your codebase.",
+            " ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://sourcegraph.com/docs/cody/clients/install-vscode#enhanced-context-selector", children: "Learn more" })
+          ] }),
+          presentationMode === "consumer" /* Consumer */ ? /* @__PURE__ */ jsxRuntimeExports.jsx("dl", { className: styles$a.foldersList, children: context.groups.map((group) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+            ContextGroupComponent,
             {
-              onChange: enabledChanged,
-              checked: enabled,
-              id: "enhanced-context-checkbox",
-              ref: autofocusTarget
+              group,
+              allGroups: context.groups
+            },
+            group.displayName
+          )) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+            CompactGroupsComponent,
+            {
+              groups: context.groups,
+              handleChoose: handleChooseRemoteSearchRepo,
+              handleRemove: handleRemoveRemoteSearchRepo
             }
-          ) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { htmlFor: "enhanced-context-checkbox", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { children: "Enhanced Context ✨" }) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
-              "Automatically include additional context from your codebase.",
-              " ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://sourcegraph.com/docs/cody/clients/install-vscode#enhanced-context-selector", children: "Learn more" })
-            ] }),
-            presentationMode === "consumer" /* Consumer */ ? /* @__PURE__ */ jsxRuntimeExports.jsx("dl", { className: styles$a.foldersList, children: context.groups.map((group) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-              ContextGroupComponent,
-              {
-                group,
-                allGroups: context.groups
-              },
-              group.displayName
-            )) }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-              CompactGroupsComponent,
-              {
-                groups: context.groups,
-                handleChoose: handleChooseRemoteSearchRepo,
-                handleRemove: handleRemoveRemoteSearchRepo
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: styles$a.hint, children: "Tip: To include a specific file or symbol as context, type @ in the message input." })
-          ] })
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: styles$a.hint, children: "Tip: To include a specific file or symbol as context, type @ in the message input." })
         ] })
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      VSCodeButton,
-      {
-        className: classNames(
-          popupStyles.popupHost,
-          styles$a.settingsBtn,
-          enabled && styles$a.settingsBtnActive
-        ),
-        appearance: "icon",
-        type: "button",
-        onClick: () => setOpen(!isOpen),
-        title: "Configure Enhanced Context",
-        ref: restoreFocusTarget,
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("i", { className: "codicon codicon-sparkle" }),
-          isOpen || hasOpenedBefore ? null : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles$a.glowyDot })
-        ]
-      }
-    )
-  ] });
+      ] })
+    }
+  ) });
 };
 
 const linkButton$1 = "_link-button_119fp_1";
@@ -36116,7 +36095,7 @@ const TextArea = ({
   isWebviewActive
 }) => {
   const inputRef = reactExports.useRef(null);
-  const tips = "(@ to include files or symbols)";
+  const tips = "";
   const placeholder = isNewChat ? `Message ${tips}` : `Follow-Up Message ${tips}`;
   const disabledPlaceHolder = "Chat has been disabled by your Enterprise instance site administrator";
   reactExports.useEffect(() => {
@@ -36459,7 +36438,7 @@ const Icon$1 = () => /* @__PURE__ */ jsxRuntimeExports.jsxs(
   }
 );
 
-const version = "1.6.0";
+const version = "2.0.0";
 
 const majorVersion = (version) => version.split(".")[0];
 const minorVersion = (version) => version.split(".")[1];
@@ -36557,6 +36536,28 @@ const styles = {
 	terms: terms
 };
 
+const WebLogin = ({ telemetryService, vscodeAPI }) => {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("ol", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://sourcegraph.com/sign-up", target: "site", children: "Sign Up at Sourcegraph.com" }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://sourcegraph.com/user/settings/tokens", target: "site", children: "Generate an Access Token" }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "a",
+      {
+        href: "about:blank",
+        onClick: (event) => {
+          telemetryService.log("CodyVSCodeExtension:auth:clickSignInWeb");
+          vscodeAPI.postMessage({
+            command: "simplified-onboarding",
+            onboardingKind: "web-sign-in-token"
+          });
+          event.preventDefault();
+          event.stopPropagation();
+        },
+        children: "Add the Access Token to VS Code"
+      }
+    ) })
+  ] });
+};
 const LoginSimplified = ({
   simplifiedLoginRedirect,
   telemetryService,
@@ -36567,8 +36568,8 @@ const LoginSimplified = ({
     telemetryService.log("CodyVSCodeExtension:auth:clickOtherSignInOptions");
     vscodeAPI.postMessage({ command: "auth", authKind: "signin" });
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.container, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.sectionsContainer, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.section, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonWidthSizer, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonStack, children: uiKindIsWeb ? (
-    // <WebLogin telemetryService={telemetryService} vscodeAPI={vscodeAPI} />
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.container, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.sectionsContainer, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.section, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonWidthSizer, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles.buttonStack, children: uiKindIsWeb ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(WebLogin, { telemetryService, vscodeAPI }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       VSCodeButton,
       {
@@ -36578,7 +36579,18 @@ const LoginSimplified = ({
         children: "使用海尔账号登录"
       }
     )
-  ) : /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {}) }) }) }) }) });
+  ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(WebLogin, { telemetryService, vscodeAPI }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      VSCodeButton,
+      {
+        className: styles.button,
+        type: "button",
+        onClick: otherSignInClick,
+        children: "使用海尔账号登录"
+      }
+    )
+  ] }) }) }) }) }) });
 };
 
 function createWebviewTelemetryService(vscodeAPI) {
@@ -36817,12 +36829,7 @@ const ErrorBanner = ({ errors, setErrors }) => /* @__PURE__ */ jsxRuntimeExports
   ] }, i)
 )) });
 function getWelcomeMessageByOS(os) {
-  const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。
-
-To run [Cody Commands](command:cody.menu.commands) use the keyboard shortcut <span class="keyboard-shortcut"><span>${os === "darwin" ? "⌥" : "Alt"}</span><span>C</span></span>, the <span class="cody-icons">A</span> button, or right-click anywhere in your code.
-
-You can start a new chat at any time with <span class="keyboard-shortcut"><span>${os === "darwin" ? "⌥" : "Alt"}</span><span>/</span></span> or using the <span class="cody-icons">H</span> button.
-`;
+  const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。`;
   return welcomeMessageMarkdown;
 }
 

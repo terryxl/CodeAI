@@ -12,15 +12,16 @@ export class SourcegraphBrowserCompletionsClient extends SourcegraphCompletionsC
         cb: CompletionCallbacks,
         signal?: AbortSignal
     ): void {
+        this.completions = []
         const abort = dependentAbortController(signal)
         const headersInstance = new Headers(this.config.customHeaders as HeadersInit)
         addCustomUserAgent(headersInstance)
         headersInstance.set('Content-Type', 'application/json; charset=utf-8')
 
-        let payload: { messages: MessageAzure[] } | CompletionParameters = params
+        let payload: { messages: MessageAzure[], stream: boolean } | CompletionParameters = params
 
         if (params.vendor === 'Azure') {
-            payload = { messages: params.messages as MessageAzure[] }
+            payload = { messages: params.messages as MessageAzure[], stream: true }
             this.config.accessToken && headersInstance.set('Api-Key', this.config.accessToken)
         } else {
             this.config.accessToken && headersInstance.set('Authorization', `token ${this.config.accessToken}`)
@@ -41,12 +42,7 @@ export class SourcegraphBrowserCompletionsClient extends SourcegraphCompletionsC
             signal: abort.signal,
             openWhenHidden: isRunningInWebWorker, // otherwise tries to call document.addEventListener
             async onopen(response) {
-                if (response.ok && response.headers.get('content-type') === 'application/json') {
-                    const res = await response.json()
-                    const text = res?.choices[0]?.message?.content
-                    cb.onChange(text)
-                }
-                else if (!response.ok && response.headers.get('content-type') !== 'text/event-stream') {
+                if (!response.ok && response.headers.get('content-type') !== 'text/event-stream') {
                     let errorMessage: null | string = null
                     try {
                         errorMessage = await response.text()
@@ -66,7 +62,7 @@ export class SourcegraphBrowserCompletionsClient extends SourcegraphCompletionsC
             },
             onmessage: message => {
                 try {
-                    const data: Event = { ...JSON.parse(message.data), type: message.event }
+                    const data: Event = this.formatCompletion({ ...JSON.parse(message.data), type: message.event })
                     this.sendEvents([data], cb)
                 } catch (error: any) {
                     cb.onError(error.message)

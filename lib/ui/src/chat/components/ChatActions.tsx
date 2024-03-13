@@ -40,27 +40,27 @@ export const ChatActions: React.FunctionComponent<{
     // indicating that the user is not editing a message and can either edit their last message
     // or start a new chat session via these buttons that also have keyboard shortcuts associated with them.
     const actions = [
-        {
-            name: 'Cancel Edit',
-            keybind: 'ESC',
-            onClick: onCancelEditClick,
-            focus: false,
-            when: isEditing && !isEmptyChat,
-        },
-        {
-            name: 'Edit Last Message',
-            keybind: `${osIcon}K`,
-            onClick: onEditLastMessageClick,
-            focus: true,
-            when: !isEmptyChat && !isEditing && !disableEditLastMessage,
-        },
-        {
-            name: '← Return to Previous Chat',
-            keybind: '',
-            onClick: onRestoreLastChatClick,
-            focus: false,
-            when: isEmptyChat && onRestoreLastChatClick !== undefined,
-        },
+        // {
+        //     name: 'Cancel Edit',
+        //     keybind: 'ESC',
+        //     onClick: onCancelEditClick,
+        //     focus: false,
+        //     when: isEditing && !isEmptyChat,
+        // },
+        // {
+        //     name: 'Edit Last Message',
+        //     keybind: `${osIcon}K`,
+        //     onClick: onEditLastMessageClick,
+        //     focus: true,
+        //     when: !isEmptyChat && !isEditing && !disableEditLastMessage,
+        // },
+        // {
+        //     name: '← Return to Previous Chat',
+        //     keybind: '',
+        //     onClick: onRestoreLastChatClick,
+        //     focus: false,
+        //     when: isEmptyChat && onRestoreLastChatClick !== undefined,
+        // },  HAIAR MOCKING
         {
             name: 'Start New Chat',
             keybind: `${osIcon}/`,

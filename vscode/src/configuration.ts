@@ -14,7 +14,6 @@ import {
     type ConfigKeys,
     type ConfigurationKeysMap,
 } from "./configuration-keys";
-import { localStorage } from "./services/LocalStorageProvider";
 import { getAccessToken } from "./services/SecretStorageProvider";
 
 interface ConfigGetter {
@@ -234,13 +233,11 @@ export const getFullConfig =
     async (): Promise<ConfigurationWithAccessToken> => {
         const config = getConfiguration();
         const isTesting = process.env.CODY_TESTING === "true";
-        const serverEndpoint =
-            localStorage?.getEndpoint() ||
-            (isTesting
+        const serverEndpoint = isTesting
                 ? "http://localhost:49300/"
                 : config.modelsVendor === "Azure"
                 ? DOTCOM_AZURE_URL.href
-                : DOTCOM_URL.href);
+                : DOTCOM_URL.href;
         const accessToken = (await getAccessToken()) || null;
         return { ...config, accessToken, serverEndpoint };
     };

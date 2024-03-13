@@ -1,4 +1,4 @@
-import { ModelVenderType } from "./models/types";
+import type { ModelVendorType } from "./models/types";
 export type ConfigurationUseContext = 'embeddings' | 'keyword' | 'none' | 'blended' | 'unified';
 /**
  * Get the numeric ID corresponding to the ConfigurationUseContext mode.
@@ -54,7 +54,7 @@ export interface Configuration {
     isRunningInsideAgent?: boolean;
     agentIDE?: 'VSCode' | 'JetBrains' | 'Neovim' | 'Emacs';
     autocompleteTimeouts: AutocompleteTimeouts;
-    ModelsVender?: ModelVenderType;
+    modelsVendor?: ModelVendorType;
     testingLocalEmbeddingsModel: string | undefined;
     testingLocalEmbeddingsEndpoint: string | undefined;
     testingLocalEmbeddingsIndexLibraryPath: string | undefined;

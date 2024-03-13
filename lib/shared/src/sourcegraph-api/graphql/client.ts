@@ -319,19 +319,20 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getSiteVersion(): Promise<string | Error> {
-        return "264357_2024-03-08_5.3-04cd87dc07d4";
-        // return this.fetchSourcegraphAPI<APIResponse<SiteVersionResponse>>(
-        //     CURRENT_SITE_VERSION_QUERY,
-        //     {}
-        // )
-        // .then(response => extractDataOrError(
-        //         response,
-        //         data => data.site?.productVersion ?? new Error('site version not found')
-        //     )
-        // ).catch(e => "264357_2024-03-08_5.3-04cd87dc07d4")//HAIAR MOCKING
+        if (!this.isDotCom()) return "264357_2024-03-08_5.3-04cd87dc07d4";
+        return this.fetchSourcegraphAPI<APIResponse<SiteVersionResponse>>(
+            CURRENT_SITE_VERSION_QUERY,
+            {}
+        )
+        .then(response => extractDataOrError(
+                response,
+                data => data.site?.productVersion ?? new Error('site version not found')
+            )
+        )
     }
 
     public async getSiteIdentification(): Promise<{ siteid: string; hashedLicenseKey: string } | Error> {
+        if (!this.isDotCom()) return new Error('site ID not found')
         const response = await this.fetchSourcegraphAPI<APIResponse<SiteIdentificationResponse>>(
             CURRENT_SITE_IDENTIFICATION,
             {}
@@ -349,6 +350,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getSiteHasIsCodyEnabledField(): Promise<boolean | Error> {
+        if (!this.isDotCom()) return false
         return this.fetchSourcegraphAPI<APIResponse<SiteGraphqlFieldsResponse>>(
             CURRENT_SITE_GRAPHQL_FIELDS_QUERY,
             {}
@@ -361,6 +363,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getSiteHasCodyEnabled(): Promise<boolean | Error> {
+        if (!this.isDotCom()) return false
         return this.fetchSourcegraphAPI<APIResponse<SiteHasCodyEnabledResponse>>(
             CURRENT_SITE_HAS_CODY_ENABLED_QUERY,
             {}
@@ -368,6 +371,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getCurrentUserId(): Promise<string | Error> {
+        if (!this.isDotCom()) return ''
         return this.fetchSourcegraphAPI<APIResponse<CurrentUserIdResponse>>(
             CURRENT_USER_ID_QUERY,
             {}
@@ -379,6 +383,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getCurrentUserCodyProEnabled(): Promise<{ codyProEnabled: boolean } | Error> {
+        if (!this.isDotCom()) return new Error('current user not found')
         return this.fetchSourcegraphAPI<APIResponse<CurrentUserCodyProEnabledResponse>>(
             CURRENT_USER_CODY_PRO_ENABLED_QUERY,
             {}
@@ -390,6 +395,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getCurrentUserCodySubscription(): Promise<CurrentUserCodySubscription | Error> {
+        if (!this.isDotCom()) return new Error()
         return this.fetchSourcegraphAPI<APIResponse<CurrentUserCodySubscriptionResponse>>(
             CURRENT_USER_CODY_SUBSCRIPTION_QUERY,
             {}
@@ -403,7 +409,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getCurrentUserInfo(): Promise<CurrentUserInfo | Error> {
-        return {
+        if (!this.isDotCom()) return {
             id: "test",
             hasVerifiedEmail: true,
             username: 'test',
@@ -411,20 +417,21 @@ export class SourcegraphGraphQLAPIClient {
             avatarURL: '',
             primaryEmail: { email: 'test@haier.com' },
         } as CurrentUserInfo
-        // return this.fetchSourcegraphAPI<APIResponse<CurrentUserInfoResponse>>(
-        //     CURRENT_USER_INFO_QUERY,
-        //     {}
-        // ).then(response =>
-        //     extractDataOrError(response, data =>
-        //         data.currentUser ? { ...data.currentUser } : new Error('current user not found')
-        //     )
-        // )
+        return this.fetchSourcegraphAPI<APIResponse<CurrentUserInfoResponse>>(
+            CURRENT_USER_INFO_QUERY,
+            {}
+        ).then(response =>
+            extractDataOrError(response, data =>
+                data.currentUser ? { ...data.currentUser } : new Error('current user not found')
+            )
+        )
     }
 
     /**
      * Fetches the Site Admin enabled/disable Cody config features for the current instance.
      */
     public async getCodyConfigFeatures(): Promise<CodyConfigFeatures | Error> {
+        if (!this.isDotCom()) return new Error('cody config not found')
         const response = await this.fetchSourcegraphAPI<APIResponse<CodyConfigFeaturesResponse>>(
             CURRENT_SITE_CODY_CONFIG_FEATURES,
             {}
@@ -474,7 +481,8 @@ export class SourcegraphGraphQLAPIClient {
      * @param after the last repository retrieved, if any, to continue enumerating the list.
      * @returns the list of repositories. If `endCursor` is null, this is the end of the list.
      */
-    public async getRepoList(first: number, after?: string): Promise<RepoListResponse | Error> {
+    public async getRepoList(first: number, after?: string): Promise<RepoListResponse | any | Error> {
+        if (!this.isDotCom()) return {}
         return this.fetchSourcegraphAPI<APIResponse<RepoListResponse>>(REPOSITORY_LIST_QUERY, {
             first,
             after: after || null,
@@ -482,6 +490,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     public async getRepoId(repoName: string): Promise<string | null | Error> {
+        if (!this.isDotCom()) return null
         return this.fetchSourcegraphAPI<APIResponse<RepositoryIdResponse>>(REPOSITORY_ID_QUERY, {
             name: repoName,
         }).then(response =>
@@ -493,6 +502,7 @@ export class SourcegraphGraphQLAPIClient {
         names: string[],
         first: number
     ): Promise<{ name: string; id: string }[] | Error> {
+        if (!this.isDotCom()) return []
         return this.fetchSourcegraphAPI<APIResponse<RepositoryIdsResponse>>(REPOSITORY_IDS_QUERY, {
             names,
             first,
@@ -503,6 +513,7 @@ export class SourcegraphGraphQLAPIClient {
         repos: Set<string>,
         query: string
     ): Promise<ContextSearchResult[] | null | Error> {
+        if (!this.isDotCom()) return null
         return this.fetchSourcegraphAPI<APIResponse<ContextSearchResponse>>(CONTEXT_SEARCH_QUERY, {
             repos: [...repos],
             query,
@@ -575,6 +586,7 @@ export class SourcegraphGraphQLAPIClient {
      * TelemetryRecorder from '@sourcegraph/telemetry' instead.
      */
     public async recordTelemetryEvents(events: TelemetryEventInput[]): Promise<unknown | Error> {
+        if (!this.isDotCom()) return
         for (const event of events) {
             this.anonymizeTelemetryEventInput(event)
         }
@@ -690,6 +702,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     private async sendEventLogRequestToDotComAPI(event: event): Promise<LogEventResponse | Error> {
+        if (!this.isDotCom()) return
         this.anonymizeEvent(event)
         const response = await this.fetchSourcegraphDotcomAPI<APIResponse<LogEventResponse>>(
             LOG_EVENT_MUTATION,
@@ -699,6 +712,7 @@ export class SourcegraphGraphQLAPIClient {
     }
 
     private async sendEventLogRequestToAPI(event: event): Promise<LogEventResponse | Error> {
+        if (!this.isDotCom()) return
         this.anonymizeEvent(event)
         const initialResponse = await this.fetchSourcegraphAPI<APIResponse<LogEventResponse>>(
             LOG_EVENT_MUTATION,
@@ -731,7 +745,8 @@ export class SourcegraphGraphQLAPIClient {
         return initialDataOrError
     }
 
-    public async searchAttribution(snippet: string): Promise<SearchAttributionResults | Error> {
+    public async searchAttribution(snippet: string): Promise<SearchAttributionResults | any | Error> {
+        if (!this.isDotCom()) return null
         return this.fetchSourcegraphAPI<APIResponse<SearchAttributionResponse>>(
             SEARCH_ATTRIBUTION_QUERY,
             {

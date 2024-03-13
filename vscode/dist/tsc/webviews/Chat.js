@@ -115,7 +115,7 @@ exports.Chat = Chat;
 const ChatButton = ({ label, action, onClick, appearance, }) => ((0, jsx_runtime_1.jsx)(react_2.VSCodeButton, { type: "button", onClick: () => onClick(action), className: Chat_module_css_1.default.chatButton, appearance: appearance, children: label }));
 const TextArea = ({ className, isFocusd, value, setValue, chatEnabled, required, onInput, onKeyDown, onKeyUp, onFocus, chatModels, messageBeingEdited, isNewChat, inputCaretPosition, isWebviewActive, }) => {
     const inputRef = (0, react_1.useRef)(null);
-    const tips = '(@ to include files or symbols)';
+    const tips = ''; //'(@ to include files or symbols)'  HAIAR MOCKING
     const placeholder = isNewChat ? `Message ${tips}` : `Follow-Up Message ${tips}`;
     const disabledPlaceHolder = 'Chat has been disabled by your Enterprise instance site administrator';
     // biome-ignore lint/correctness/useExhaustiveDependencies: want new value to refresh it

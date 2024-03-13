@@ -2,7 +2,8 @@
     "name": "cody-ai",
     "private": true,
     "displayName": "码友",
-    "version": "1.6.0",
+    "version": "2.0.0",
+    "deprecate": true,
     "publisher": "sourcegraph",
     "license": "Apache-2.0",
     "icon": "resources/icon.ico",
@@ -38,7 +39,7 @@
         "vscode:prepublish": "pnpm -s run build",
         "test:unit:tree-sitter-queries": "vitest ./src/tree-sitter/query-tests/*.test.ts",
         "github-changelog": "ts-node-transpile-only ./scripts/github-changelog.ts",
-        "pub:loc": "pnpm build && pnpm release:dry-run && code --install-extension dist/cody.vsix"
+        "pub:loc": "pnpm build && pnpm release:dry-run && code --install-extension dist/cody.vsix --force"
     },
     "categories": [
         "Programming Languages",
@@ -83,7 +84,7 @@
     "bugs": {
         "url": "https://github.com/sourcegraph/cody/issues"
     },
-    "homepage": "https://sourcegraph.com/docs/cody",
+    "homepage": "https://sourcegraph11.com/docs/cody",
     "badges": [
         {
             "url": "https://img.shields.io/discord/969688426372825169?color=5765F2",
@@ -406,7 +407,7 @@
             {
                 "command": "cody.chat.panel.new",
                 "category": "Cody",
-                "title": "New Chat Panel",
+                "title": "对话",
                 "when": "cody.activated",
                 "group": "Cody",
                 "icon": "$(new-comment-icon)"
@@ -916,7 +917,7 @@
                     "markdownDescription": "[INTERNAL ONLY] Enable all unstable experimental features.",
                     "default": false
                 },
-                "cody.models.vender": {
+                "cody.models.vendor": {
                     "order": 99,
                     "type": "string",
                     "enum": [

@@ -4,10 +4,10 @@ import type { TelemetryService } from '@sourcegraph/cody-shared'
 
 import type { AuthMethod } from '../src/chat/protocol'
 
-import onboardingSplashImage from './cody-onboarding-splash.svg'
-import signInLogoGitHub from './sign-in-logo-github.svg'
-import signInLogoGitLab from './sign-in-logo-gitlab.svg'
-import signInLogoGoogle from './sign-in-logo-google.svg'
+// import onboardingSplashImage from './cody-onboarding-splash.svg'
+// import signInLogoGitHub from './sign-in-logo-github.svg'
+// import signInLogoGitLab from './sign-in-logo-gitlab.svg'
+// import signInLogoGoogle from './sign-in-logo-google.svg'
 import type { VSCodeWrapper } from './utils/VSCodeApi'
 
 import styles from './OnboardingExperiment.module.css'
@@ -77,16 +77,26 @@ export const LoginSimplified: React.FunctionComponent<React.PropsWithoutRef<Logi
                     <div className={styles.buttonWidthSizer}>
                         <div className={styles.buttonStack}>
                             {uiKindIsWeb ? (
-                                // <WebLogin telemetryService={telemetryService} vscodeAPI={vscodeAPI} />
-                                <VSCodeButton
-                                    className={styles.button}
-                                    type="button"
-                                    onClick={otherSignInClick}
-                                >
-                                    使用海尔账号登录
-                                </VSCodeButton>
+                                <>
+                                    <WebLogin telemetryService={telemetryService} vscodeAPI={vscodeAPI} />
+                                    <VSCodeButton
+                                        className={styles.button}
+                                        type="button"
+                                        onClick={otherSignInClick}
+                                    >
+                                        使用海尔账号登录
+                                    </VSCodeButton>
+                                </>
                             ) : (
                                 <>
+                                    <WebLogin telemetryService={telemetryService} vscodeAPI={vscodeAPI} />
+                                    <VSCodeButton
+                                        className={styles.button}
+                                        type="button"
+                                        onClick={otherSignInClick}
+                                    >
+                                        使用海尔账号登录
+                                    </VSCodeButton>
                                     {/* <VSCodeButton
                                         className={styles.button}
                                         type="button"

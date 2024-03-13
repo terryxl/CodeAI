@@ -293,15 +293,16 @@ const ErrorBanner: React.FunctionComponent<{ errors: string[]; setErrors: (error
     )
 
 function getWelcomeMessageByOS(os: string): string {
-    const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。
+    const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。`
+//     const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。
 
-To run [Cody Commands](command:cody.menu.commands) use the keyboard shortcut <span class="keyboard-shortcut"><span>${
-        os === 'darwin' ? '⌥' : 'Alt'
-    }</span><span>C</span></span>, the <span class="cody-icons">A</span> button, or right-click anywhere in your code.
+// To run [Cody Commands](command:cody.menu.commands) use the keyboard shortcut <span class="keyboard-shortcut"><span>${
+//         os === 'darwin' ? '⌥' : 'Alt'
+//     }</span><span>C</span></span>, the <span class="cody-icons">A</span> button, or right-click anywhere in your code.
 
-You can start a new chat at any time with <span class="keyboard-shortcut"><span>${
-        os === 'darwin' ? '⌥' : 'Alt'
-    }</span><span>/</span></span> or using the <span class="cody-icons">H</span> button.
-`
+// You can start a new chat at any time with <span class="keyboard-shortcut"><span>${
+//         os === 'darwin' ? '⌥' : 'Alt'
+//     }</span><span>/</span></span> or using the <span class="cody-icons">H</span> button.
+// HAIAR MOCKING
     return welcomeMessageMarkdown
 }

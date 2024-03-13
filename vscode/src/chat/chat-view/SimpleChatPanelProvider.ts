@@ -26,7 +26,7 @@ import {
     type ChatEventSource,
     featureFlagProvider,
     FeatureFlag,
-    MessageAzure,
+    type MessageAzure,
 } from "@sourcegraph/cody-shared";
 
 import type { View } from "../../../webviews/NavBar";
@@ -727,7 +727,7 @@ export class SimpleChatPanelProvider implements vscode.Disposable, ChatSession {
                             );
 
                         span.setAttribute("strategy", this.config.useContext);
-                        const prompter = new AzuerPrompter(userContextItems);
+                        const prompter = new AzuerPrompter(userContextItems, submitType);
 
                         try {
                             const prompt = await this.buildPrompt<MessageAzure>(prompter);
@@ -1196,7 +1196,7 @@ export class SimpleChatPanelProvider implements vscode.Disposable, ChatSession {
             prompt,
             { model: this.chatModel.modelID },
             abortController.signal,
-            this.config.modelsVendor,
+            this.config.modelsVendor
         );
 
         for await (const message of stream) {

@@ -178,11 +178,14 @@ const ErrorBanner = ({ errors, setErrors }) => ((0, jsx_runtime_1.jsx)("div", { 
     // biome-ignore lint/suspicious/noArrayIndexKey: error strings might not be unique, so we have no natural id
     (0, jsx_runtime_1.jsxs)("div", { className: "error", children: [(0, jsx_runtime_1.jsx)("span", { children: error }), (0, jsx_runtime_1.jsx)("button", { type: "button", className: "close-btn", onClick: () => setErrors(errors.filter(e => e !== error)), children: "\u00D7" })] }, i))) }));
 function getWelcomeMessageByOS(os) {
-    const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。
-
-To run [Cody Commands](command:cody.menu.commands) use the keyboard shortcut <span class="keyboard-shortcut"><span>${os === 'darwin' ? '⌥' : 'Alt'}</span><span>C</span></span>, the <span class="cody-icons">A</span> button, or right-click anywhere in your code.
-
-You can start a new chat at any time with <span class="keyboard-shortcut"><span>${os === 'darwin' ? '⌥' : 'Alt'}</span><span>/</span></span> or using the <span class="cody-icons">H</span> button.
-`;
+    const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。`;
+    //     const welcomeMessageMarkdown = `欢迎! 开始编写代码，我将为您自动完成行和整个函数。
+    // To run [Cody Commands](command:cody.menu.commands) use the keyboard shortcut <span class="keyboard-shortcut"><span>${
+    //         os === 'darwin' ? '⌥' : 'Alt'
+    //     }</span><span>C</span></span>, the <span class="cody-icons">A</span> button, or right-click anywhere in your code.
+    // You can start a new chat at any time with <span class="keyboard-shortcut"><span>${
+    //         os === 'darwin' ? '⌥' : 'Alt'
+    //     }</span><span>/</span></span> or using the <span class="cody-icons">H</span> button.
+    // HAIAR MOCKING
     return welcomeMessageMarkdown;
 }

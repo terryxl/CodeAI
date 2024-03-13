@@ -106,6 +106,8 @@ const register = async (context, initialConfig, platform) => {
     if (config.chatPreInstruction) {
         cody_shared_1.PromptMixin.addCustom((0, cody_shared_1.newPromptMixin)(config.chatPreInstruction));
     }
+    // logDebug('Config', JSON.stringify(config))
+    // logDebug('InitConfig', JSON.stringify(initialConfig))
     (0, parse_tree_cache_1.parseAllVisibleDocuments)();
     disposables.push(vscode.window.onDidChangeVisibleTextEditors(parse_tree_cache_1.parseAllVisibleDocuments));
     disposables.push(vscode.workspace.onDidChangeTextDocument(parse_tree_cache_1.updateParseTreeOnEdit));

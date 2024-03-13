@@ -68,8 +68,8 @@ class ChatManager {
         // Register Commands
         this.disposables.push(vscode.commands.registerCommand('cody.action.chat', args => this.executeChat(args)), vscode.commands.registerCommand('cody.chat.history.export', () => this.exportHistory()), vscode.commands.registerCommand('cody.chat.history.clear', () => this.clearHistory()), vscode.commands.registerCommand('cody.chat.history.delete', item => this.clearHistory(item)), vscode.commands.registerCommand('cody.chat.history.edit', item => this.editChatHistory(item)), vscode.commands.registerCommand('cody.chat.panel.new', () => this.createNewWebviewPanel()), vscode.commands.registerCommand('cody.chat.panel.restore', (id, chat) => this.restorePanel(id, chat)), vscode.commands.registerCommand('cody.chat.panel.reset', () => this.chatPanelsManager.resetPanel()), vscode.commands.registerCommand(display_text_1.CODY_PASSTHROUGH_VSCODE_OPEN_COMMAND_ID, (...args) => this.passthroughVsCodeOpen(...args)));
     }
-    async getChatProvider() {
-        const provider = await this.chatPanelsManager.getChatPanel();
+    async getChatProvider(source) {
+        const provider = await this.chatPanelsManager.getChatPanel(source);
         return provider;
     }
     async syncAuthStatus(authStatus) {
@@ -95,8 +95,8 @@ class ChatManager {
      * Execute a chat request in a new chat panel
      */
     async executeChat(args) {
-        const provider = await this.getChatProvider();
-        await provider?.handleUserMessageSubmission(uuid.v4(), args.text, args?.submitType, args?.contextFiles ?? [], args?.addEnhancedContext ?? true, args?.source);
+        const provider = await this.getChatProvider(args?.source);
+        await provider?.handleUserMessageFn(uuid.v4(), args.text, args?.submitType, args?.contextFiles ?? [], args?.addEnhancedContext ?? true, args?.source);
         return provider;
     }
     async editChatHistory(treeItem) {

@@ -141,7 +141,8 @@ const register = async (
     if (config.chatPreInstruction) {
         PromptMixin.addCustom(newPromptMixin(config.chatPreInstruction))
     }
-
+    // logDebug('Config', JSON.stringify(config))
+    // logDebug('InitConfig', JSON.stringify(initialConfig))
     parseAllVisibleDocuments()
 
     disposables.push(vscode.window.onDidChangeVisibleTextEditors(parseAllVisibleDocuments))

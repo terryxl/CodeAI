@@ -1,4 +1,4 @@
-import { ModelVendorType } from "./models/types"
+import type { ModelVendorType } from "./models/types"
 
 export type ConfigurationUseContext = 'embeddings' | 'keyword' | 'none' | 'blended' | 'unified'
 

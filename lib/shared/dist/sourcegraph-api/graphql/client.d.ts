@@ -85,7 +85,7 @@ export interface event {
     connectedSiteID?: string;
     hashedLicenseKey?: string;
 }
-export type GraphQLAPIClientConfig = Pick<ConfigurationWithAccessToken, 'serverEndpoint' | 'accessToken' | 'customHeaders'> & Pick<Partial<ConfigurationWithAccessToken>, 'telemetryLevel'>;
+export type GraphQLAPIClientConfig = Pick<ConfigurationWithAccessToken, 'serverEndpoint' | 'accessToken' | 'customHeaders' | 'modelsVendor'> & Pick<Partial<ConfigurationWithAccessToken>, 'telemetryLevel'>;
 export declare let customUserAgent: string | undefined;
 export declare function addCustomUserAgent(headers: Headers): void;
 export declare function setUserAgent(newUseragent: string): void;
@@ -132,7 +132,7 @@ export declare class SourcegraphGraphQLAPIClient {
      * @param after the last repository retrieved, if any, to continue enumerating the list.
      * @returns the list of repositories. If `endCursor` is null, this is the end of the list.
      */
-    getRepoList(first: number, after?: string): Promise<RepoListResponse | Error>;
+    getRepoList(first: number, after?: string): Promise<RepoListResponse | any | Error>;
     getRepoId(repoName: string): Promise<string | null | Error>;
     getRepoIds(names: string[], first: number): Promise<{
         name: string;
@@ -176,7 +176,7 @@ export declare class SourcegraphGraphQLAPIClient {
     private sendEventLogRequestToDotComAPI;
     private sendEventLogRequestToAPI;
     private sendEventLogRequestToTestingAPI;
-    searchAttribution(snippet: string): Promise<SearchAttributionResults | Error>;
+    searchAttribution(snippet: string): Promise<SearchAttributionResults | any | Error>;
     getEvaluatedFeatureFlags(): Promise<Record<string, boolean> | Error>;
     evaluateFeatureFlag(flagName: string): Promise<boolean | null | Error>;
     private fetchSourcegraphAPI;

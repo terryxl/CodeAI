@@ -6,14 +6,13 @@ const osIcon = (0, platform_1.isMac)() ? "⌥" : "Alt+";
 exports.CodyCommandMenuItems = [
     {
         key: "ask",
-        description: "聊天",
+        description: "对话",
         prompt: "Start a new chat",
         icon: "comment",
         command: { command: "cody.chat.panel.new" },
         keybinding: `${osIcon}L`,
         mode: "ask",
         type: "default",
-        show: false,
     },
     {
         key: "edit",
@@ -37,7 +36,7 @@ exports.CodyCommandMenuItems = [
     // },
     {
         key: "explain",
-        description: "解读代码",
+        description: "代码解释",
         icon: "file-binary",
         command: { command: "cody.command.explain-code" },
         keybinding: "",
@@ -61,6 +60,7 @@ exports.CodyCommandMenuItems = [
         keybinding: "",
         mode: "edit",
         type: "default",
+        show: false,
     },
     // {
     //     key: 'custom',

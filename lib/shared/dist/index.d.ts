@@ -48,7 +48,7 @@ export { MAX_BYTES_PER_FILE, MAX_CURRENT_FILE_TOKENS, MAX_HUMAN_INPUT_TOKENS, NU
 export { PromptMixin, newPromptMixin } from './prompt/prompt-mixin';
 export * from './prompt/templates';
 export { truncateText, truncateTextNearestLine, truncateTextStart, } from './prompt/truncation';
-export type { Message } from './sourcegraph-api';
+export type { Message, MessageAzure } from './sourcegraph-api';
 export { SourcegraphBrowserCompletionsClient } from './sourcegraph-api/completions/browserClient';
 export { SourcegraphCompletionsClient } from './sourcegraph-api/completions/client';
 export type { CompletionLogger, CompletionsClientConfig } from './sourcegraph-api/completions/client';

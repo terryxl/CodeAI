@@ -18,6 +18,7 @@ import {
     addTraceparent,
     type ConfigurationWithAccessToken,
     CompletionStopReason,
+    Message,
 } from '@sourcegraph/cody-shared'
 
 import { getLanguageConfig } from '../../tree-sitter/language'
@@ -315,7 +316,7 @@ class FireworksProvider extends Provider {
             `POST ${url}`,
             async function* (span): CompletionResponseGenerator {
                 // Convert the SG instance messages array back to the original prompt
-                const prompt = requestParams.messages[0]!.text!
+                const prompt = (requestParams.messages[0] as Message)!.text!
 
                 // c.f. https://readme.fireworks.ai/reference/createcompletion
                 const fireworksRequest = {

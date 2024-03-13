@@ -1,7 +1,7 @@
 import dedent from 'dedent'
 import { describe, expect, test } from 'vitest'
 
-import type { CompletionParameters } from '@sourcegraph/cody-shared'
+import type { CompletionParameters, Message } from '@sourcegraph/cody-shared'
 
 import { vsCodeMocks } from '../../testutils/mocks'
 import { InlineCompletionsResultSource } from '../get-inline-completions'
@@ -84,7 +84,7 @@ describe('[getInlineCompletions] common', () => {
             )
         )
         const messages = requests[0].messages
-        expect(messages.at(-1)!.text).toBe('<CODE5711>class Range {')
+        expect((messages.at(-1) as Message)!.text).toBe('<CODE5711>class Range {')
     })
 
     test('uses a more complex prompt for larger files', async () => {

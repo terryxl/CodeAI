@@ -93,8 +93,8 @@ class ChatPanelsManager {
         await this.updateTreeViewHistory();
         this.supportTreeViewProvider.syncAuthStatus(authStatus);
     }
-    async getChatPanel() {
-        const provider = await this.createWebviewPanel();
+    async getChatPanel(source) {
+        const provider = await this.createWebviewPanel(undefined, undefined, undefined, source);
         if (this.options.config.isRunningInsideAgent) {
             // Never reuse webviews when running inside the agent.
             return provider;
@@ -105,7 +105,7 @@ class ChatPanelsManager {
     /**
      * Creates a new webview panel for chat.
      */
-    async createWebviewPanel(chatID, chatQuestion, panel) {
+    async createWebviewPanel(chatID, chatQuestion, panel, source) {
         if (chatID && this.panelProviders.map(p => p.sessionID).includes(chatID)) {
             const provider = this.panelProviders.find(p => p.sessionID === chatID);
             if (provider?.webviewPanel) {
@@ -131,7 +131,7 @@ class ChatPanelsManager {
         (0, log_1.logDebug)('ChatPanelsManager:createWebviewPanel', this.panelProviders.length.toString());
         // Get the view column of the current active chat panel so that we can open a new one on top of it
         const activePanelViewColumn = this.activePanelProvider?.webviewPanel?.viewColumn;
-        const provider = this.createProvider();
+        const provider = this.createProvider(source);
         if (chatID) {
             await provider.restoreSession(chatID);
         }
@@ -166,7 +166,7 @@ class ChatPanelsManager {
     /**
      * Creates a provider for the chat panel.
      */
-    createProvider() {
+    createProvider(source) {
         const authProvider = this.options.authProvider;
         const authStatus = authProvider.getAuthStatus();
         if (authStatus?.configOverwrites?.chatModel) {
@@ -187,6 +187,7 @@ class ChatPanelsManager {
             enterpriseContext: isConsumer ? null : this.enterpriseContext,
             models,
             guardrails: this.guardrails,
+            source
         });
     }
     selectTreeItem(chatID) {

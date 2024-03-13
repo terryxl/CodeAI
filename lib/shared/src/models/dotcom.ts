@@ -19,7 +19,7 @@ export const DEFAULT_DOT_COM_MODELS = [
         vendor: 'Azure',
         default: true,
         codyProOnly: true,
-        usage: [ModelUsage.Chat, ModelUsage.Edit],
+        usage: [ModelUsage.Chat],
     },
     {
         title: 'Claude 2.1 Preview',
