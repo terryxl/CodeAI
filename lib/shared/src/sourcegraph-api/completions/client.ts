@@ -8,7 +8,6 @@ import type {
     Event,
 } from "./types";
 import { recordErrorToSpan } from "../../tracing";
-import { logDebug } from '../../logger'
 
 export interface CompletionLogger {
     startCompletion(

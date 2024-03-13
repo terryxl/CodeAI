@@ -164,8 +164,13 @@ export class SourcegraphNodeCompletionsClient extends SourcegraphCompletionsClie
 
                         let parseResult: any
                         if (this.config.modelsVendor === 'Azure') {
-                            const obj = JSON.parse(str.startsWith('data:') ? str.slice(5) : str)
-                            parseResult = { events: [this.formatCompletion(obj)]}
+                            try {
+                                const obj = JSON.parse(str.startsWith('data:') ? str.slice(5) : str)
+                                parseResult = { events: [this.formatCompletion(obj)]}
+                            }
+                            catch(e) {
+                                onErrorOnce(new Error('2222222' + str + typeof(str) + ' ' + JSON.stringify(e)))
+                            }
                         }
                         else {
                             bufferText += str
