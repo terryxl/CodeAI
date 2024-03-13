@@ -56,6 +56,7 @@ export abstract class SourcegraphCompletionsClient {
         if (this.config.modelsVendor === "Azure")
             return new URL(
                 "/openai/deployments/gpt-4/chat/completions?api-version=2024-02-15-preview",
+                // "/restapi/nc/arch/llm/v1.0/stream/chatCompletions",
                 this.config.serverEndpoint
             ).href;
         return new URL("/.api/completions/stream", this.config.serverEndpoint)

@@ -6,6 +6,7 @@ export const DOTCOM_URL = new URL(
 
 export const DOTCOM_AZURE_URL = new URL(
     (typeof process === 'undefined' ? null : process.env.TESTING_DOTCOM_URL) ?? 'https://homegpt-plus.openai.azure.com'
+    // (typeof process === 'undefined' ? null : process.env.TESTING_DOTCOM_URL) ?? 'https://ys-openservice.haigeek.com'
 )
 
 export const LOCAL_APP_URL = new URL('http://localhost:3080')

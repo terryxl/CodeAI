@@ -4,6 +4,10 @@ export type ConfigurationUseContext = 'embeddings' | 'keyword' | 'none' | 'blend
  * Get the numeric ID corresponding to the ConfigurationUseContext mode.
  */
 export declare const CONTEXT_SELECTION_ID: Record<ConfigurationUseContext, number>;
+export declare const SystemSecurity: {
+    systemId: string;
+    systemKey: string;
+};
 export interface Configuration {
     proxy?: string | null;
     codebase?: string;

@@ -28,7 +28,7 @@ export { renderMarkdown } from './common/markdown';
 export { posixFilePaths } from './common/path';
 export { isWindows } from './common/platform';
 export { assertFileURI, isFileURI, uriBasename, uriDirname, uriExtname, uriParseNameAndExtension, type FileURI, } from './common/uri';
-export type { AutocompleteTimeouts, Configuration, ConfigurationUseContext, ConfigurationWithAccessToken, OllamaGenerateParameters, OllamaOptions, } from './configuration';
+export { SystemSecurity, type AutocompleteTimeouts, type Configuration, type ConfigurationUseContext, type ConfigurationWithAccessToken, type OllamaGenerateParameters, type OllamaOptions, } from './configuration';
 export { NoopEditor } from './editor';
 export type { ActiveTextEditor, ActiveTextEditorDiagnostic, ActiveTextEditorDiagnosticType, ActiveTextEditorSelection, ActiveTextEditorSelectionRange, ActiveTextEditorVisibleContent, Editor, } from './editor';
 export { displayPath, displayPathBasename, displayPathDirname, displayPathWithoutWorkspaceFolderPrefix, setDisplayPathEnvInfo, type DisplayPathEnvInfo, } from './editor/displayPath';

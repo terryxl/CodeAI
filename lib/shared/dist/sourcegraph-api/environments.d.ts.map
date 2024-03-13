@@ -1,1 +1,1 @@
-{"version":3,"file":"environments.d.ts","sourceRoot":"","sources":["../../src/sourcegraph-api/environments.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,UAAU,KAEtB,CAAA;AAED,eAAO,MAAM,gBAAgB,KAE5B,CAAA;AAED,eAAO,MAAM,aAAa,KAAmC,CAAA;AAG7D,wBAAgB,QAAQ,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAM7C"}
+{"version":3,"file":"environments.d.ts","sourceRoot":"","sources":["../../src/sourcegraph-api/environments.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,UAAU,KAEtB,CAAA;AAED,eAAO,MAAM,gBAAgB,KAG5B,CAAA;AAED,eAAO,MAAM,aAAa,KAAmC,CAAA;AAG7D,wBAAgB,QAAQ,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAM7C"}

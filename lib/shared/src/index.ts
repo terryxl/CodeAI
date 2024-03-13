@@ -71,13 +71,14 @@ export {
     uriParseNameAndExtension,
     type FileURI,
 } from './common/uri'
-export type {
-    AutocompleteTimeouts,
-    Configuration,
-    ConfigurationUseContext,
-    ConfigurationWithAccessToken,
-    OllamaGenerateParameters,
-    OllamaOptions,
+export {
+    SystemSecurity,
+    type AutocompleteTimeouts,
+    type Configuration,
+    type ConfigurationUseContext,
+    type ConfigurationWithAccessToken,
+    type OllamaGenerateParameters,
+    type OllamaOptions,
 } from './configuration'
 export { NoopEditor } from './editor'
 export type {

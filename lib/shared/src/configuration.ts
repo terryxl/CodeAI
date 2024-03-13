@@ -13,6 +13,11 @@ export const CONTEXT_SELECTION_ID: Record<ConfigurationUseContext, number> = {
     unified: 11,
 }
 
+export const SystemSecurity: { systemId: string, systemKey: string } = {
+    systemId: 'SV-IYPMY-0000',
+    systemKey: '6796e46ca09d375e28feb612febd08b2',
+}
+
 // Should we share VS Code specific config via cody-shared?
 export interface Configuration {
     proxy?: string | null
